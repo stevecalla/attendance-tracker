@@ -327,7 +327,7 @@ function Attendance() {
   //TODO END
 
   return (
-    <div className="api-scrollview">
+    <div className="" style={{ width: "300px" }}>
       <HorizontalLine height="5px" backgroundColor="#0d6efd" />
       <HorizontalLine height="15px" backgroundColor="#ffdc03" />
 
