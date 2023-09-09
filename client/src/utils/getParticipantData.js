@@ -1,6 +1,7 @@
 const { invokeZoomAppsSdk } = require("../apis");
 
-async function getParticipantData(getAPIName) {
+// export async function getParticipantData(getAPIName) {
+export const getParticipantData = async (getAPIName) => {
   try {
     // Define your API configuration
     const apiConfig = {
@@ -23,6 +24,6 @@ async function getParticipantData(getAPIName) {
 
 };
 
-module.exports = {
-  getParticipantData,
-};
+// module.exports = {
+//   getParticipantData,
+// };
