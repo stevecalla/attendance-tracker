@@ -1,12 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Router } from "react-router-dom";
+import { createHashHistory } from "history";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
 
+import App from "./App";
+
+import "./index.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-
 import {
   faTrash,
   faXmarkCircle,
@@ -30,14 +32,18 @@ library.add(
   faClipboard,
   faRotateRight,
   faSave,
-  faCloud,
-  
+  faCloud
 );
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const history = createHashHistory();
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Router history={history}>
+      <App />
+    </Router>
   </React.StrictMode>
 );
 
