@@ -24,7 +24,7 @@ const sortHandlerNamesNumbers = (items) => {
 };
 
 module.exports = {
+  sortHandlerNamesNumbers,
   sortHandlerScreenName,
   sortHandlerNames,
-  sortHandlerNamesNumbers,
 };
