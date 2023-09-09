@@ -8,7 +8,7 @@ import TimeStamp from "../components/TimeStamp";
 import ButtonData from "../components/ButtonData";
 import AttendeeInput from "../components/AttendeeInput";
 
-import { sortHandlerNames } from "../utils/sort";
+// import { sortHandlerNamesNumbers } from "../utils/sort"; //fix
 import { handleSimilarityScores } from "../utils/similarityScoring";
 import { setStorage, retrieveStorage } from "../utils/storage";
 import { cipherText, decryptText } from "../utils/encrypt";
@@ -161,7 +161,8 @@ function Attendance() {
     console.log(textInput);
 
     const attendeeTextInput = textInput.split(";"); //spit to array
-    let sortedAttendees = sortHandlerNames(attendeeTextInput); //sort array
+    // let sortedAttendees = sortHandlerNamesNumbers(attendeeTextInput); //sort array //fix
+    let sortedAttendees = attendeeTextInput; //sort array
     const attendees = sortedAttendees.map((name, index) => {
       // console.log(name);
       // isNaN(name) ? name = name.trim() : name;
