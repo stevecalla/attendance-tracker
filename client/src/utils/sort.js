@@ -1,12 +1,12 @@
-const sortHandlerScreenName = (items) => {
+export const sortHandlerScreenName = (items) => {
   return [...items].sort((a, b) => a.screenName.localeCompare(b.screenName));
 };
 
-const sortHandlerNames = (items) => {
+export const sortHandlerNames = (items) => {
   return [...items].sort((a, b) => a.localeCompare(b));
 };
 
-const sortHandlerNamesNumbers = (items) => {
+export const sortHandlerNamesNumbers = (items) => {
   // Separate numbers and strings
   const numbers = items.filter(item => !isNaN(item));
   const strings = items.filter(item => isNaN(item));
@@ -23,8 +23,8 @@ const sortHandlerNamesNumbers = (items) => {
   return resultArray;
 };
 
-module.exports = {
-  sortHandlerNamesNumbers,
-  sortHandlerScreenName,
-  sortHandlerNames,
-};
+// module.exports = {
+//   sortHandlerNamesNumbers,
+//   sortHandlerScreenName,
+//   sortHandlerNames,
+// };
