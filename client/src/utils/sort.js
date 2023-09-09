@@ -21,7 +21,7 @@ const sortHandlerNamesNumbers = (items) => {
   const resultArray = [...sortedNumbers, ...sortedStrings];
   
   return resultArray;
-}
+};
 
 module.exports = {
   sortHandlerScreenName,
