@@ -5,6 +5,35 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+import {
+  faTrash,
+  faXmarkCircle,
+  faSearch,
+  faCheck,
+  faXmark,
+  faCopy,
+  faClipboard,
+  faRotateRight,
+  faSave,
+  faCloud,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+  faTrash,
+  faXmarkCircle,
+  faSearch,
+  faCheck,
+  faXmark,
+  faCopy,
+  faClipboard,
+  faRotateRight,
+  faSave,
+  faCloud,
+  
+);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
