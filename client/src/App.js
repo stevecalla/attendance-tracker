@@ -11,6 +11,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 let once = 0; // to prevent increasing number of event listeners being added
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const history = useHistory();
   const location = useLocation();
   const [error, setError] = useState(null);
@@ -21,6 +23,12 @@ function App() {
   const [preMeeting, setPreMeeting] = useState(true); // start with pre-meeting code
   const [userContextStatus, setUserContextStatus] = useState("");
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //   }, 1000);
+  // }, [])
+  
   useEffect(() => {
     async function configureSdk() {
       // to account for the 2 hour timeout for config
@@ -182,20 +190,28 @@ function App() {
     communicateTabChange();
   }, [connected, location, preMeeting, receiveMessage, runningContext]);
 
-  if (error) {
-    console.log(error);
+  // if (error) {
+  //   console.log(error);
+  //   return (
+  //     <div className="App">
+  //       <h1>{error.message}</h1>
+  //     </div>
+  //   );
+  // }
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="d-flex justify-content-center align-items-center" style={{ width: "300px", height: "200px", color: "red" }}>
+  //       <div>...isLoading</div>
+  //     </div>
+  //   );
+  // } else {
     return (
       <div className="App">
-        <h1>{error.message}</h1>
+        <MainPortal />
       </div>
     );
   }
-
-  return (
-    <div className="App">
-      <MainPortal />
-    </div>
-  );
-}
+// }
 
 export default App;

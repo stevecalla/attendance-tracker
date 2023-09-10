@@ -45,7 +45,6 @@ export const MainPortal = () => {
       let sortedParticipants = sortHandlerScreenName(
         mode === "dev" ? mockParticipantData : clientResponse.participants
       );
-
       setParticipantsOriginal(sortedParticipants);
       setParticipantsMutable(sortedParticipants);
       setRetrieveDate(!retrieveDate); //get timestamp info
@@ -70,7 +69,7 @@ export const MainPortal = () => {
       <Tabs
         defaultActiveKey="participants"
         // defaultActiveKey="attendance"
-        id="justify-tab-example"
+        id=""
         className="mb-3 flex-nowrap"
         fill
         style={{ flexWrap: "nowrap", width: "300px" }}

@@ -21,7 +21,6 @@ export const getParticipantData = async (getAPIName) => {
     console.error("Error:", error);
     return error;
   };
-
 };
 
 // module.exports = {

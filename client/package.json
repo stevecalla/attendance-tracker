@@ -31,7 +31,9 @@
     "react-bootstrap": "^2.2.1",
     "react-router-dom": "^5.2.0",
     "react-router-dom-v5-compat": "^6.15.0",
-    "string-similarity": "^4.0.4"
+    "string-similarity": "^4.0.4",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
