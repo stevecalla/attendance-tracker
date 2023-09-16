@@ -3,7 +3,7 @@ const router = Router()
 const controller = require('./controller')
 router
   .use('/proxy', controller.proxy)
-  .use('/sockjs-node', controller.proxy)
+  // .use('/sockjs-node', controller.proxy)
   .get('/install', controller.install)
   .get('/auth', controller.auth)
   .get('/home', controller.home)

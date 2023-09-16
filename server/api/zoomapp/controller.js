@@ -279,13 +279,13 @@ module.exports = {
       console.log({decryptedAppContext});
       console.log(decryptedAppContext.uid);
 
+      req.session.user = decryptedAppContext.uid
+      req.session.meetingUUID = decryptedAppContext?.mid
       
       if (decryptedAppContext.uid) {
-        req.session.user = decryptedAppContext.uid
       } else {
         console.log('crazy error');
       }
-      req.session.meetingUUID = decryptedAppContext?.mid
 
     } catch (error) {
       return next(error)
@@ -299,8 +299,14 @@ module.exports = {
   // FRONTEND PROXY ===========================================================
   proxy: createProxyMiddleware({
     target: process.env.ZOOM_APP_CLIENT_URL,
+    // target: 'http://localhost:3001/api/zoomapp/home',
+    // target: "https://www.google.com",
     // target: "https://secure-stream-83815-9a6b29ac017d.herokuapp.com/",
+    // secure: false,
     changeOrigin: true,
+    // headers: {
+    //   "Connection": "keep-alive"
+    // },
     ws: true,
   }),
 }
