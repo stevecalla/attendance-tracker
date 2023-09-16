@@ -242,14 +242,19 @@ module.exports = {
 
   // ZOOM APP HOME URL HANDLER ==================================================
   // This route is called when the app opens
-  home(req, res, next) {
+  async home(req, res, next) {
     // console.log('------5-------');
     // console.log('-------6------');
 
-    // console.log(res);
-
+    console.log(req.headers);
+    
     // console.log('-------7------');
     // console.log('-------8------');
+    
+    console.log(req.session);
+
+    // console.log('-------9------');
+    // console.log('-------10------');
 
     console.log(
       'ZOOM APP HOME URL HANDLER ==================================================',
@@ -261,7 +266,7 @@ module.exports = {
         throw new Error('x-zoom-app-context header is required')
       }
 
-      const decryptedAppContext = zoomHelpers.decryptZoomAppContext(
+      const decryptedAppContext = await zoomHelpers.decryptZoomAppContext(
         req.headers['x-zoom-app-context'],
         process.env.ZOOM_APP_CLIENT_SECRET
       )
@@ -270,8 +275,18 @@ module.exports = {
       console.log('2. Persisting user id and meetingUUIDa', '\n')
 
       // 2. Persist user id and meetingUUID
-      req.session.user = decryptedAppContext.uid
-      req.session.meetingUUID = decryptedAppContext.mid
+      console.log('-------------decryptedAppContext.uid----');
+      console.log({decryptedAppContext});
+      console.log(decryptedAppContext.uid);
+
+      
+      if (decryptedAppContext.uid) {
+        req.session.user = decryptedAppContext.uid
+      } else {
+        console.log('crazy error');
+      }
+      req.session.meetingUUID = decryptedAppContext?.mid
+
     } catch (error) {
       return next(error)
     }
@@ -284,6 +299,7 @@ module.exports = {
   // FRONTEND PROXY ===========================================================
   proxy: createProxyMiddleware({
     target: process.env.ZOOM_APP_CLIENT_URL,
+    // target: "https://secure-stream-83815-9a6b29ac017d.herokuapp.com/",
     changeOrigin: true,
     ws: true,
   }),

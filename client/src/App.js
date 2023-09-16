@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { apis } from "./apis";
+import axios from 'axios';
 
 import { MainPortal } from "./pages/MainPortal";
 
@@ -198,6 +199,49 @@ function App() {
   //     </div>
   //   );
   // }
+
+  // Function to make the API request and handle the response
+  const fetchData = async () => {
+    console.log('--------------fetch data--------------')
+    try {
+      // const response = await axios.get('http://localhost:3001/api/zoomapp/proxy');
+      const response = await axios.get('http://localhost:3001/test');
+
+      // Access custom headers from the response
+      // const customHeader = response.headers['custom-header'];
+      // const customHeader = response;
+      // You can access more headers here if needed
+
+      // Use the custom header in your component state or perform actions
+      // console.log(`Custom Header Value: ${customHeader}`;
+      console.log(`Custom Header Value: ${JSON.stringify(response)}`);
+      // Update state or perform actions based on the header value
+    } catch (error) {
+      // Handle errors
+    }
+  };
+
+  // const fetchData2 = async() => {
+  //     fetch('/api/data', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Example custom header
+  //       },
+  //     })
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         setData(data);
+  //       })
+  //       .catch(error => {
+  //         console.error('Error:', error);
+  //       });
+  // }
+
+  // Use the useEffect hook to execute the setup code when the component mounts
+  useEffect(() => {
+    // Call the fetchData function when the component mounts
+    // fetchData();
+  }, []);
 
   // if (isLoading) {
   //   return (
