@@ -10,22 +10,22 @@ const util = require("util");
  * of persistence.
  */
 
+// const db = redis.createClient({
+//   url: process.env.REDIS_URL,
+// }); 
+
+const redisPort = process.env.REDIS_PORT;
+const redisHost = process.env.REDIS_HOST;
+// const redisAuth = process.env.REDIS_AUTH;
+
 const db = redis.createClient({
-  // url: process.env.REDIS_URL,
-}); 
+  host: redisHost,
+  port: redisPort,
+});
 
 process.on("SIGINT", () => {
   db.quit(); //gracefully exit redis upon crash
 });
-
-// db.connect()
-//   .then(() => {
-//     console.log("Connected to Redis");
-//     db.set("z", "p");
-//   })
-//   .catch((err) => {
-//     console.log(err.message);
-//   });
 
 const getAsync = util.promisify(db.get).bind(db);
 const setAsync = util.promisify(db.set).bind(db);
@@ -34,14 +34,6 @@ const delAsync = util.promisify(db.del).bind(db);
 db.on("error", console.error);
 
 module.exports = {
-  // on: db.connect().then(() => {
-  //   console.log("Connected to Redis 1");
-  //   db.set("1", "1");
-  // })
-  // .catch((err) => {
-  //   console.log(err.message);
-  // }),
-
   getUser: async function (zoomUserId) {
     const user = await getAsync(zoomUserId);
     if (!user) {
