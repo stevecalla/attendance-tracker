@@ -1,7 +1,25 @@
-const session = require("express-session");
-const SessionStore = require("connect-redis")(session);
 const redis = require("redis");
-const store = require("./util/store");
+const session = require("express-session");
+const connectRedis = require('connect-redis');
+const RedisStore = connectRedis(session);
+
+const redisPort = process.env.REDIS_PORT;
+const redisHost = process.env.REDIS_HOST;
+// const redisAuth = process.env.REDIS_AUTH;
+
+//Configure redis client
+const redisClient = redis.createClient({
+  host: redisHost,
+  port: redisPort,
+});
+
+redisClient.on("connect", () => {
+  console.log('Successfully connected to Redis ' + redisHost + ':' + redisPort);
+});
+
+process.on("SIGINT", () => {
+  redisClient.quit();
+});
 
 module.exports = {
   // Set up required OWASP HTTP response headers
@@ -22,13 +40,26 @@ module.exports = {
     console.log("------1-------");
     console.log("-------2------");
 
-    console.log(res);
+    // console.log(res);
 
     console.log("-------3------");
     console.log("-------4------");
 
     next();
   },
+
+  // Zoom app session middleware
+  session: session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      path: "/",
+      maxAge: 365 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    },
+    store: new RedisStore({client: redisClient}),
+  }),
 
   // Zoom app session middleware
   // session: session({
@@ -47,35 +78,35 @@ module.exports = {
   //   }),
   // }),
 
-  async createSession(req, res, next) {
-    store.on;
+  // async createSession(req, res, next) {
+  //   store.on;
 
-    console.log('session');
+  //   console.log('session');
 
-    try {
-      session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-          path: "/",
-          httpOnly: true,
-          maxAge: 365 * 24 * 60 * 60 * 1000,
-        },
-        store: new SessionStore({
-          client: redis.createClient({
-            url: process.env.REDIS_URL,
-          }),
-        }),
-      });
-    } catch(err) {
-      console.log(err)
-    }
+  //   try {
+  //     session({
+  //       secret: process.env.SESSION_SECRET,
+  //       resave: false,
+  //       saveUninitialized: true,
+  //       cookie: {
+  //         path: "/",
+  //         httpOnly: true,
+  //         maxAge: 365 * 24 * 60 * 60 * 1000,
+  //       },
+  //       store: new SessionStore({
+  //         client: redis.createClient({
+  //           url: process.env.REDIS_URL,
+  //         }),
+  //       }),
+  //     });
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
 
-    console.log({session});
-    console.log(req.session);
-    next();
-  },
+  //   console.log({session});
+  //   console.log(req.session);
+  //   next();
+  // },
 
   // Protected route middleware
   // Routes behind this will only show if the user has a Zoom App session and an Auth0 id token

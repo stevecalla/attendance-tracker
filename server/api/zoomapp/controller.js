@@ -279,12 +279,13 @@ module.exports = {
       console.log({decryptedAppContext});
       console.log(decryptedAppContext.uid);
 
-      req.session.user = decryptedAppContext.uid
-      req.session.meetingUUID = decryptedAppContext?.mid
       
-      if (decryptedAppContext.uid) {
-      } else {
-        console.log('crazy error');
+      if (!req.session.meetingUUID) {
+        req.session.user = decryptedAppContext.uid
+      }
+
+      if (!req.session.meetingUUID) {
+        req.session.meetingUUID = decryptedAppContext?.mid
       }
 
     } catch (error) {
@@ -293,6 +294,7 @@ module.exports = {
 
     // 3. Redirect to frontend
     console.log('3. Redirect to frontend', '\n')
+    console.log(req.session)
     res.redirect('/api/zoomapp/proxy')
   },
 
