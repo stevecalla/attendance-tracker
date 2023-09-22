@@ -4,6 +4,7 @@ const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const compression = require("compression"); //added to address lighthouse text compression performance issue
 
+
 // require("dotenv").config();
 
 // //section cors start
