@@ -1,6 +1,7 @@
 const redis = require("redis");
 const encrypt = require("./encrypt");
 const util = require("util");
+require("dotenv").config();
 /**
  * The auth token exchange happens before the Zoom App is launched. Therefore,
  * we need a place to store the tokens so we can later use them when a session
@@ -14,13 +15,14 @@ const util = require("util");
 //   url: process.env.REDIS_URL,
 // }); 
 
-const redisPort = process.env.REDIS_PORT;
-const redisHost = process.env.REDIS_HOST;
+// const redisPort = process.env.REDIS_PORT;
+// const redisHost = process.env.REDIS_HOST;
 // const redisAuth = process.env.REDIS_AUTH;
 
 const db = redis.createClient({
-  host: redisHost,
-  port: redisPort,
+  // host: process.env.REDIS_HOST,
+  // port: process.env.REDIS_PORT,
+  url: process.env.REDIS_URL,
 });
 
 process.on("SIGINT", () => {

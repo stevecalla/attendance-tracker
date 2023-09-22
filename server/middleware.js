@@ -2,19 +2,21 @@ const redis = require("redis");
 const session = require("express-session");
 const connectRedis = require('connect-redis');
 const RedisStore = connectRedis(session);
+require("dotenv").config();
 
-const redisPort = process.env.REDIS_PORT;
-const redisHost = process.env.REDIS_HOST;
+// const redisPort = process.env.REDIS_PORT;
+// const redisHost = process.env.REDIS_HOST;
 // const redisAuth = process.env.REDIS_AUTH;
 
 //Configure redis client
 const redisClient = redis.createClient({
-  host: redisHost,
-  port: redisPort,
+  // host: process.env.REDIS_HOST,
+  // port: process.env.REDIS_PORT,
+  url: process.env.REDIS_URL,
 });
 
 redisClient.on("connect", () => {
-  console.log('Successfully connected to Redis ' + redisHost + ':' + redisPort);
+  console.log('Successfully connected to Redis ' + process.env.REDIS_HOST + ':' + process.env.REDIS_PORT + " or : " + process.env.REDIS_URL);
 });
 
 process.on("SIGINT", () => {
@@ -37,13 +39,13 @@ module.exports = {
     res.setHeader("Referrer-Policy", "same-origin");
     res.setHeader("X-Frame-Option", "same-origin");
 
-    console.log("------1-------");
-    console.log("-------2------");
+    // console.log("------1-------");
+    // console.log("-------2------");
 
     // console.log(res);
 
-    console.log("-------3------");
-    console.log("-------4------");
+    // console.log("-------3------");
+    // console.log("-------4------");
 
     next();
   },
