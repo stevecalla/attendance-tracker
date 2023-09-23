@@ -63,51 +63,23 @@ module.exports = {
     store: new RedisStore({client: redisClient}),
   }),
 
-  // Zoom app session middleware
-  // session: session({
-  //   secret: process.env.SESSION_SECRET,
-  //   resave: false,
-  //   saveUninitialized: true,
-  //   cookie: {
-  //     path: '/',
-  //     httpOnly: true,
-  //     maxAge: 365 * 24 * 60 * 60 * 1000,
-  //   },
-  //   store: new SessionStore({
-  //     client: redis.createClient({
-  //       url: process.env.REDIS_URL,
-  //     }),
-  //   }),
-  // }),
+  // getSession(req, res, next) {
+  //   redisClient.lpush("viewSession", "z", redisClient.print);
+  //   redisClient.lrange("viewSession", 0, -1);
 
-  // async createSession(req, res, next) {
-  //   store.on;
-
-  //   console.log('session');
-
-  //   try {
-  //     session({
-  //       secret: process.env.SESSION_SECRET,
-  //       resave: false,
-  //       saveUninitialized: true,
-  //       cookie: {
-  //         path: "/",
-  //         httpOnly: true,
-  //         maxAge: 365 * 24 * 60 * 60 * 1000,
-  //       },
-  //       store: new SessionStore({
-  //         client: redis.createClient({
-  //           url: process.env.REDIS_URL,
-  //         }),
-  //       }),
-  //     });
-  //   } catch(err) {
-  //     console.log(err)
-  //   }
-
-  //   console.log({session});
+  //   console.log('request made to get session');
   //   console.log(req.session);
-  //   next();
+
+  //   // Check if a session exists
+  //   if (!req.session) {
+  //     return res.status(200).json({ message: "No session found" });
+  //   } else {
+  //     // req.session.user = 3;
+  //   }
+  
+  //   // Access and send the session data
+  //   console.log(req.session);
+  //   return res.status(200).json({ session: req.session });
   // },
 
   // Protected route middleware
