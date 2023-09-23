@@ -22,9 +22,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   // const history = useHistory();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const location = useLocation();
+  const location = useLocation();
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [runningContext, setRunningContext] = useState(null);
@@ -138,7 +138,7 @@ function App() {
           "Message received " + receiver + " " + reason + ": " + content
         );
         // history.push({ pathname: content });
-        // navigate({ pathname: content });
+        navigate({ pathname: content });
       };
       if (once === 0) {
         zoomSdk.addEventListener("onMessage", on_message_handler);
@@ -146,8 +146,8 @@ function App() {
       }
     },
     // [history]
-    // [navigate]
-    []
+    [navigate]
+    // []
   );
 
   useEffect(() => {
@@ -264,7 +264,7 @@ function App() {
   // } else {
   return (
     <div className="App">
-      <Router>
+      {/* <Router> */}
         {/* <Switch> */}
         <Routes>
           {/* <MainPortal /> */}
@@ -279,7 +279,7 @@ function App() {
             <Route path="*"><WrongPage /></Route> */}
         </Routes>
         {/* </Switch> */}
-      </Router>
+      {/* </Router> */}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom"; //v6
+// import { Router } from "react-router-dom";
 // import { createHashHistory } from "history";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
@@ -42,8 +43,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     {/* <Router history={history}> */}
+    <Router>
       <App />
     {/* </Router> */}
+    </Router>
   </React.StrictMode>
 );
 
