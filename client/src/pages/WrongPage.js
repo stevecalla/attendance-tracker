@@ -7,6 +7,7 @@ const WrongPage = () => {
   return (
     <button
       onClick={() => navigate('/home')}
+      // to=""
       style={{ backgroundColor: "white", border: "none" }}
     >
       <img src={wrongPageImg} className="" alt="404 Wrong Page" />
