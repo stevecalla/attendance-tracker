@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Router } from "react-router-dom";
-import { createHashHistory } from "history";
+// import { createHashHistory } from "history";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
@@ -37,7 +37,7 @@ library.add(
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const history = createHashHistory();
+// const history = createHashHistory();
 
 root.render(
   <React.StrictMode>
