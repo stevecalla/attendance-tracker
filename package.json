@@ -2,6 +2,10 @@
   "name": "Attendance Tracker",
   "description": "Attendance Tracker",
   "version": "1.0.0",
+  "engines": {
+    "node": "18.17",
+    "npm": "9.6.7"
+  },
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
