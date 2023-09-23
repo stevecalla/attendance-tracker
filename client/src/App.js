@@ -1,10 +1,17 @@
 /* globals zoomSdk */
 import React, { useState, useEffect, useCallback } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, useNavigate } from "react-router-dom";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import { Switch } from "react-router-dom/cjs/react-router-dom.min";
+
 import { apis } from "./apis";
-import axios from 'axios';
+import axios from "axios";
 
 import { MainPortal } from "./pages/MainPortal";
+import { Home } from "./pages/Home";
+import WrongPage from "./pages/WrongPage";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,8 +21,10 @@ let once = 0; // to prevent increasing number of event listeners being added
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const history = useHistory();
-  const location = useLocation();
+  // const history = useHistory();
+  // const navigate = useNavigate();
+
+  // const location = useLocation();
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [runningContext, setRunningContext] = useState(null);
@@ -29,7 +38,7 @@ function App() {
   //     setIsLoading(false);
   //   }, 1000);
   // }, [])
-  
+
   useEffect(() => {
     async function configureSdk() {
       // to account for the 2 hour timeout for config
@@ -128,14 +137,17 @@ function App() {
         console.log(
           "Message received " + receiver + " " + reason + ": " + content
         );
-        history.push({ pathname: content });
+        // history.push({ pathname: content });
+        // navigate({ pathname: content });
       };
       if (once === 0) {
         zoomSdk.addEventListener("onMessage", on_message_handler);
         once = 1;
       }
     },
-    [history]
+    // [history]
+    // [navigate]
+    []
   );
 
   useEffect(() => {
@@ -202,10 +214,10 @@ function App() {
 
   // Function to make the API request and handle the response
   const fetchData = async () => {
-    console.log('--------------fetch data--------------')
+    console.log("--------------fetch data--------------");
     try {
       // const response = await axios.get('http://localhost:3001/api/zoomapp/proxy');
-      const response = await axios.get('http://localhost:3001/test');
+      const response = await axios.get("http://localhost:3001/test");
 
       // Access custom headers from the response
       // const customHeader = response.headers['custom-header'];
@@ -250,12 +262,27 @@ function App() {
   //     </div>
   //   );
   // } else {
-    return (
-      <div className="App">
-        <MainPortal />
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <Router>
+        {/* <Switch> */}
+        <Routes>
+          {/* <MainPortal /> */}
+          {/* <Home /> */}
+          <Route path="/api/zoomapp/proxy" element={<MainPortal />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="*" element={<WrongPage />} />
+
+          {/* <Route exact path="/"><MainPortal /></Route>
+            <Route exact path="/home"><Home /></Route>
+            <Route path="*"><WrongPage /></Route> */}
+        </Routes>
+        {/* </Switch> */}
+      </Router>
+    </div>
+  );
+}
 // }
 
 export default App;

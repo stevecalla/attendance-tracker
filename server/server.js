@@ -4,7 +4,6 @@ const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const compression = require("compression"); //added to address lighthouse text compression performance issue
 
-
 // require("dotenv").config();
 
 // //section cors start
@@ -36,6 +35,28 @@ app.use("/test", (req, res, next) => {
   res.json({ message: "This is your API data" });
   // You can perform additional operations here if needed
   next(); // Continue to the next middleware or route handler
+});
+
+//http://localhost:3000/view-session
+app.get("/view-session", (req, res) => {
+  // console.log("Request made to /view-session route");
+  // console.log(req.session);
+
+  // let test = middleware.getSession();
+  
+  // res.json(test);
+  
+  // redisClient.lpush("viewSession", "z", redisClient.print);
+  // // Check if a session exists
+  // if (!req.session) {
+  //   return res.status(200).json({ message: "No session found" });
+  // } else {
+  //   // req.session.user = 3;
+  // }
+
+  // // Access and send the session data
+  // console.log(req.session);
+  // res.status(200).json({ session: req.session });
 });
 
 // //section cors start
@@ -76,21 +97,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../client/build/index.html"));
   });
 }
-
-//http://localhost:3000/view-session
-app.get("/view-session", (req, res) => {
-  redisClient.lpush('viewSession', 'z', redisClient.print);
-  // Check if a session exists
-  if (!req.session) {
-    return res.status(200).json({ message: "No session found" });
-  } else {
-    // req.session.user = 3;
-  }
-
-  // Access and send the session data
-  console.log(req.session);
-  res.status(200).json({ session: req.session });
-});
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {

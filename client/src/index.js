@@ -41,9 +41,9 @@ const history = createHashHistory();
 
 root.render(
   <React.StrictMode>
-    <Router history={history}>
+    {/* <Router history={history}> */}
       <App />
-    </Router>
+    {/* </Router> */}
   </React.StrictMode>
 );
 
