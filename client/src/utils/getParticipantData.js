@@ -18,7 +18,7 @@ export const getParticipantData = async (getAPIName) => {
     return clientResponse;
 
   } catch (error) {
-    console.error("Error:", error);
+    // console.error("Error:", error);
     return error;
   };
 };

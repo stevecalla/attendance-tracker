@@ -1,9 +1,9 @@
 /* globals zoomSdk */
 import React, { useState, useEffect, useCallback } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useHistory, useNavigate } from "react-router-dom";
 
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import { Switch } from "react-router-dom/cjs/react-router-dom.min";
 
 import { apis } from "./apis";
@@ -21,8 +21,10 @@ let once = 0; // to prevent increasing number of event listeners being added
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const history = useHistory();
-  const location = useLocation();
+  // const history = useHistory();
+  // const navigate = useNavigate();
+
+  // const location = useLocation();
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [runningContext, setRunningContext] = useState(null);
@@ -135,14 +137,17 @@ function App() {
         console.log(
           "Message received " + receiver + " " + reason + ": " + content
         );
-        history.push({ pathname: content });
+        // history.push({ pathname: content });
+        // navigate({ pathname: content });
       };
       if (once === 0) {
         zoomSdk.addEventListener("onMessage", on_message_handler);
         once = 1;
       }
     },
-    [history]
+    // [history]
+    // [navigate]
+    []
   );
 
   useEffect(() => {
@@ -260,16 +265,20 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Switch>
+        {/* <Switch> */}
+        <Routes>
           {/* <MainPortal /> */}
-          {/* <Home2 /> */}
-          {/* <Route path="/" element={<MainPortal />} />
-          <Route path="/help" element={<Home2 />} /> */}
+          {/* <Home /> */}
+          <Route path="/api/zoomapp/proxy" element={<MainPortal />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="*" element={<WrongPage />} />
 
-            <Route exact path="/"><MainPortal /></Route>
+          {/* <Route exact path="/"><MainPortal /></Route>
             <Route exact path="/home"><Home /></Route>
-            <Route path="*"><WrongPage /></Route>
-        </Switch>
+            <Route path="*"><WrongPage /></Route> */}
+        </Routes>
+        {/* </Switch> */}
       </Router>
     </div>
   );

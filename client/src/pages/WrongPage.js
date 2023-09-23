@@ -9,12 +9,12 @@ import "../styles/button-style.css";
 import wrongPageImg from "../assets/images-avif/404-not-found.avif";
 
 const WrongPage = () => {
-  // const navigate = useNavigate();
-  const history = useHistory();
-  
-  const homePage = () => {
-      history.push("/home")
-  };
+  const navigate = useNavigate();
+  // const history = useHistory();
+
+  // const homePage = () => {
+  //     history.push("/home");
+  // };
 
   return (
     <Container>
@@ -25,7 +25,8 @@ const WrongPage = () => {
         <Button
           // as={Link}
           // as={<Home />}
-          onClick={homePage}
+          // onClick={homePage}
+          onClick={() => navigate("/home")}
           to="/jobs-panel"
           className="rounded-pill wrong-page-button"
           style={{ backgroundColor: "white", border: "none" }}
