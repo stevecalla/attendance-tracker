@@ -1,10 +1,17 @@
 /* globals zoomSdk */
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useHistory } from "react-router-dom";
+
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import { Switch } from "react-router-dom/cjs/react-router-dom.min";
+
 import { apis } from "./apis";
-import axios from 'axios';
+import axios from "axios";
 
 import { MainPortal } from "./pages/MainPortal";
+import { Home } from "./pages/Home";
+import WrongPage from "./pages/WrongPage";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -29,7 +36,7 @@ function App() {
   //     setIsLoading(false);
   //   }, 1000);
   // }, [])
-  
+
   useEffect(() => {
     async function configureSdk() {
       // to account for the 2 hour timeout for config
@@ -202,10 +209,10 @@ function App() {
 
   // Function to make the API request and handle the response
   const fetchData = async () => {
-    console.log('--------------fetch data--------------')
+    console.log("--------------fetch data--------------");
     try {
       // const response = await axios.get('http://localhost:3001/api/zoomapp/proxy');
-      const response = await axios.get('http://localhost:3001/test');
+      const response = await axios.get("http://localhost:3001/test");
 
       // Access custom headers from the response
       // const customHeader = response.headers['custom-header'];
@@ -250,12 +257,23 @@ function App() {
   //     </div>
   //   );
   // } else {
-    return (
-      <div className="App">
-        <MainPortal />
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <Router>
+        <Switch>
+          {/* <MainPortal /> */}
+          {/* <Home2 /> */}
+          {/* <Route path="/" element={<MainPortal />} />
+          <Route path="/help" element={<Home2 />} /> */}
+
+            <Route exact path="/"><MainPortal /></Route>
+            <Route exact path="/home"><Home /></Route>
+            <Route path="*"><WrongPage /></Route>
+        </Switch>
+      </Router>
+    </div>
+  );
+}
 // }
 
 export default App;
