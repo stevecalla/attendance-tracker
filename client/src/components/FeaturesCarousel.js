@@ -1,48 +1,44 @@
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from "react-bootstrap/Carousel";
 import FeatureSlide from "./FeatureSlides";
-import FirstSlide from "../assets/slides/firstSlide.png";
-import SecondSlide from "../assets/slides/firstSlide.png";
-import ThirdSlide from "../assets/slides/firstSlide.png";
+import firstSlide from "../assets/slides/firstSlide.png";
+import secondSlide from "../assets/slides/secondSlide.png";
+import thirdSlide from "../assets/slides/thirdSlide.png";
 
 function FeaturesCarousel() {
+  const slides = [
+    {
+      url: firstSlide,
+      title: "",
+      alt: "Attendance tracker features",
+    },
+    {
+      url: secondSlide,
+      title: "",
+      alt: "Participants tab features",
+    },
+    {
+      url: thirdSlide,
+      title: "",
+      alt: "Fuzzy logic tab features",
+    },
+  ];
+
   return (
-    <Carousel>
-      <Carousel.Item>
-        <FeatureSlide 
-          slidePath={FirstSlide}
-          slideTitle=""
-          slideAlt="" 
-        />
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <FeatureSlide 
-          slidePath={FirstSlide}
-          slideTitle=""
-          slideAlt="" 
-        />
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <FeatureSlide 
-          slidePath={FirstSlide}
-          slideTitle=""
-          slideAlt="" 
-        />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+    <>
+      {
+        <Carousel variant="dark" className="m-5">
+          {slides.map((slide) => (
+            <Carousel.Item>
+              <FeatureSlide
+                slidePath={slide.url}
+                slideTitle={slide.title}
+                slideAlt={slide.alt}
+              />
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      }
+    </>
   );
 }
 
