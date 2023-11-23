@@ -26,8 +26,8 @@ const sortListByName = (curr, next) => {
 }
 
 const mockParticipantData = [
-  {participantId: "16778240", screenName: "Steve Calla", role: "host"},
-  {participantId: "16778241", screenName: "Calla, Steve", role: "host"},
+  {participantId: "16778240", screenName: "Mickey Mouse", role: "host"},
+  {participantId: "16778241", screenName: "Mouse, Mickey", role: "host"},
   {participantId: "16778242", screenName: "Alexander, Jose", role: "host"},
   {participantId: "16778243", screenName: "Barry Jones", role: "host"},
   {participantId: "16778244", screenName: "Jones, Barry", role: "host"},

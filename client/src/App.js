@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
 // import { Switch } from "react-router-dom/cjs/react-router-dom.min";
 
 import { apis } from "./apis";
-import axios from "axios";
+// import axios from "axios";
 
 import { MainPortal } from "./pages/MainPortal";
 import { Home } from "./pages/Home";
@@ -213,25 +213,25 @@ function App() {
   // }
 
   // Function to make the API request and handle the response
-  const fetchData = async () => {
-    console.log("--------------fetch data--------------");
-    try {
-      // const response = await axios.get('http://localhost:3001/api/zoomapp/proxy');
-      const response = await axios.get("http://localhost:3001/test");
+  // const fetchData = async () => {
+  //   console.log("--------------fetch data--------------");
+  //   try {
+  //     // const response = await axios.get('http://localhost:3001/api/zoomapp/proxy');
+  //     const response = await axios.get("http://localhost:3001/test");
 
-      // Access custom headers from the response
-      // const customHeader = response.headers['custom-header'];
-      // const customHeader = response;
-      // You can access more headers here if needed
+  //     // Access custom headers from the response
+  //     // const customHeader = response.headers['custom-header'];
+  //     // const customHeader = response;
+  //     // You can access more headers here if needed
 
-      // Use the custom header in your component state or perform actions
-      // console.log(`Custom Header Value: ${customHeader}`;
-      console.log(`Custom Header Value: ${JSON.stringify(response)}`);
-      // Update state or perform actions based on the header value
-    } catch (error) {
-      // Handle errors
-    }
-  };
+  //     // Use the custom header in your component state or perform actions
+  //     // console.log(`Custom Header Value: ${customHeader}`;
+  //     console.log(`Custom Header Value: ${JSON.stringify(response)}`);
+  //     // Update state or perform actions based on the header value
+  //   } catch (error) {
+  //     // Handle errors
+  //   }
+  // };
 
   // const fetchData2 = async() => {
   //     fetch('/api/data', {
@@ -265,20 +265,20 @@ function App() {
   return (
     <div className="App">
       {/* <Router> */}
-        {/* <Switch> */}
-        <Routes>
-          {/* <MainPortal /> */}
-          {/* <Home /> */}
-          <Route path="/api/zoomapp/proxy" element={<MainPortal />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="*" element={<WrongPage />} />
+      {/* <Switch> */}
+      <Routes>
+        {/* <MainPortal /> */}
+        {/* <Home /> */}
+        <Route path="/api/zoomapp/proxy" element={<MainPortal />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="*" element={<WrongPage />} />
 
-          {/* <Route exact path="/"><MainPortal /></Route>
+        {/* <Route exact path="/"><MainPortal /></Route>
             <Route exact path="/home"><Home /></Route>
             <Route path="*"><WrongPage /></Route> */}
-        </Routes>
-        {/* </Switch> */}
+      </Routes>
+      {/* </Switch> */}
       {/* </Router> */}
     </div>
   );
