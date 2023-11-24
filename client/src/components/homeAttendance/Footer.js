@@ -29,7 +29,7 @@ function Footer() {
 
       <Row>
         <Col className="col-12 m-0 mb-2 text-light">
-          &copy;{new Date().getFullYear()} CallaCodes LLC.
+          CallaCodes LLC. &copy;{new Date().getFullYear()} 
         </Col>
       </Row>
     </Container>
