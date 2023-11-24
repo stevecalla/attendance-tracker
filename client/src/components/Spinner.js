@@ -1,4 +1,4 @@
-import "./styles/spinner.css";
+import "../styles/spinner.css";
 
 function Spinner({ content, onClickHandler, isDisabled }) {
   return (

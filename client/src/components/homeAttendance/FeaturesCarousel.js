@@ -27,23 +27,24 @@ function FeaturesCarousel() {
       {
         <Carousel
           variant="dark"
-          className="w-80 h-50"
+          className="col-12 col-lg-9 d-flex justify-center"
           slide={false}
           style={{
-            marginTop: "100px",
+            marginTop: "80px",
           }}
         >
           {slides.map((variant, index) => (
             <Carousel.Item key={index}>
               <img
                 interval={false}
+                // className="border rounded w-75"
                 className="border rounded"
                 src={variant.url}
                 title={variant.title}
                 alt={variant.alt}
                 style={{
-                  width: "85%",
-                  // height: "50%",
+                  width: "90%",
+                //   height: "50%",
                 }}
               />
             </Carousel.Item>
