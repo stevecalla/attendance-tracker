@@ -1,5 +1,4 @@
 import Carousel from "react-bootstrap/Carousel";
-import FeatureSlide from "./FeatureSlides";
 import firstSlide from "../assets/slides/firstSlide.png";
 import secondSlide from "../assets/slides/secondSlide.png";
 import thirdSlide from "../assets/slides/thirdSlide.png";
@@ -26,13 +25,22 @@ function FeaturesCarousel() {
   return (
     <>
       {
-        <Carousel variant="dark" className="m-5">
+        <Carousel
+          slide={false}
+          variant="dark"
+          className="m-lg-4 w-80 h-50"
+        >
           {slides.map((slide) => (
             <Carousel.Item>
-              <FeatureSlide
-                slidePath={slide.url}
-                slideTitle={slide.title}
-                slideAlt={slide.alt}
+              <img
+                className="border rounded"
+                src={slide.url}
+                title={slide.title}
+                alt={slide.alt}
+                style={{
+                  width: "85%",
+                  // height: "50%",
+                }}
               />
             </Carousel.Item>
           ))}
