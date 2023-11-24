@@ -1,7 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
-import firstSlide from "../assets/slides/firstSlide.png";
-import secondSlide from "../assets/slides/secondSlide.png";
-import thirdSlide from "../assets/slides/thirdSlide.png";
+import firstSlide from "../../assets/slides/firstSlide.png";
+import secondSlide from "../../assets/slides/secondSlide.png";
+import thirdSlide from "../../assets/slides/thirdSlide.png";
 
 function FeaturesCarousel() {
   const slides = [
@@ -26,17 +26,21 @@ function FeaturesCarousel() {
     <>
       {
         <Carousel
-          slide={false}
           variant="dark"
-          className="m-lg-4 w-80 h-50"
+          className="w-80 h-50"
+          slide={false}
+          style={{
+            marginTop: "100px",
+          }}
         >
-          {slides.map((slide) => (
-            <Carousel.Item>
+          {slides.map((variant, index) => (
+            <Carousel.Item key={index}>
               <img
+                interval={false}
                 className="border rounded"
-                src={slide.url}
-                title={slide.title}
-                alt={slide.alt}
+                src={variant.url}
+                title={variant.title}
+                alt={variant.alt}
                 style={{
                   width: "85%",
                   // height: "50%",

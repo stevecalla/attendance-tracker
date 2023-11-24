@@ -6,8 +6,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 function Headerbar() {
   return (
     <Navbar
-      // fixed="top"
-      sticky="top"
+      fixed="top"
+      // sticky="top"
       expand="md"
       className="bg-body-tertiary mb-3"
       bg="dark"
