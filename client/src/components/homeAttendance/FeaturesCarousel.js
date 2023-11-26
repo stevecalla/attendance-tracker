@@ -25,7 +25,7 @@ function FeaturesCarousel() {
   return (
     <>
       <Carousel
-        // slide={false}
+        slide={false}
         // interval={false}
         variant="dark"
         className="col-12 col-lg-9 d-flex justify-center"

@@ -1,5 +1,6 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
@@ -19,8 +20,9 @@ function Headerbar() {
         <Navbar.Collapse className="flex-grow-0" id="basic-navbar-nav">
           {/* <Nav className="me-auto"> */}
           <Nav className="">
-            <Nav.Link href="#home">Login</Nav.Link>
-            <Nav.Link href="#link">Logout</Nav.Link>
+            <Nav.Link as={Link} to="/login">Login</Nav.Link>
+            <Nav.Link as={Link} to="/Logout">Logout</Nav.Link>
+
             <NavDropdown
               // drop="start"
               title="Account"
