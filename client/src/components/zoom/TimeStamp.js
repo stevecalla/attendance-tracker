@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getDate, getTime } from "../utils/dateInfo";
+import { getDate, getTime } from "../../utils/dateInfo";
 
 const TimeStamp = ({ retrieveDate }) => {
   console.log(retrieveDate);

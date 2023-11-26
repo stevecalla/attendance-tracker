@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { copyUtility } from "../utils/copyUtility";
+import { copyUtility } from "../../utils/copyUtility";
 
 import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
 import { apis } from "./apis";
 // import axios from "axios";
 
-import { MainPortal } from "./pages/MainPortal";
+import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import { Home } from "./pages/Home";
 import WrongPage from "./pages/WrongPage";
 
@@ -269,7 +269,7 @@ function App() {
       <Routes>
         {/* <MainPortal /> */}
         {/* <Home /> */}
-        <Route path="/api/zoomapp/proxy" element={<MainPortal />} />
+        <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="*" element={<WrongPage />} />

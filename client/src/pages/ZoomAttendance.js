@@ -1,24 +1,24 @@
 import React, { useState, useEffect, Suspense, lazy, useContext } from "react";
-import { ParticipantContext } from "./MainPortal";
+import { ParticipantContext } from "./ZoomMainPortal";
 
-import AttendeeList from "../components/AttendeeList";
-import CountInfo from "../components/CountInfo";
-import HorizontalLine from "../components/HorizontalLine";
-import TimeStamp from "../components/TimeStamp";
-import ButtonData from "../components/ButtonData";
-import AttendeeInput from "../components/AttendeeInput";
+import AttendeeList from "../components/zoom/AttendeeList";
+import CountInfo from "../components/zoom/CountInfo";
+import HorizontalLine from "../components/zoom/HorizontalLine";
+import TimeStamp from "../components/zoom/TimeStamp";
+import ButtonData from "../components/zoom/ButtonData";
+import AttendeeInput from "../components/zoom/AttendeeInput";
 
 import { sortHandlerNamesNumbers } from "../utils/sort"; //fix
 import { handleSimilarityScores } from "../utils/similarityScoring";
 import { setStorage, retrieveStorage } from "../utils/storage";
 import { cipherText, decryptText } from "../utils/encrypt";
 
-import "../components/ApiScrollview";
+// import "../components/ApiScrollview";
 
-const ViewCopyLists = lazy(() => import("../components/ViewCopyLists"));
-const BuyACoffee = lazy(() => import("../components/BuyACoffee"));
+const ViewCopyLists = lazy(() => import("../components/zoom/ViewCopyLists"));
+const BuyACoffee = lazy(() => import("../components/zoom/BuyACoffee"));
 
-function Attendance() {
+function ZoomAttendance() {
   const {
     handleInvokeApi,
     participantsMutable,
@@ -422,4 +422,4 @@ function Attendance() {
   );
 }
 
-export default Attendance;
+export default ZoomAttendance;

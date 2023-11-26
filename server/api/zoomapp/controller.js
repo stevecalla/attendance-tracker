@@ -291,12 +291,13 @@ module.exports = {
       }
 
       //fix //test if i can get user from store
-      console.log('==============');
-      const userTest = await store.getUser(req.session.user);
-      console.log(userTest);
-      const userResponse = await zoomApi.getZoomUser(userTest.accessToken);
-      console.log(userResponse);
-      console.log('==============');
+      // console.log('==============');
+      // const userTest = await store.getUser(req.session.user);
+      // console.log(userTest);
+      // // const userResponse = await zoomApi.getZoomUser(userTest.accessToken);
+      // const userResponse = await zoomApi.getZoomUser(userTest.refreshToken);
+      // console.log(userResponse);
+      // console.log('==============');
       //fix //end
 
       if (!req.session.meetingUUID || !req.session.meetingUUID !== decryptedAppContext?.mid) {

@@ -8,7 +8,6 @@ export const Home = () => {
     <>
       <Headerbar />
       <FeaturesCarousel />
-      {/* <FeaturesCarousel /> */}
       <Footer />
     </>
   );

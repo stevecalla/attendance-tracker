@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 
-import Participants from "./Participants";
-import Attendance from "./Attendance";
+import ZoomParticipants from "./ZoomParticipants";
+import ZoomAttendance from "./ZoomAttendance";
 
 import { mockParticipantData } from "../apis";
 import { getParticipantData } from "../utils/getParticipantData";
@@ -12,7 +12,7 @@ import Tabs from "react-bootstrap/Tabs";
 
 export const ParticipantContext = createContext(null);
 
-export const MainPortal = () => {
+export const ZoomMainPortal = () => {
   const [participantsNonMutable, setParticipantsOriginal] = useState([]); //original array
   const [participantsMutable, setParticipantsMutable] = useState(); //mutable copy of original
 
@@ -75,14 +75,14 @@ export const MainPortal = () => {
         style={{ flexWrap: "nowrap", width: "300px" }}
       >
         <Tab eventKey="participants" title="Participants">
-          <Participants />
+          <ZoomParticipants />
         </Tab>
         <Tab eventKey="attendance" title="Attendance">
-          <Attendance />
+          <ZoomAttendance />
         </Tab>
       </Tabs>
     </ParticipantContext.Provider>
   );
 };
 
-export default MainPortal;
+export default ZoomMainPortal;
