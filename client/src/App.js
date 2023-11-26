@@ -8,9 +8,18 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
 
 import { apis } from "./apis";
 // import axios from "axios";
+import Auth from "./utils/auth";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import { Home } from "./pages/Home";
+import Login from "./pages/Login";
+import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
 
 import "./App.css";
@@ -255,6 +264,35 @@ function App() {
     // fetchData();
   }, []);
 
+  // fix //======== apollo client start
+  const httpLink = new HttpLink({
+    uri:
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3001/graphql"
+        : "/graphql",
+  });
+  
+  // Construct request middleware that will attach the JWT token to every request as an `authorization` header
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem("id_token");
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+  
+  const client = new ApolloClient({
+    // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
+  // fix// ======== apollo client end
+
   // if (isLoading) {
   //   return (
   //     <div className="d-flex justify-content-center align-items-center" style={{ width: "300px", height: "200px", color: "red" }}>
@@ -263,6 +301,8 @@ function App() {
   //   );
   // } else {
   return (
+
+    <ApolloProvider client={client}>
     <div className="App">
       {/* <Router> */}
       {/* <Switch> */}
@@ -272,7 +312,9 @@ function App() {
         <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<WrongPage />} />
+
 
         {/* <Route exact path="/"><MainPortal /></Route>
             <Route exact path="/home"><Home /></Route>
@@ -281,6 +323,8 @@ function App() {
       {/* </Switch> */}
       {/* </Router> */}
     </div>
+
+    </ApolloProvider>
   );
 }
 // }

@@ -25,7 +25,8 @@ function FeaturesCarousel() {
   return (
     <>
       <Carousel
-        slide={false}
+        // slide={false}
+        // interval={false}
         variant="dark"
         className="col-12 col-lg-9 d-flex justify-center"
         style={{
@@ -35,7 +36,6 @@ function FeaturesCarousel() {
         {slides.map((variant, index) => (
           <Carousel.Item key={index}>
             <img
-              interval={false}
               className="border rounded"
               src={variant.url}
               title={variant.title}
