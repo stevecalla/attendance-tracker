@@ -37,7 +37,7 @@ app.use("/test", (req, res, next) => {
   next(); // Continue to the next middleware or route handler
 });
 
-//http://localhost:3000/view-session
+//http://localhost:3001/view-session
 app.get("/view-session", (req, res) => {
   // console.log("Request made to /view-session route");
   // console.log(req.session);
