@@ -64,7 +64,9 @@ module.exports = {
       console.log(
         '2a. Use code to get Zoom access token - response data: ',
         tokenResponse.data,
-        '\n'
+        '\n',
+        tokenResponse.data.access_token,
+        '\n',
       )
 
       console.log('2b. Get Zoom user from Zoom API with access token')
@@ -243,9 +245,13 @@ module.exports = {
   // ZOOM APP HOME URL HANDLER ==================================================
   // This route is called when the app opens
   async home(req, res, next) {
-    // console.log('------5-------');
+    console.log('------5-------');
     // console.log('-------6------');
 
+    console.log(req.body);
+    console.log(req.sessionID);
+    console.log(req.sessionStore);
+    console.log(req.session);
     console.log(req.headers);
     
     // console.log('-------7------');
@@ -284,7 +290,16 @@ module.exports = {
         req.session.user = decryptedAppContext.uid
       }
 
-      if (!req.session.meetingUUID) {
+      //fix //test if i can get user from store
+      console.log('==============');
+      const userTest = await store.getUser(req.session.user);
+      console.log(userTest);
+      const userResponse = await zoomApi.getZoomUser(userTest.accessToken);
+      console.log(userResponse);
+      console.log('==============');
+      //fix //end
+
+      if (!req.session.meetingUUID || !req.session.meetingUUID !== decryptedAppContext?.mid) {
         req.session.meetingUUID = decryptedAppContext?.mid
       }
 
