@@ -21,6 +21,8 @@ import { Home } from "./pages/Home";
 import Login from "./pages/Login";
 import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
+import ForgotPassword from "./components/ResetPassword/ForgotPassword";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -312,6 +314,27 @@ function App() {
         <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route
+                exact
+                path="/login"
+                element={
+                  <Login
+                    renderPanel={"login"}
+                    loginButtonIsActive={true}
+                  />
+                }
+              />
+              <Route
+                exact
+                path="/forgotpassword"
+                element={<ForgotPassword />}
+              />
+              <Route
+                exact
+                path="/resetpassword/:token"
+                element={<ResetPassword />}
+              
+              />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<WrongPage />} />
 
