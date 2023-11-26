@@ -1,4 +1,4 @@
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function AttendeeList({

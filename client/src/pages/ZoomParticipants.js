@@ -1,19 +1,19 @@
 import React, { Suspense, lazy, useContext } from "react";
-import { ParticipantContext } from "./MainPortal";
+import { ParticipantContext } from "./ZoomMainPortal";
 
-import AttendeeList from "../components/AttendeeList";
-import SearchInput from "../components/SearchInput";
-import CountInfo from "../components/CountInfo";
-import HorizontalLine from "../components/HorizontalLine";
-import TimeStamp from "../components/TimeStamp";
-import ButtonData from "../components/ButtonData";
+import AttendeeList from "../components/zoom/AttendeeList";
+import SearchInput from "../components/zoom/SearchInput";
+import CountInfo from "../components/zoom/CountInfo";
+import HorizontalLine from "../components/zoom/HorizontalLine";
+import TimeStamp from "../components/zoom/TimeStamp";
+import ButtonData from "../components/zoom/ButtonData";
 
-import "../components/ApiScrollview";
+// import "../components/ApiScrollview";
 
-const ViewCopyLists = lazy(() => import("../components/ViewCopyLists"));
-const BuyACoffee = lazy(() => import("../components/BuyACoffee"));
+const ViewCopyLists = lazy(() => import("../components/zoom/ViewCopyLists"));
+const BuyACoffee = lazy(() => import("../components/zoom/BuyACoffee"));
 
-function Participants() {
+function ZoomParticipants() {
   const {
     handleInvokeApi,
     participantsMutable,
@@ -205,4 +205,4 @@ function Participants() {
   );
 }
 
-export default Participants;
+export default ZoomParticipants;
