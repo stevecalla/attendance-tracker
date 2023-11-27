@@ -160,7 +160,7 @@ const resolvers = {
     signupEmployee: async (parent, { email, password }, context) => {
       const employee = await Employee.create({ email, password });
 
-      expiration = "2h"; // 15 minutes
+      expiration = "2h"; // 2hr
       const token = signToken(employee, expiration);
 
       return { token, employee };
@@ -383,6 +383,15 @@ const resolvers = {
     },
 
     // SECTION EMPLOYEE
+    // fix add user
+    addUser: async (parent, { username, email, password }, context) => {
+      // const user = await User.create({ username, email, password });
+      const user = await Employee.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
+    },
+
+    // fix end add user
     addEmployee: async (
       parent,
       {

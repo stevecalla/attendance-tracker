@@ -19,6 +19,8 @@ import { setContext } from "@apollo/client/link/context";
 
 import { Home } from "./pages/Home";
 import Login from "./pages/Login";
+import SignupForm from "./components/Login/SignupForm";
+import Message from "./components/Login/Message";
 import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
 import ForgotPassword from "./components/ResetPassword/ForgotPassword";
@@ -273,7 +275,7 @@ function App() {
         ? "http://localhost:3001/graphql"
         : "/graphql",
   });
-  
+
   // Construct request middleware that will attach the JWT token to every request as an `authorization` header
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
@@ -286,7 +288,7 @@ function App() {
       },
     };
   });
-  
+
   const client = new ApolloClient({
     // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
     link: authLink.concat(httpLink),
@@ -303,50 +305,59 @@ function App() {
   //   );
   // } else {
   return (
-
     <ApolloProvider client={client}>
-    <div className="App">
-      {/* <Router> */}
-      {/* <Switch> */}
-      <Routes>
-        {/* <MainPortal /> */}
-        {/* <Home /> */}
-        <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route
-                exact
-                path="/login"
-                element={
-                  <Login
-                    renderPanel={"login"}
-                    loginButtonIsActive={true}
-                  />
-                }
+      <div className="App">
+        {/* <Router> */}
+        {/* <Switch> */}
+        <Routes>
+          <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route
+            exact
+            path="/login"
+            element={
+              <Login
+                renderPanel={"login"}
+                messageButtonIsActive={false}
+                loginButtonIsActive={true}
+                signupButtonIsActive={false}
               />
-              <Route
-                exact
-                path="/forgotpassword"
-                element={<ForgotPassword />}
+            }
+          />
+          <Route
+            exact
+            path="/signup"
+            element={
+              <Login
+                renderPanel={"signup"}
+                messageButtonIsActive={false}
+                loginButtonIsActive={false}
+                signupButtonIsActive={true}
               />
-              <Route
-                exact
-                path="/resetpassword/:token"
-                element={<ResetPassword />}
-              
+            }
+          />
+          <Route
+            exact
+            path="/messages"
+            element={
+              <Login
+                renderPanel={"messages"}
+                messageButtonIsActive={true}
+                loginButtonIsActive={false}
+                signupButtonIsActive={false}
               />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<WrongPage />} />
-
-
-        {/* <Route exact path="/"><MainPortal /></Route>
-            <Route exact path="/home"><Home /></Route>
-            <Route path="*"><WrongPage /></Route> */}
-      </Routes>
-      {/* </Switch> */}
-      {/* </Router> */}
-    </div>
-
+            }
+          />
+          <Route exact path="/forgotpassword" element={<ForgotPassword />} />
+          <Route
+            exact
+            path="/resetpassword/:token"
+            element={<ResetPassword />}
+          />
+          <Route path="*" element={<WrongPage />} />
+        </Routes>
+      </div>
     </ApolloProvider>
   );
 }

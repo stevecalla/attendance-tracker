@@ -159,6 +159,8 @@ const typeDefs = gql`
     updateClientSchedule(_id: ID, schedule: String): Client
 
     # SECTION EMPLOYEE
+    addUser(username: String!, email: String!, password: String!): Auth
+
     addEmployee(
       email: String
       password: String
