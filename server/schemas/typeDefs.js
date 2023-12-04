@@ -84,9 +84,9 @@ const typeDefs = gql`
   }
 
   type Query {
-    #users: [User]!
+    users: [User]!
     #user(email: String!): User
-    #me(_id: ID!): User
+    me(_id: ID!): User
     #clients: [Client]!
     clients(isDisplayable: Boolean): [Client]!
     client(_id: ID!): Client

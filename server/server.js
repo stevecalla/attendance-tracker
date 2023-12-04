@@ -7,7 +7,8 @@ const compression = require("compression"); //added to address lighthouse text c
 // require("dotenv").config();
 
 // //section cors start
-const cors = require("cors");const ALLOWED_DOMAIN = [
+const cors = require("cors");
+const ALLOWED_DOMAIN = [
   "http://localhost:3000", 
   "http://localhost:8080", 
   "https://studio.apollographql.com"

@@ -7,12 +7,19 @@ let expiration = "2h"; // 2 hours
 
 const resolvers = {
   Query: {
-    // me: async (parent, { _id }, context) => {
-    //   // if (context.user) {
-    //   return User.findById({ _id }).populate("locations");
-    //   // }
-    //   // throw new AuthenticationError("You need to be logged in!");
-    // },
+    me: async (parent, { _id }, context) => {
+      // if (context.user) {
+      return User.findById({ _id });
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    users: async (parent, args, context) => {
+      // if (context.user) {
+        return User.find();
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
 
     clients: async (parent, { isDisplayable }, context) => {
       // if (context.user) {
@@ -168,7 +175,7 @@ const resolvers = {
 
     login: async (parent, { email, password }) => {
 
-      const user = await Employee.findOne({ email });
+      const employee = await Employee.findOne({ email });
 
       if (!employee) {
         throw new AuthenticationError("No email found with this email address");
