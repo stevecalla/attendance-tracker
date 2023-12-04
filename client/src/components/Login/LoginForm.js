@@ -42,12 +42,14 @@ const LoginForm = () => {
       // if user is not locked then give access via Auth.login function
       if (data.login.employee.isLocked === false) {
         Auth.login(data.login);
+        // console.log( Auth.login(data.login));
 
-        window.location.assign(`/`); //sends user back to home; on the home page the nav will display the nav links based on auth rights (isAdmin true or isAdmin false)
+        // window.location.assign(`/`); //sends user back to home; on the home page the nav will display the nav links based on auth rights (isAdmin true or isAdmin false)
       } else {
         //if user is locked remove token from local storage & send to home page
 
-        localStorage.removeItem("id_token");
+        Auth.clearStorage();
+        // localStorage.removeItem("id_token");
         window.location.assign(`/`);
         alert(
           "You do not have employee access. Please contact Integral Solutions."

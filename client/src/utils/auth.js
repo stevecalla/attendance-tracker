@@ -13,6 +13,7 @@ class AuthService {
   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = this.getToken();
+
     return !!token && !this.isTokenExpired(token); // handwaiving here
   }
 
@@ -21,8 +22,6 @@ class AuthService {
     const token = this.getToken();
 
     const decoded = decode(token);
-
-
 
     return decoded.data.isAdmin;
   }
@@ -33,8 +32,6 @@ class AuthService {
 
     const decoded = decode(token);
 
-
-
     return decoded.data.isLocked;
   }
 
@@ -42,8 +39,6 @@ class AuthService {
   isTokenExpired(token) {
     try {
       const decoded = decode(token);
-
-      
 
       if (decoded.exp < Date.now() / 1000) {
         return true;
@@ -59,9 +54,13 @@ class AuthService {
   }
 
   login({ token, user }) {
-    
     // Saves user token to localStorage
+    console.log(token);
+    
     localStorage.setItem("id_token", token);
+
+    let decodeToken = decode(token);
+    console.log(decodeToken);
   }
 
   logout() {

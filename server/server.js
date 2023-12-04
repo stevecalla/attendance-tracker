@@ -39,12 +39,12 @@ app.use("/test", (req, res, next) => {
 
 //http://localhost:3001/view-session
 app.get("/view-session", (req, res) => {
-  // console.log("Request made to /view-session route");
+  console.log("Request made to /view-session route");
   // console.log(req.session);
 
   // let test = middleware.getSession();
   
-  // res.json(test);
+  res.json('whatever');
   
   // redisClient.lpush("viewSession", "z", redisClient.print);
   // // Check if a session exists

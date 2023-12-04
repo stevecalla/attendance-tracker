@@ -1,5 +1,5 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Schedule, Client, Employee, Hour } = require("../models");
+const { Schedule, Client, Employee, Hour, User } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
 
@@ -168,7 +168,7 @@ const resolvers = {
 
     login: async (parent, { email, password }) => {
 
-      const employee = await Employee.findOne({ email });
+      const user = await Employee.findOne({ email });
 
       if (!employee) {
         throw new AuthenticationError("No email found with this email address");
