@@ -39,12 +39,13 @@ const LoginForm = () => {
         variables: { ...userFormData },
       });
 
+      console.log(data);
       // if user is not locked then give access via Auth.login function
-      if (data.login.employee.isLocked === false) {
+      if (data.login.user.isLocked === false) {
         Auth.login(data.login);
         // console.log( Auth.login(data.login));
 
-        // window.location.assign(`/`); //sends user back to home; on the home page the nav will display the nav links based on auth rights (isAdmin true or isAdmin false)
+        window.location.assign(`/`); //sends user back to home; on the home page the nav will display the nav links based on auth rights (isAdmin true or isAdmin false)
       } else {
         //if user is locked remove token from local storage & send to home page
 

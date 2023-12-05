@@ -54,8 +54,8 @@ const typeDefs = gql`
 
   type Auth {
     token: ID!
-    #user: User
-    employee: Employee
+    user: User
+    #employee: Employee
   }
 
   type Client {

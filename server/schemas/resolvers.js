@@ -175,23 +175,23 @@ const resolvers = {
 
     login: async (parent, { email, password }) => {
 
-      const employee = await Employee.findOne({ email });
+      const user = await User.findOne({ email });
 
-      if (!employee) {
+      if (!user) {
         throw new AuthenticationError("No email found with this email address");
       }
 
-      const correctPw = await employee.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
         throw new AuthenticationError("Incorrect credentials");
       }
 
       expiration = "2h"; // 15 minutes
-      const token = signToken(employee, expiration);
+      const token = signToken(user, expiration);
       // const token = signToken(employee);
 
-      return { token, employee };
+      return { token, user };
     },
 
     forgotPassword: async (parent, { email, password }) => {
