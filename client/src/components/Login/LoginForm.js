@@ -12,8 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../styles/button-home.css";
 
 const LoginForm = () => {
-  const [validated] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [validated] = useState(false); //set state for form validation
+  const [showAlert, setShowAlert] = useState(false); //set state for alert
 
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [login, { error }] = useMutation(LOGIN_USER);

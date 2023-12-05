@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { Form, Button, Alert, InputGroup } from "react-bootstrap";
+import Auth from "../../utils/auth";
+
 import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../../utils/mutations";
-import Auth from "../../utils/auth";
+
+import MaskedInput from "react-text-mask";
+import emailMask from "text-mask-addons/dist/emailMask";
+
+import { Form, Button, Alert, InputGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../styles/button-style.css";
 
-const SignupForm = ({ setShowModal }) => {
+const SignupForm = () => {
+  const [validated] = useState(false); //set state for form validation
+  const [showAlert, setShowAlert] = useState(false); //set state for alert
+
   const [userFormData, setUserFormData] = useState({
     username: "",
     email: "",
@@ -14,11 +22,6 @@ const SignupForm = ({ setShowModal }) => {
   });
 
   const [addUser, { error }] = useMutation(ADD_USER);
-
-  // set state for form validation
-  const [validated] = useState(false);
-  // set state for alert
-  const [showAlert, setShowAlert] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -40,9 +43,11 @@ const SignupForm = ({ setShowModal }) => {
         variables: { ...userFormData },
       });
 
+      console.log(data);
+
       Auth.login(data.addUser);
 
-      window.location.assign(`/dashboard`);
+      window.location.assign(`/`);
 
     } catch (e) {
       console.error(e);
@@ -95,12 +100,14 @@ const SignupForm = ({ setShowModal }) => {
 
           <Form.Group>
             <Form.Label htmlFor="email">Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Your email address"
+            <MaskedInput
+              className="form-control"
+              mask={emailMask}
+              placeholder="Enter email address"
+              guide={true}
               name="email"
+              value={userFormData.email.toLowerCase()}
               onChange={handleInputChange}
-              value={userFormData.email}
               required
             />
             <Form.Control.Feedback type="invalid">
@@ -110,11 +117,11 @@ const SignupForm = ({ setShowModal }) => {
 
           <Form.Group>
             <Form.Label htmlFor="password">Password</Form.Label>
-
             <InputGroup className="mb-3">
               <Form.Control
                 type={showHidePassword}
-                placeholder="Your password"
+                placeholder="Password (5 character min)"
+                minLength="5"
                 name="password"
                 onChange={handleInputChange}
                 value={userFormData.password}
@@ -122,13 +129,12 @@ const SignupForm = ({ setShowModal }) => {
                 style={{ borderRight: "none" }}
               />
               <Form.Control.Feedback type="invalid">
-                Password is required!
+                <p>Password is required!</p>
               </Form.Control.Feedback>
-
               <InputGroup.Text
                 id="basic-addon1"
                 style={{
-                  borderRadius: "0%",
+                  borderRadius: "0px 4px 4px 0px",
                   background: "white",
                   borderLeft: "none",
                 }}

@@ -187,9 +187,18 @@ const resolvers = {
         throw new AuthenticationError("Incorrect credentials");
       }
 
-      expiration = "2h"; // 15 minutes
+      expiration = "2h"; // 2 hours
       const token = signToken(user, expiration);
       // const token = signToken(employee);
+
+      return { token, user };
+    },
+
+    addUser: async (parent, { username, email, password }, context) => {
+      const user = await User.create({ username, email, password });
+      
+      expiration = "2h"; // 2 hours
+      const token = signToken(user, expiration);
 
       return { token, user };
     },
@@ -391,13 +400,12 @@ const resolvers = {
 
     // SECTION EMPLOYEE
     // fix add user
-    addUser: async (parent, { username, email, password }, context) => {
-      // const user = await User.create({ username, email, password });
-      const user = await Employee.create({ username, email, password });
-      const token = signToken(user);
-      return { token, user };
-    },
-
+    // addUser: async (parent, { username, email, password }, context) => {
+    //   // const user = await User.create({ username, email, password });
+    //   const user = await Employee.create({ username, email, password });
+    //   const token = signToken(user);
+    //   return { token, user };
+    // },
     // fix end add user
     addEmployee: async (
       parent,
