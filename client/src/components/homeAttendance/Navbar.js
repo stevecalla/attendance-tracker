@@ -3,6 +3,7 @@ import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Auth from "../../utils/auth";
 
 function Headerbar() {
   return (
@@ -20,8 +21,12 @@ function Headerbar() {
         <Navbar.Collapse className="flex-grow-0" id="basic-navbar-nav">
           {/* <Nav className="me-auto"> */}
           <Nav className="">
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
-            <Nav.Link as={Link} to="/Logout">Logout</Nav.Link>
+            <Nav.Link as={Link} to="/login">
+              Login
+            </Nav.Link>
+            <Nav.Link onClick={Auth.logout} as={Link}>
+              Logout
+            </Nav.Link>
 
             <NavDropdown
               // drop="start"
