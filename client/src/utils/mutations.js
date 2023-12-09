@@ -29,7 +29,7 @@ export const FORGOT_PASSWORD = gql`
   mutation forgotPassword($email: String!, $password: String!) {
     forgotPassword(email: $email, password: $password) {
       token
-      employee {
+      user {
         _id
       }
     }

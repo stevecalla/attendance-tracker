@@ -74,6 +74,7 @@ function Employees() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
+    console.log('event=', event.currentTarget);
 
     // check if form has everything (as per react-bootstrap docs)
     if (form.checkValidity() === false) {
@@ -86,15 +87,20 @@ function Employees() {
 
     //set email address to send too
     setToEmail(userFormData.email);
+    console.log('toEmail=', toEmail);
 
     //create token payload
     let payload = { email: userFormData.email, password: tempPassword };
+    console.log('payload=', payload);
 
     // create new token using the forgotPassword mutation
     try {
+      console.log('hello1');
       const { data } = await forgotPassword({
         variables: { ...payload },
       });
+      console.log('hello2');
+      console.log(data);
 
       setPayLoadToken({ token: data.forgotPassword.token });
 
@@ -104,6 +110,7 @@ function Employees() {
         setShowAlert(true);
       }
     } catch (e) {
+      console.log('hello3');
       console.error("error = ", e);
       setShowAlert(true);
     }
@@ -117,6 +124,7 @@ function Employees() {
 
   // eslint-disable-next-line
   const submitEmailContent = useEmailSend(emailContent);
+  console.log(submitEmailContent);
 
   //sets emailContent state to trigger useEmailSend above
   const sendEmail = (token) => {
@@ -142,14 +150,12 @@ function Employees() {
         <h2 className="mt-3">Forgot Password</h2>
         <p
           style={{
-            margin: "0px",
+            margin: "0px 10px",
             padding: "0px 7px",
             textWrap: "pretty",
             textAlign: "center",
           }}
         >
-          {/* You will recieve an email with instructions to reset your password if
-          an account exists with this email address. */}
           If an account exists, an email will be sent with instructions to reset
           the password.
         </p>

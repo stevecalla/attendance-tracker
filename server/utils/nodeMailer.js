@@ -1,12 +1,5 @@
-// https://www.youtube.com/watch?v=QDIOBsMBEI0
-//https://openjavascript.info/2023/01/10/nodemailer-tutorial-send-emails-in-node-js/#Basic%20example
-//https://mailtrap.io/blog/sending-emails-with-nodemailer/
-// templates https://codedmails.com/reset-emails-preview
-// mock app at /Users/stevecalla/du_coding/utilities/node-mailer/index.js 
-
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-// Import NodeMailer (after npm install)
 
 // First, define send settings by creating a new transporter:
 const transporter = nodemailer.createTransport({
@@ -73,4 +66,17 @@ const sendMail = async (transporter, mailOptions) => {
   }
 };
 
-sendMail(transporter, mailOptions).catch((error) => console.log("2)", error));
+module.exports = {
+  transporter,
+  mailOptions,
+  sendMail
+};
+
+// sendMail(transporter, mailOptions).catch((error) => console.log("2)", error));
+
+// SECTION - SOURCES
+// https://www.youtube.com/watch?v=QDIOBsMBEI0
+// https://openjavascript.info/2023/01/10/nodemailer-tutorial-send-emails-in-node-js/#Basic%20example
+//https://mailtrap.io/blog/sending-emails-with-nodemailer/
+// templates https://codedmails.com/reset-emails-preview
+// mock app at /Users/stevecalla/du_coding/utilities/node-mailer/index.js 

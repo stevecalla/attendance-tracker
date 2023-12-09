@@ -49,7 +49,6 @@ root.render(
     {/* <Router history={history}> */}
     <Router>
       <App />
-    {/* </Router> */}
     </Router>
   </React.StrictMode>
 );

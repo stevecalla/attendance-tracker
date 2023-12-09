@@ -1,7 +1,9 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { Schedule, Client, Employee, Hour, User } = require("../models");
 const { signToken } = require("../utils/auth");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+
+// const { sendMail } = require("../utils/nodeMailer");
 
 let expiration = "2h"; // 2 hours
 
@@ -16,7 +18,7 @@ const resolvers = {
 
     users: async (parent, args, context) => {
       // if (context.user) {
-        return User.find();
+      return User.find();
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },
@@ -135,32 +137,55 @@ const resolvers = {
     },
 
     sendEmail: async (parent, args, context) => {
-      const sgMail = require("@sendgrid/mail");
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      const { transporter, mailOptions, sendMail } = require("../utils/nodeMailer");
 
       let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
+      let count = 0;
 
-      const msg = {
-        to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
-        from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
-        subject: args.subject,
-        text: args.textContent,
-        html: args.htmlContent,
-      };
+      try {
+        while (count < 1) {
+          sendMail(transporter, mailOptions);
+          count++;
+        }
 
-      sgMail
-        .send(msg)
-        .then(() => {
-          console.log("Email sent");
-        })
-        .catch((error) => {
-          console.error(error);
-          console.error(error.response.body.errors);
-          message = "Something went wrong. Give us a call at 555-555-1212.";
-        });
+      } catch (error) {
+
+        console.log("2)", error);
+        message = "Something went wrong. Give us a call at 555-555-1212.";
+
+      }
 
       return message;
     },
+
+    // OLD SEND GRID
+    // sendEmail: async (parent, args, context) => {
+    //   const sgMail = require("@sendgrid/mail");
+    //   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    //   let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
+
+    //   const msg = {
+    //     to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
+    //     from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
+    //     subject: args.subject,
+    //     text: args.textContent,
+    //     html: args.htmlContent,
+    //   };
+
+    //   sgMail
+    //     .send(msg)
+    //     .then(() => {
+    //       console.log("Email sent");
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //       console.error(error.response.body.errors);
+    //       message = "Something went wrong. Give us a call at 555-555-1212.";
+    //     });
+
+    //   return message;
+    // },
   },
 
   Mutation: {
@@ -174,7 +199,6 @@ const resolvers = {
     // },
 
     login: async (parent, { email, password }) => {
-
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -195,7 +219,7 @@ const resolvers = {
 
     addUser: async (parent, { username, email, password }, context) => {
       const user = await User.create({ username, email, password });
-      
+
       expiration = "2h"; // 2 hours
       const token = signToken(user, expiration);
 
@@ -616,7 +640,7 @@ const resolvers = {
         employees,
         isDisplayable,
       });
-      return schedule
+      return schedule;
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },
