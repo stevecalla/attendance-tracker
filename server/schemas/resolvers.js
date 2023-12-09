@@ -146,24 +146,47 @@ const resolvers = {
 
     //NODEMAIL VERSION
     sendEmail: async (parent, args, context) => {
+      console.log(args);
+      
       const {
         transporter,
-        mailOptions,
+        // mailOptions,
         sendMail,
       } = require("../utils/nodeMailer");
 
       let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
 
-      const msg = {
-        to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
-        from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
-        subject: args.subject,
+      // const msg = {
+      //   to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
+      //   from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
+      //   subject: args.subject,
+      //   text: args.textContent,
+      //   html: args.htmlContent,
+      // };
+
+      const mailOptionsDirect = {
+        from: {
+          name: "Calla",
+          address: args.fromEmail ? `${args.fromEmail}` : process.env.SENDER_EMAIL,
+        },
+        to: args.toEmail ? [`${args.toEmail}`] : [process.env.SENDER_EMAIL],
+        subject: args.subject ? args.subject : "Something Went Wrong",
         text: args.textContent,
         html: args.htmlContent,
+        // cc: [],
+        // bcc: [],
+        // dsn: {
+        //   id: "some random message specific id",
+        //   return: "headers",
+        //   notify: ["failure", "delay", "success"],
+        //   recipient: process.env.SENDER_EMAIL,
+        // },
+        // debug: true, // show debug output
+        // logger: true // log information in console
       };
 
       try {
-        sendMail(transporter, mailOptions);
+        sendMail(transporter, mailOptionsDirect);
       } catch (error) {
         console.log("2)", error);
         message = "Something went wrong. Give us a call at 555-555-1212.";

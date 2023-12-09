@@ -13,47 +13,34 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailOptions = {
-  from: {
-    name: "Calla",
-    address: process.env.SENDER_EMAIL,
-  },
-  to: ["scalla2@instructors.2u.com"],
-  subject: "Testing, testing, 123",
-  text: "Hello World",
-  html: `<h1>Hello there</h1>
-    <p>Isn't NodeMailer useful?</p>
-    `,
-  // cc: [],
-  // bcc: [],
-  amp: `<!doctype html>
-  <html ⚡4email>
-    <head>
-      <meta charset="utf-8">
-      <style amp4email-boilerplate>body{visibility:hidden}</style>
-      <script async src="https://cdn.ampproject.org/v0.js"></script>
-      <script async custom-element="amp-anim" src="https://cdn.ampproject.org/v0/amp-anim-0.1.js"></script>
-    </head>
-    <body>
-      <p>Image: <amp-img src="https://cldup.com/P0b1bUmEet.png" width="16" height="16"/></p>
-      <p>GIF (requires "amp-anim" script in header):<br/>
-        <amp-anim src="https://cldup.com/D72zpdwI-i.gif" width="500" height="350"/></p>
-    </body>
-  </html>`,
-  dsn: {
-    id: "some random message specific id",
-    return: "headers",
-    notify: ["failure", "delay", "success"],
-    recipient: process.env.SENDER_EMAIL,
-  },
-  debug: true, // show debug output
-  logger: true // log information in console
-};
+// const mailOptions = {
+//   from: {
+//     name: "Calla",
+//     address: process.env.SENDER_EMAIL,
+//   },
+//   to: ["scalla2@instructors.2u.com"],
+//   subject: "Testing, testing, 123",
+//   text: "Hello World",
+//   html: `<h1>Hello there</h1>
+//     <p>Isn't NodeMailer useful?</p>
+//     `,
+//   // cc: [],
+//   // bcc: [],
+//   dsn: {
+//     id: "some random message specific id",
+//     return: "headers",
+//     notify: ["failure", "delay", "success"],
+//     recipient: process.env.SENDER_EMAIL,
+//   },
+//   debug: true, // show debug output
+//   logger: true // log information in console
+// };
 
 // Define and send message inside transporter.sendEmail() and await info about send from
-const sendMail = async (transporter, mailOptions) => {
+
+const sendMail = async (transporter, mailOptionsDirect) => {
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptionsDirect);
     console.log(info.messageId);
     console.log(info.envelope);
     console.log('successfully delivered', info.accepted);
@@ -68,7 +55,7 @@ const sendMail = async (transporter, mailOptions) => {
 
 module.exports = {
   transporter,
-  mailOptions,
+  // mailOptions,
   sendMail
 };
 

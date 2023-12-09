@@ -6,9 +6,10 @@ import { getTinyURL, createURL } from "../../utils/tinyURL";
 
 import {
   FROM_EMAIL,
+  TO_EMAIL,
   RESET_SUBJECT,
-  reset_text_template,
-  reset_html_template,
+  RESET_TEXT_TEMPLATE,
+  RESET_HTML_TEMPLATE,
 } from "./templates/resetTemplate";
 
 import {
@@ -18,7 +19,10 @@ import {
 } from "./templates/contactUsTemplate";
 import "../../styles/Contact.css";
 
+// function useEmailSend(props) {
 function useEmailSend(props) {
+  //props = source, token, toEmail, firstName
+
   const [tinyURI, setTinyURI] = useState("");
 
   const tiny_url = async () => {
@@ -28,24 +32,31 @@ function useEmailSend(props) {
   };
 
   // SECTION SET EMAIL CONTENT
+  const fromEmail = FROM_EMAIL;
+
   const toEmail =
     props?.source === "resetPassword"
-      ? props?.toEmail
-      : "callasteven@gmail.com";
-  const fromEmail = FROM_EMAIL;
+      ? TO_EMAIL(props)
+      : "callasteven@gmail.com"; //used for contact form // change to env var
+
+
   const subject =
     props?.source === "resetPassword"
-      ? RESET_SUBJECT(props)
+      ? RESET_SUBJECT()
       : CONTACT_US_SUBJECT(props);
+
   const textContent =
     props?.source === "resetPassword"
-      ? reset_text_template(props, tinyURI, createURL(props.token))
+      ? RESET_TEXT_TEMPLATE(props, tinyURI, createURL(props.token))
       : contactus_text_template(props, tinyURI, createURL(props.token));
+
   const htmlContent =
     props?.source === "resetPassword"
-      ? reset_html_template(props, tinyURI, createURL(props.token))
+      ? RESET_HTML_TEMPLATE(props, tinyURI, createURL(props.token))
       : contactus_html_template(props, tinyURI, createURL(props.token));
 
+
+  console.log(toEmail, fromEmail, subject, textContent,htmlContent);
   // SECTION SEND EMAIL VIA LAZY QUERY
   const [
     sendEmail,

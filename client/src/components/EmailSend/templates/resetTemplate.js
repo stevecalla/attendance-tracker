@@ -1,14 +1,19 @@
-export const RESET_SUBJECT = (props) => {
-  let template = `Integral Solutions Employee Password Reset`;
+export const FROM_EMAIL = "callasteven@gmail.com";
+
+export const TO_EMAIL = (props) => {
+  // return props.toEmail;
+  return "scalla2@instructors.2u.com";
+};
+
+export const RESET_SUBJECT = () => {
+  let template = `Zoom Attendance Tracker App Password Reset`;
 
   return template;
 };
 
-export const FROM_EMAIL = "callasteven@gmail.com";
-
 // SENDGRID RECOMMENDS INCLUDING A TEXT VERSION AS A BACKUP IF HTML ISN'T ACCEPTED
 // export const reset_text_template = (tokenURL, firstName) => {
-export const reset_text_template = (props, tinyURI = "blank", { uri }) => {
+export const RESET_TEXT_TEMPLATE = (props, tinyURI = "blank", { uri }) => {
 
   const template = `Hello ${props.firstName},
   
@@ -19,14 +24,14 @@ export const reset_text_template = (props, tinyURI = "blank", { uri }) => {
   This link will expire 15 minutes from the receipt of this email.
   
   Thank you,
-  Integral Solutions`;
+  Zoom Attendance App`;
 
   return template;
 };
 
 // DEFAULT HTML TEMPLATE WILL BE USED BY MOST BUT NOT ALL PLATFORMS
 // export const reset_html_template = (tokenURL, firstName) => {
-export const reset_html_template = (props, tinyURI, { uri }) => {
+export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
 
   const template = `<p>Hello ${props.firstName},</p>
   
@@ -44,7 +49,7 @@ export const reset_html_template = (props, tinyURI, { uri }) => {
   <p>This link will expire 15 minutes from the receipt of this email.</p>
 
   <p>Thank you,</p>
-  <p>Integral Solutions</p>`;
+  <p>Zoom Attendance App</p>`;
 
   return template;
 };
