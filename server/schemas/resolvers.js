@@ -81,6 +81,14 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
+    //section users
+    userByEmail: async (parent, { email }, context) => {
+      // if (context.user) {
+      return User.findOne({ email: email })
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
     //section hour queries
     hours: async (parent, args, context) => {
       // if (context.user) {
@@ -136,29 +144,35 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
+    //NODEMAIL VERSION
     sendEmail: async (parent, args, context) => {
-      const { transporter, mailOptions, sendMail } = require("../utils/nodeMailer");
+      const {
+        transporter,
+        mailOptions,
+        sendMail,
+      } = require("../utils/nodeMailer");
 
       let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
-      let count = 0;
+
+      const msg = {
+        to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
+        from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
+        subject: args.subject,
+        text: args.textContent,
+        html: args.htmlContent,
+      };
 
       try {
-        while (count < 1) {
-          sendMail(transporter, mailOptions);
-          count++;
-        }
-
+        sendMail(transporter, mailOptions);
       } catch (error) {
-
         console.log("2)", error);
         message = "Something went wrong. Give us a call at 555-555-1212.";
-
       }
 
       return message;
     },
 
-    // OLD SEND GRID
+    // SENDGRID VERSION
     // sendEmail: async (parent, args, context) => {
     //   const sgMail = require("@sendgrid/mail");
     //   sgMail.setApiKey(process.env.SENDGRID_API_KEY);

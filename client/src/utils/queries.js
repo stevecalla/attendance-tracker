@@ -127,6 +127,36 @@ export const QUERY_SINGLE_EMPLOYEE = gql`
   }
 `;
 
+//SECTION USERS
+
+//   query me($id: ID!) {
+//     me(_id: $id) {
+//       _id
+//       username
+//       email
+//       firstName
+//       lastName
+//     }
+//   }
+// `;
+
+// SECTION EMPLOYEE
+export const QUERY_USER_BYEMAIL = gql`
+  query UserByEmail($email: String!) {
+    userByEmail(email: $email) {
+      _id
+      firstName
+      lastName
+      email
+      cell
+      isAdmin
+      isLocked
+      isDisplayable
+      password
+    }
+  }
+`;
+
 // SECTION CLIENTS
 export const QUERY_ALL_CLIENTS = gql`
   query getAllClients($isDisplayable: Boolean) {

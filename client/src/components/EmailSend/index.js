@@ -22,10 +22,11 @@ function useEmailSend(props) {
   const [tinyURI, setTinyURI] = useState("");
 
   const tiny_url = async () => {
-    getTinyURL(props.token)
-      .then((data) => {setTinyURI(data.data.tiny_url)})
+    getTinyURL(props.token).then((data) => {
+      setTinyURI(data.data.tiny_url);
+    });
   };
-  
+
   // SECTION SET EMAIL CONTENT
   const toEmail =
     props?.source === "resetPassword"
@@ -63,7 +64,6 @@ function useEmailSend(props) {
 
   // SECTION USE EFFECT TO RUN SENDEMAIL IF TOKEN IS POPULATED (since this hook will run on every render for this component)
   useEffect(() => {
-
     if (props?.token?.token || props?.companyName) {
       // get tiny url
       // tiny_url();

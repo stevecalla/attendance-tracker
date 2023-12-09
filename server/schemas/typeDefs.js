@@ -86,6 +86,7 @@ const typeDefs = gql`
 
   type Query {
     users: [User]!
+    userByEmail(email: String!): User
     #user(email: String!): User
     me(_id: ID!): User
     #clients: [Client]!

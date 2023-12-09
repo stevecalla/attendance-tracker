@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Auth from "../../utils/auth";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { QUERY_EMPLOYEE_BYEMAIL } from "../../utils/queries";
+import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
 
@@ -16,7 +16,7 @@ import "../../styles/button-home.css";
 function Employees() {
   const [tempPassword] = useState("20000");
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
-  const [employee, setEmployee] = useState({});
+  const [user, setUser] = useState({});
   const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
   const [payLoadToken, setPayLoadToken] = useState({});
   const [validated] = useState(false);
@@ -33,12 +33,12 @@ function Employees() {
     data,
     error: getEmployeeError,
     refetch,
-  } = useQuery(QUERY_EMPLOYEE_BYEMAIL, {
+  } = useQuery(QUERY_USER_BYEMAIL, {
     variables: { email: userFormData?.email },
     // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
     skip: !Auth.loggedIn(),
     onCompleted: (data) => {
-      setEmployee(data?.employeeByEmail);
+      setUser(data?.userByEmail);
     },
   });
 
@@ -49,7 +49,7 @@ function Employees() {
     try {
       const { data } = await updatePassword({
         variables: {
-          id: employee?._id,
+          id: user?._id,
           password: tempPassword,
         },
       });
@@ -58,11 +58,11 @@ function Employees() {
     }
   };
 
-  // set temp password when employee state is updated (query retrieves employee info)
+  // set temp password when user state is updated (query retrieves user info)
   useEffect(() => {
     setPassword();
     // eslint-disable-next-line
-  }, [employee]);
+  }, [user]);
 
   // for email mask input
   const handleInputChange = (event) => {
@@ -104,7 +104,7 @@ function Employees() {
 
       setPayLoadToken({ token: data.forgotPassword.token });
 
-      if (!employee.email) {
+      if (!user.email) {
         setShowError(true);
       } else {
         setShowAlert(true);
@@ -132,7 +132,7 @@ function Employees() {
       source: "resetPassword",
       token: token,
       toEmail: toEmail,
-      firstName: employee.firstName,
+      firstName: user.firstName,
     });
   };
 

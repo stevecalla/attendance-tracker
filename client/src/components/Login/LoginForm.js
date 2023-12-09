@@ -54,7 +54,7 @@ const LoginForm = () => {
         // localStorage.removeItem("id_token");
         window.location.assign(`/`);
         alert(
-          "You do not have employee access. Please contact Integral Solutions."
+          "You do not have user access. Please contact Integral Solutions."
         );
       }
     } catch (e) {
