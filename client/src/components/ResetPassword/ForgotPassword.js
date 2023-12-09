@@ -64,11 +64,13 @@ function Employees() {
     // eslint-disable-next-line
   }, [employee]);
 
+  // for email mask input
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  // for form submit button
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -148,7 +150,8 @@ function Employees() {
         >
           {/* You will recieve an email with instructions to reset your password if
           an account exists with this email address. */}
-          If an account exists, an email will be sent with instructions to reset the password. 
+          If an account exists, an email will be sent with instructions to reset
+          the password.
         </p>
         <Form
           noValidate
@@ -191,12 +194,11 @@ function Employees() {
           onClose={() => setShowError(false)}
           variant="success"
           show={showError}
-          className="mb- py-1 pl-3 bg-success text-white"
-          stlye={{ alignContent: "center" }}
+          className="mb-4 py-1 pl-3 bg-success text-white"
+          style={{ textAlign: "left" }}
         >
-          <p style={{ width: "200px", padding: "8px", marginTop: "5px" }}>
-            Email has been sent to <br></br>
-            {userFormData.email}
+          <p className="" style={{ marginTop: "5px" }}>
+            Email has been sent to <br></br>{userFormData.email}.
           </p>
         </Alert>
 
@@ -209,14 +211,11 @@ function Employees() {
               show={showAlert}
               variant="danger"
               className="mb-4 py-1 pl-1 bg-danger text-white"
-              style={{ width: "300px" }}
+              style={{ textAlign: "left" }}
             >
-              <p
-                className=""
-                style={{ width: "200px", padding: "10px", marginTop: "5px" }}
-              >
-                Email failed to send. Make sure to use the same email address
-                you created your account with
+              <p className="" style={{ marginTop: "5px" }}>
+                {/* Email failed to send.<br></br>Enter a valid email address. */}
+                Email failed to send.<br></br>Please enter a valid email.
               </p>
             </Alert>
           </div>
