@@ -148,7 +148,7 @@ function Employees() {
         >
           {/* You will recieve an email with instructions to reset your password if
           an account exists with this email address. */}
-          If an account exists with this email address, an email will be sent with instructions to reset  password 
+          If an account exists with this email address, an email will be sent with instructions to reset the password. 
         </p>
         <Form
           noValidate
