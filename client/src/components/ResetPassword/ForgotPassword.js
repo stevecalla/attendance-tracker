@@ -118,7 +118,7 @@ function Employees() {
   // eslint-disable-next-line
   const submitEmailContent = useEmailSend(emailContent);
 
-  //sets emailContent state trigger useEmailSend above
+  //sets emailContent state to trigger useEmailSend above
   const sendEmail = (token) => {
     setEmailContent({
       source: "resetPassword",
