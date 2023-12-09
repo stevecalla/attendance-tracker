@@ -39,7 +39,6 @@ function useEmailSend(props) {
       ? TO_EMAIL(props)
       : "callasteven@gmail.com"; //used for contact form // change to env var
 
-
   const subject =
     props?.source === "resetPassword"
       ? RESET_SUBJECT()
@@ -55,8 +54,6 @@ function useEmailSend(props) {
       ? RESET_HTML_TEMPLATE(props, tinyURI, createURL(props.token))
       : contactus_html_template(props, tinyURI, createURL(props.token));
 
-
-  console.log(toEmail, fromEmail, subject, textContent,htmlContent);
   // SECTION SEND EMAIL VIA LAZY QUERY
   const [
     sendEmail,
@@ -91,7 +88,7 @@ function useEmailSend(props) {
     // eslint-disable-next-line
   }, [props]);
 
-  return;
+  return emailData;
 }
 
 export default useEmailSend;

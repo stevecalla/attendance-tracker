@@ -84,7 +84,7 @@ const resolvers = {
     //section users
     userByEmail: async (parent, { email }, context) => {
       // if (context.user) {
-      return User.findOne({ email: email })
+      return User.findOne({ email: email });
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },
@@ -147,27 +147,21 @@ const resolvers = {
     //NODEMAIL VERSION
     sendEmail: async (parent, args, context) => {
       console.log(args);
-      
+
       const {
         transporter,
         // mailOptions,
         sendMail,
       } = require("../utils/nodeMailer");
 
-      let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
-
-      // const msg = {
-      //   to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
-      //   from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
-      //   subject: args.subject,
-      //   text: args.textContent,
-      //   html: args.htmlContent,
-      // };
+      let message = `Your information was sent to support at Zoom Attendance App. A represenative will be in touch soon.`;
 
       const mailOptionsDirect = {
         from: {
           name: "Calla",
-          address: args.fromEmail ? `${args.fromEmail}` : process.env.SENDER_EMAIL,
+          address: args.fromEmail
+            ? `${args.fromEmail}`
+            : process.env.SENDER_EMAIL,
         },
         to: args.toEmail ? [`${args.toEmail}`] : [process.env.SENDER_EMAIL],
         subject: args.subject ? args.subject : "Something Went Wrong",
@@ -189,8 +183,11 @@ const resolvers = {
         sendMail(transporter, mailOptionsDirect);
       } catch (error) {
         console.log("2)", error);
-        message = "Something went wrong. Give us a call at 555-555-1212.";
+        message =
+          "Something went wrong. Contact support at support@zoomattendance.com.";
       }
+
+      console.log("resolver message=======", message);
 
       return message;
     },
