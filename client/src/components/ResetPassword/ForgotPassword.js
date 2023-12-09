@@ -133,22 +133,22 @@ function Employees() {
         style={{
           border: "1px solid black",
           borderRadius: "10px",
-          margin: "0px 10px 0px 10px",
+          margin: "0px 10px",
           maxWidth: "600px",
         }}
       >
-        <h2>Forgot Password</h2>
+        <h2 className="mt-3">Forgot Password</h2>
         <p
           style={{
-            margin: "0px 10px 0px 10px",
-            padding: "0px 3px 0px 3px",
+            margin: "0px",
+            padding: "0px 7px",
             textWrap: "pretty",
             textAlign: "center",
           }}
         >
           {/* You will recieve an email with instructions to reset your password if
           an account exists with this email address. */}
-          If an account exists with this email address, an email will be sent with instructions to reset the password. 
+          If an account exists, an email will be sent with instructions to reset the password. 
         </p>
         <Form
           noValidate
@@ -177,9 +177,8 @@ function Employees() {
           </Form.Group>
 
           <Button
-            style={{ marginRigt: "auto", marginLeft: "auto" }}
             disabled={!userFormData.email}
-            className="mb-3 mt-2 submit-button-style"
+            className="mb-3 mt-3 submit-button-style"
             type="submit"
             variant="success"
           >
