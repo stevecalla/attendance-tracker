@@ -22,7 +22,7 @@ function Employees() {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
-  // const [tinyURI, setTinyURI] = useState(""); // set sate for tiny_url
+  // const [tinyURI, setTinyURI] = useState(""); // set state for tiny_url
   const [toEmail, setToEmail] = useState("");
   const [emailContent, setEmailContent] = useState({});
 
@@ -127,51 +127,65 @@ function Employees() {
   };
 
   return (
-    <>
-      <div className="d-flex flex-column align-items-center mt-3">
-        <div className="d-flex flex-column align-items-center box-making">
-          <h2>Forgot Password</h2>
-          <p style={{ textAlign: "center" }}>
-            You will recieve an email with instructions to reset your password{" "}
-            <br></br>if an account exists with this email address.{" "}
-          </p>
-          <Form
-            noValidate
-            validated={validated}
-            onSubmit={handleFormSubmit}
-            className="mx-2 mt-2 mb-1"
-            style={{ width: "280px" }}
+    <div className="d-flex justify-content-center">
+      <div
+        className="d-flex flex-column align-items-center mt-3"
+        style={{
+          border: "1px solid black",
+          borderRadius: "10px",
+          margin: "0px 10px 0px 10px",
+          maxWidth: "600px",
+        }}
+      >
+        <h2>Forgot Password</h2>
+        <p
+          style={{
+            margin: "0px 10px 0px 10px",
+            padding: "0px 3px 0px 3px",
+            textWrap: "pretty",
+            textAlign: "center",
+          }}
+        >
+          {/* You will recieve an email with instructions to reset your password if
+          an account exists with this email address. */}
+          If an account exists with this email address, an email will be sent with instructions to reset  password 
+        </p>
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={handleFormSubmit}
+          className="mx-2 mb-1"
+          style={{ width: "80%" }}
+        >
+          <Form.Group style={{ marginTop: "25px" }}>
+            {/* <Form.Label htmlFor="email">Enter your email</Form.Label> */}
+
+            <MaskedInput
+              className="form-control"
+              mask={emailMask}
+              placeholder="Enter your email"
+              guide={true}
+              name="email"
+              value={userFormData.email.toLowerCase()}
+              onChange={handleInputChange}
+              required
+            />
+
+            <Form.Control.Feedback type="invalid">
+              Email is required!
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Button
+            style={{ marginRigt: "auto", marginLeft: "auto" }}
+            disabled={!userFormData.email}
+            className="mb-3 mt-2 submit-button-style"
+            type="submit"
+            variant="success"
           >
-            <Form.Group style={{ marginTop: "25px" }}>
-              <Form.Label htmlFor="email">Enter your email</Form.Label>
-
-              <MaskedInput
-                className="form-control"
-                mask={emailMask}
-                placeholder="Employee email"
-                guide={true}
-                name="email"
-                value={userFormData.email.toLowerCase()}
-                onChange={handleInputChange}
-                required
-              />
-
-              <Form.Control.Feedback type="invalid">
-                Email is required!
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Button
-              style={{ marginRigt: "auto", marginLeft: "auto" }}
-              disabled={!userFormData.email}
-              className="mb-3 submit-button-style"
-              type="submit"
-              variant="success"
-            >
-              Submit
-            </Button>
-          </Form>
-        </div>
+            Submit
+          </Button>
+        </Form>
 
         <Alert
           dismissible
@@ -209,7 +223,7 @@ function Employees() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

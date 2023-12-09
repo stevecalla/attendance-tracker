@@ -11,6 +11,7 @@ const typeDefs = gql`
     cell: String
     isAdmin: Boolean
     isLocked: Boolean
+    isDisplayable: Boolean
   }
 
   type Employee {
@@ -118,9 +119,11 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    # SECTION LOGIN & RESET PASSWORD
+    # SECTION LOGIN, SIGNUP/ADD USER, RESET PASSWORD
     login(email: String!, password: String!): Auth
     
+    addUser(username: String!, email: String!, password: String!): Auth
+
     forgotPassword(email: String!, password: String!): Auth
 
     updatePassword(_id: ID, password: String): Employee
@@ -159,8 +162,6 @@ const typeDefs = gql`
     updateClientSchedule(_id: ID, schedule: String): Client
 
     # SECTION EMPLOYEE
-    addUser(username: String!, email: String!, password: String!): Auth
-
     addEmployee(
       email: String
       password: String

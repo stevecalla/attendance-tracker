@@ -164,14 +164,14 @@ const resolvers = {
   },
 
   Mutation: {
-    signupEmployee: async (parent, { email, password }, context) => {
-      const employee = await Employee.create({ email, password });
+    // signupEmployee: async (parent, { email, password }, context) => {
+    //   const employee = await Employee.create({ email, password });
 
-      expiration = "2h"; // 2hr
-      const token = signToken(employee, expiration);
+    //   expiration = "2h"; // 2hr
+    //   const token = signToken(employee, expiration);
 
-      return { token, employee };
-    },
+    //   return { token, employee };
+    // },
 
     login: async (parent, { email, password }) => {
 
@@ -189,7 +189,6 @@ const resolvers = {
 
       expiration = "2h"; // 2 hours
       const token = signToken(user, expiration);
-      // const token = signToken(employee);
 
       return { token, user };
     },
@@ -399,14 +398,6 @@ const resolvers = {
     },
 
     // SECTION EMPLOYEE
-    // fix add user
-    // addUser: async (parent, { username, email, password }, context) => {
-    //   // const user = await User.create({ username, email, password });
-    //   const user = await Employee.create({ username, email, password });
-    //   const token = signToken(user);
-    //   return { token, user };
-    // },
-    // fix end add user
     addEmployee: async (
       parent,
       {
