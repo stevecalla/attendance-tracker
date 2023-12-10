@@ -101,7 +101,7 @@ function useEmailSend(props) {
       tiny_url();
 
       // send email
-      sendEmail();
+      // sendEmail();
 
       if (emailError) {
         console.log(`Error! ${emailError}`);
