@@ -21,29 +21,51 @@ import "../../styles/Contact.css";
 
 // function useEmailSend(props) {
 function useEmailSend(props) {
-  //props = source, token, toEmail, firstName
+  //props = source, token, toEmail, firstName, triggerEmail
+  console.log(props);
   const [tinyURI, setTinyURI] = useState("");
   const [fromEmail, setFromEmail] = useState("");
   const [toEmail, setToEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [textContent, setTextContent] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
+  const [handleSendEmail, SetHandleSendEmail] = useState(false);
+  const [reset, setReset] = useState(false);
 
+  // SECTION FUNCTION TO GET TINY URL
   const tiny_url = async () => {
     let shortURI = await getTinyURL(props.token);
     setTinyURI(shortURI.data.tiny_url);
   };
 
-  // SECTION GET TINY URL
+  // SECTION FUNCTION TO EXECUTE SEND EMAIL
+  const [
+    sendEmail,
+    // eslint-disable-next-line
+    { loading: emailLoad, error: emailError, data: emailData },
+  ] = useLazyQuery(SEND_EMAIL, {
+    variables: {
+      toEmail: toEmail,
+      fromEmail: fromEmail,
+      subject: subject,
+      textContent: textContent,
+      htmlContent: htmlContent,
+    },
+    fetchPolicy: "cache-and-network", // ensure the query executes after each click
+  });
+
+  // SECTION GET TINY URL //executes on load
   useEffect(() => {
+    console.log('1=', handleSendEmail);
     if (props?.token?.token) {
       tiny_url();
     }
     // eslint-disable-next-line
   }, [props]);
 
-  // SECTION SET EMAIL CONTENT
+  // SECTION SET EMAIL CONTENT //executes 2nd after tiny url fetch
   useEffect(() => {
+    console.log('2=', handleSendEmail);
     if (props?.token?.token) {
       let getBackupUrl = createURL(props.token);
       console.log("x=", getBackupUrl);
@@ -74,58 +96,30 @@ function useEmailSend(props) {
           ? RESET_HTML_TEMPLATE(props, tinyURI, getBackupUrl)
           : contactus_html_template(props, tinyURI, getBackupUrl)
       );
+
+      SetHandleSendEmail(true);
     }
     //eslint-disable-next-line
   }, [tinyURI]);
 
-  // SECTION SEND EMAIL VIA LAZY QUERY
-  const [
-    sendEmail,
-    // eslint-disable-next-line
-    { loading: emailLoad, error: emailError, data: emailData },
-  ] = useLazyQuery(SEND_EMAIL, {
-    variables: {
-      toEmail: toEmail,
-      fromEmail: fromEmail,
-      subject: subject,
-      textContent: textContent,
-      htmlContent: htmlContent,
-    },
-    fetchPolicy: "cache-and-network", // ensure the query executes after each click
-  });
-
-  //SECTION SEND EMAIL
+  //SECTION SEND EMAIL //executes 3rd after email content set
   useEffect(() => {
-    if (props?.token?.token) {
+    console.log('3=', handleSendEmail);
+    if (handleSendEmail) {
       // send email
-      console.log('send email')
+      console.log("send email");
       sendEmail();
-
-      if (emailError) {
-        console.log(`Error! ${emailError}`);
-        alert`Error! ${emailError}`;
-      }
     }
+    setReset(!reset);
     // eslint-disable-next-line
-  }, [tinyURI]);
+  }, [handleSendEmail]);
 
-  // SECTION USE EFFECT TO RUN SENDEMAIL IF TOKEN IS POPULATED (since this hook will run on every render for this component)
+  //SECTION RESET HANDLESENDEMAIL
   useEffect(() => {
-    if (props?.token?.token) {
-      // get tiny url
-      // tiny_url();
-
-      // send email
-      // sendEmail();
-
-      if (emailError) {
-        console.log(`Error! ${emailError}`);
-        alert`Error! ${emailError}`;
-      }
-    }
-    // eslint-disable-next-line
-  }, [props]);
-
+    SetHandleSendEmail(false);
+  }, [reset])
+  
+  // console.log(emailData);
   return emailData;
 }
 

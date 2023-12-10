@@ -97,11 +97,13 @@ function ForgotPassword() {
       setShowAlert(true);
       setShowSuccess(true);
       setUserFormData({ email: "", password: "" });
+      // setUser({});
     } catch (e) {
       console.log("error2", user);
       setShowAlert(true);
       setShowSuccess(false);
       setUserFormData({ email: "", password: "" });
+      // setUser({});
     }
   };
 
@@ -111,8 +113,10 @@ function ForgotPassword() {
       source: "resetPassword",
       token: payLoadToken,
       toEmail: toEmail,
-      firstName: user.firstName,
+      firstName: user.firstName
     });
+
+    // setUser({});
     // eslint-disable-next-line
   }, [payLoadToken]);
 
