@@ -22,7 +22,6 @@ import "../../styles/Contact.css";
 // function useEmailSend(props) {
 function useEmailSend(props) {
   //props = source, token, toEmail, firstName
-
   const [tinyURI, setTinyURI] = useState("");
   const [fromEmail, setFromEmail] = useState("");
   const [toEmail, setToEmail] = useState("");
@@ -30,11 +29,22 @@ function useEmailSend(props) {
   const [textContent, setTextContent] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
 
+  // useEffect(() => {
+  //   // const tiny_url = async () => {
+  //   if (props?.token?.token) {
+  //     getTinyURL(props.token).then((data) => {
+  //       setTinyURI(data.data.tiny_url);
+  //     });
+  //   }
+  //   // };
+  // }, [props])
+
   const tiny_url = async () => {
     getTinyURL(props.token).then((data) => {
       setTinyURI(data.data.tiny_url);
     });
   };
+  
 
   // SECTION SET EMAIL CONTENT
   useEffect(() => {

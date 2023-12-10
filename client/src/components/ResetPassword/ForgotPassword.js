@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Auth from "../../utils/auth";
 
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
@@ -22,22 +22,17 @@ function ForgotPassword() {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  // const [tinyURI, setTinyURI] = useState(""); // set state for tiny_url
   const [toEmail, setToEmail] = useState("");
+  const [skipUseQuery, setSkipUseQuery] = useState(true); // ensures useQuery only runs on button submit, not if characters are entered in the input element
   const [emailContent, setEmailContent] = useState({});
 
-  const [skipUseQuery, setSkipUseQuery] = useState(true);
-
   // SECTION GET USER Query
-  const {
-    refetch,
-  } = useQuery(QUERY_USER_BYEMAIL, {
+  const { refetch } = useQuery(QUERY_USER_BYEMAIL, {
     variables: { email: userFormData?.email },
-    // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
-    // skip: !Auth.loggedIn(),
+    // if skip is true, this query will not be executed; in this instance, ensures useQuery only runs on button submit, not if characters are entered in the input element
     skip: skipUseQuery,
     onCompleted: (data) => {
-      console.log(data)
+      console.log(data);
       setUser(data?.userByEmail);
     },
   });
@@ -98,23 +93,16 @@ function ForgotPassword() {
       const { data } = await forgotPassword({
         variables: { ...payload },
       });
-      
-      setPayLoadToken({ token: data.forgotPassword.token });
 
-      if (user.email) {
-        // console.log("success", user);
-        setShowSuccess(true);
-        setShowAlert(false);
-      } else {
-        // console.log("error", user);
-        setShowAlert(true);
-        setShowSuccess(false);
-      }
+      setPayLoadToken({ token: data.forgotPassword.token });
+      setShowAlert(true);
+      setShowSuccess(true);
+      setUserFormData({ email: "", password: "" });
     } catch (e) {
-      // console.log("error2", user);
-      // setUserFormData({ ...userFormData, email: '' }); //resets form
+      console.log("error2", user);
       setShowAlert(true);
       setShowSuccess(false);
+      setUserFormData({ email: "", password: "" });
     }
   };
 
@@ -130,7 +118,12 @@ function ForgotPassword() {
   }, [payLoadToken]);
 
   // eslint-disable-next-line
-  // const submitEmailContent = useEmailSend(emailContent);
+  const submitEmailContent = useEmailSend(emailContent);
+
+  useEffect(() => {
+    console.log(submitEmailContent);
+  // eslint-disable-next-line
+  }, [user])
 
   return (
     <div className="d-flex justify-content-center">
@@ -191,37 +184,32 @@ function ForgotPassword() {
           </Button>
         </Form>
 
-        <Alert
-          dismissible
-          onClose={() => setShowSuccess(false)}
-          variant="success"
-          show={showSuccess}
-          className="mb-4 py-1 pl-3 bg-success text-white"
-          style={{ textAlign: "left" }}
-        >
-          <p className="" style={{ marginTop: "5px" }}>
-            Email has been sent to <br></br>
-            {userFormData.email}.
-          </p>
-        </Alert>
-
-        {/* show alert if server response is bad */}
-        {error && (
-          <div className="d-flex justify-content-center">
-            <Alert
-              dismissible
-              onClose={() => setShowAlert(false)}
-              show={showAlert}
-              variant="danger"
-              className="mb-4 py-1 pl-1 bg-danger text-white"
-              style={{ textAlign: "left" }}
-            >
+        {showAlert && (
+          <Alert
+            dismissible
+            onClose={() => {
+              setShowAlert(false);
+            }}
+            variant="success"
+            // show={showAlert}
+            className={
+              showSuccess
+                ? "mb-4 py-1 pl-3 bg-success text-white"
+                : "mb-4 py-1 pl-1 bg-danger text-white"
+            }
+            style={{ textAlign: "left" }}
+          >
+            {showSuccess ? (
               <p className="" style={{ marginTop: "5px" }}>
-                {/* Email failed to send.<br></br>Enter a valid email address. */}
+                Email has been sent to <br></br>
+                {userFormData.email}.
+              </p>
+            ) : (
+              <p className="" style={{ marginTop: "5px" }}>
                 Email failed to send.<br></br>Please enter a valid email.
               </p>
-            </Alert>
-          </div>
+            )}
+          </Alert>
         )}
       </div>
     </div>

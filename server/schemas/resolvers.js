@@ -167,16 +167,6 @@ const resolvers = {
         subject: args.subject ? args.subject : "Something Went Wrong",
         text: args.textContent,
         html: args.htmlContent,
-        // cc: [],
-        // bcc: [],
-        // dsn: {
-        //   id: "some random message specific id",
-        //   return: "headers",
-        //   notify: ["failure", "delay", "success"],
-        //   recipient: process.env.SENDER_EMAIL,
-        // },
-        // debug: true, // show debug output
-        // logger: true // log information in console
       };
 
       try {
