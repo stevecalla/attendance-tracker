@@ -119,7 +119,7 @@ function useEmailSend(props) {
     SetHandleSendEmail(false);
   }, [reset])
   
-  // console.log(emailData);
+  console.log(emailData);
   return emailData;
 }
 
