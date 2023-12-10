@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Auth from "../../utils/auth";
 
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
@@ -13,7 +13,7 @@ import useEmailSend from "../../components/EmailSend";
 import { Form, Button, Alert } from "react-bootstrap";
 import "../../styles/button-home.css";
 
-function Employees() {
+function ForgotPassword() {
   const [tempPassword] = useState("20000");
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [user, setUser] = useState({});
@@ -21,23 +21,23 @@ function Employees() {
   const [payLoadToken, setPayLoadToken] = useState({});
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   // const [tinyURI, setTinyURI] = useState(""); // set state for tiny_url
   const [toEmail, setToEmail] = useState("");
   const [emailContent, setEmailContent] = useState({});
 
-  //section queries
-  // eslint-disable-next-line
+  const [skipUseQuery, setSkipUseQuery] = useState(true);
+
+  // SECTION GET USER Query
   const {
-    loading,
-    data,
-    error: getEmployeeError,
     refetch,
   } = useQuery(QUERY_USER_BYEMAIL, {
     variables: { email: userFormData?.email },
     // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
-    skip: !Auth.loggedIn(),
+    // skip: !Auth.loggedIn(),
+    skip: skipUseQuery,
     onCompleted: (data) => {
+      console.log(data)
       setUser(data?.userByEmail);
     },
   });
@@ -46,6 +46,7 @@ function Employees() {
     useMutation(UPDATE_PASSWORD);
 
   const setPassword = async () => {
+    // console.log('setPassword');
     try {
       const { data } = await updatePassword({
         variables: {
@@ -74,67 +75,62 @@ function Employees() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    console.log('event=', event.currentTarget);
 
-    // check if form has everything (as per react-bootstrap docs)
+    // check if form has everything per react-bootstrap docs
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       return false;
     }
 
-    await refetch();
+    setSkipUseQuery(false); //allows use query to run
+    await refetch(); //get user information
+    setSkipUseQuery(true);
 
-    //set email address to send too
+    // set destination email address
     setToEmail(userFormData.email);
-    console.log('toEmail=', toEmail);
 
     //create token payload
     let payload = { email: userFormData.email, password: tempPassword };
-    console.log('payload=', payload);
 
     // create new token using the forgotPassword mutation
     try {
-      console.log('hello1');
       const { data } = await forgotPassword({
         variables: { ...payload },
       });
-      console.log('hello2');
-      console.log(data);
-
+      
       setPayLoadToken({ token: data.forgotPassword.token });
 
-      if (!user.email) {
-        setShowError(true);
+      if (user.email) {
+        // console.log("success", user);
+        setShowSuccess(true);
+        setShowAlert(false);
       } else {
+        // console.log("error", user);
         setShowAlert(true);
+        setShowSuccess(false);
       }
     } catch (e) {
-      console.log('hello3');
-      console.error("error = ", e);
+      // console.log("error2", user);
+      // setUserFormData({ ...userFormData, email: '' }); //resets form
       setShowAlert(true);
+      setShowSuccess(false);
     }
   };
 
-  // After payLoadToken state is updated, launch email to user
+  // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
   useEffect(() => {
-    sendEmail(payLoadToken);
+    setEmailContent({
+      source: "resetPassword",
+      token: payLoadToken,
+      toEmail: toEmail,
+      firstName: user.firstName,
+    });
     // eslint-disable-next-line
   }, [payLoadToken]);
 
   // eslint-disable-next-line
-  const submitEmailContent = useEmailSend(emailContent);
-  console.log(submitEmailContent);
-
-  //sets emailContent state to trigger useEmailSend above
-  const sendEmail = (token) => {
-    setEmailContent({
-      source: "resetPassword",
-      token: token,
-      toEmail: toEmail,
-      firstName: user.firstName,
-    });
-  };
+  // const submitEmailContent = useEmailSend(emailContent);
 
   return (
     <div className="d-flex justify-content-center">
@@ -197,14 +193,15 @@ function Employees() {
 
         <Alert
           dismissible
-          onClose={() => setShowError(false)}
+          onClose={() => setShowSuccess(false)}
           variant="success"
-          show={showError}
+          show={showSuccess}
           className="mb-4 py-1 pl-3 bg-success text-white"
           style={{ textAlign: "left" }}
         >
           <p className="" style={{ marginTop: "5px" }}>
-            Email has been sent to <br></br>{userFormData.email}.
+            Email has been sent to <br></br>
+            {userFormData.email}.
           </p>
         </Alert>
 
@@ -231,4 +228,4 @@ function Employees() {
   );
 }
 
-export default Employees;
+export default ForgotPassword;

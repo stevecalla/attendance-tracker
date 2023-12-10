@@ -24,6 +24,11 @@ function useEmailSend(props) {
   //props = source, token, toEmail, firstName
 
   const [tinyURI, setTinyURI] = useState("");
+  const [fromEmail, setFromEmail] = useState("");
+  const [toEmail, setToEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [textContent, setTextContent] = useState("");
+  const [htmlContent, setHtmlContent] = useState("");
 
   const tiny_url = async () => {
     getTinyURL(props.token).then((data) => {
@@ -32,27 +37,36 @@ function useEmailSend(props) {
   };
 
   // SECTION SET EMAIL CONTENT
-  const fromEmail = FROM_EMAIL;
+  useEffect(() => {
+    if (props?.token?.token) {
+      setFromEmail(FROM_EMAIL);
 
-  const toEmail =
-    props?.source === "resetPassword"
-      ? TO_EMAIL(props)
-      : "callasteven@gmail.com"; //used for contact form // change to env var
+      setToEmail(
+        props?.source === "resetPassword"
+          ? TO_EMAIL(props)
+          : "callasteven@gmail.com"
+      ); //used for contact form // change to env var
 
-  const subject =
-    props?.source === "resetPassword"
-      ? RESET_SUBJECT()
-      : CONTACT_US_SUBJECT(props);
+      setSubject(
+        props?.source === "resetPassword"
+          ? RESET_SUBJECT()
+          : CONTACT_US_SUBJECT(props)
+      );
 
-  const textContent =
-    props?.source === "resetPassword"
-      ? RESET_TEXT_TEMPLATE(props, tinyURI, createURL(props.token))
-      : contactus_text_template(props, tinyURI, createURL(props.token));
+      setTextContent(
+        props?.source === "resetPassword"
+          ? RESET_TEXT_TEMPLATE(props, tinyURI, createURL(props.token))
+          : contactus_text_template(props, tinyURI, createURL(props.token))
+      );
 
-  const htmlContent =
-    props?.source === "resetPassword"
-      ? RESET_HTML_TEMPLATE(props, tinyURI, createURL(props.token))
-      : contactus_html_template(props, tinyURI, createURL(props.token));
+      setHtmlContent(
+        props?.source === "resetPassword"
+          ? RESET_HTML_TEMPLATE(props, tinyURI, createURL(props.token))
+          : contactus_html_template(props, tinyURI, createURL(props.token))
+      );
+    }
+    // eslint-disable-next-line
+  }, [props]);
 
   // SECTION SEND EMAIL VIA LAZY QUERY
   const [
@@ -72,9 +86,8 @@ function useEmailSend(props) {
 
   // SECTION USE EFFECT TO RUN SENDEMAIL IF TOKEN IS POPULATED (since this hook will run on every render for this component)
   useEffect(() => {
-    if (props?.token?.token || props?.companyName) {
+    if (props?.token?.token) {
       // get tiny url
-      // tiny_url();
       tiny_url();
 
       // send email
