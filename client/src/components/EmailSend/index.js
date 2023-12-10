@@ -29,26 +29,26 @@ function useEmailSend(props) {
   const [textContent, setTextContent] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
 
-  // useEffect(() => {
-  //   // const tiny_url = async () => {
-  //   if (props?.token?.token) {
-  //     getTinyURL(props.token).then((data) => {
-  //       setTinyURI(data.data.tiny_url);
-  //     });
-  //   }
-  //   // };
-  // }, [props])
-
   const tiny_url = async () => {
-    getTinyURL(props.token).then((data) => {
-      setTinyURI(data.data.tiny_url);
-    });
+    let shortURI = await getTinyURL(props.token);
+    setTinyURI(shortURI.data.tiny_url);
   };
-  
+
+  // SECTION GET TINY URL
+  useEffect(() => {
+    if (props?.token?.token) {
+      tiny_url();
+    }
+    // eslint-disable-next-line
+  }, [props]);
 
   // SECTION SET EMAIL CONTENT
   useEffect(() => {
     if (props?.token?.token) {
+      let getBackupUrl = createURL(props.token);
+      console.log("x=", getBackupUrl);
+      console.log(tinyURI);
+
       setFromEmail(FROM_EMAIL);
 
       setToEmail(
@@ -65,18 +65,18 @@ function useEmailSend(props) {
 
       setTextContent(
         props?.source === "resetPassword"
-          ? RESET_TEXT_TEMPLATE(props, tinyURI, createURL(props.token))
-          : contactus_text_template(props, tinyURI, createURL(props.token))
+          ? RESET_TEXT_TEMPLATE(props, tinyURI, getBackupUrl)
+          : contactus_text_template(props, tinyURI, getBackupUrl)
       );
 
       setHtmlContent(
         props?.source === "resetPassword"
-          ? RESET_HTML_TEMPLATE(props, tinyURI, createURL(props.token))
-          : contactus_html_template(props, tinyURI, createURL(props.token))
+          ? RESET_HTML_TEMPLATE(props, tinyURI, getBackupUrl)
+          : contactus_html_template(props, tinyURI, getBackupUrl)
       );
     }
-    // eslint-disable-next-line
-  }, [props]);
+    //eslint-disable-next-line
+  }, [tinyURI]);
 
   // SECTION SEND EMAIL VIA LAZY QUERY
   const [
@@ -94,11 +94,26 @@ function useEmailSend(props) {
     fetchPolicy: "cache-and-network", // ensure the query executes after each click
   });
 
+  //SECTION SEND EMAIL
+  useEffect(() => {
+    if (props?.token?.token) {
+      // send email
+      console.log('send email')
+      sendEmail();
+
+      if (emailError) {
+        console.log(`Error! ${emailError}`);
+        alert`Error! ${emailError}`;
+      }
+    }
+    // eslint-disable-next-line
+  }, [tinyURI]);
+
   // SECTION USE EFFECT TO RUN SENDEMAIL IF TOKEN IS POPULATED (since this hook will run on every render for this component)
   useEffect(() => {
     if (props?.token?.token) {
       // get tiny url
-      tiny_url();
+      // tiny_url();
 
       // send email
       // sendEmail();

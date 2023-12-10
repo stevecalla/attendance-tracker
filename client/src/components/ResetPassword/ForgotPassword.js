@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Auth from "../../utils/auth";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
@@ -17,7 +16,7 @@ function ForgotPassword() {
   const [tempPassword] = useState("20000");
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [user, setUser] = useState({});
-  const [forgotPassword, { error }] = useMutation(FORGOT_PASSWORD);
+  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
   const [payLoadToken, setPayLoadToken] = useState({});
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -37,13 +36,13 @@ function ForgotPassword() {
     },
   });
 
-  const [updatePassword, { error: passwordError }] =
+  const [updatePassword] =
     useMutation(UPDATE_PASSWORD);
 
   const setPassword = async () => {
     // console.log('setPassword');
     try {
-      const { data } = await updatePassword({
+      await updatePassword({
         variables: {
           id: user?._id,
           password: tempPassword,
@@ -83,7 +82,7 @@ function ForgotPassword() {
     setSkipUseQuery(true);
 
     // set destination email address
-    setToEmail(userFormData.email);
+    setToEmail(user?.email);
 
     //create token payload
     let payload = { email: userFormData.email, password: tempPassword };
@@ -202,7 +201,7 @@ function ForgotPassword() {
             {showSuccess ? (
               <p className="" style={{ marginTop: "5px" }}>
                 Email has been sent to <br></br>
-                {userFormData.email}.
+                {user?.email}.
               </p>
             ) : (
               <p className="" style={{ marginTop: "5px" }}>

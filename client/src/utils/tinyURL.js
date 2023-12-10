@@ -1,8 +1,6 @@
 // set tinyURL path
 export const TINY_URL_PATH = `https://api.tinyurl.com/create?api_token=${process.env.REACT_APP_TINY_URL_KEY}`;
 
-// console.log(process.env.REACT_APP_TINY_URL_KEY);
-
 export const createURL = (token) => {
   let uri =
     process.env.NODE_ENV === "development"
@@ -13,7 +11,7 @@ export const createURL = (token) => {
 
   console.log(encodedURI);
 
-  return { encodedURI, uri }; //fix was missing parathesis
+  return { encodedURI, uri };
 };
 
 // TINY URL API CALL

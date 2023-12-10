@@ -170,6 +170,7 @@ const resolvers = {
       };
 
       try {
+        // console.log(mailOptionsDirect);
         sendMail(transporter, mailOptionsDirect);
       } catch (error) {
         console.log("2)", error);
