@@ -24,7 +24,7 @@ export const RESET_TEXT_TEMPLATE = (props, tinyURI = "blank", { uri }) => {
   This link will expire 15 minutes from the receipt of this email.
   
   Thank you,
-  Zoom Attendance App`;
+  The Attendance Tracker`;
 
   return template;
 };
@@ -49,7 +49,7 @@ export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
   <p>This link will expire 15 minutes from the receipt of this email.</p>
 
   <p>Thank you,</p>
-  <p>Zoom Attendance App</p>`;
+  <p>The Attendance Tracker</p>`;
 
   return template;
 };
