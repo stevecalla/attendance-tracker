@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "6398fb54494aa98f85992da2",
+    "username":  "b@b.com",
+    "email": "b@b.com",
+    "password": "12345",
+    "firstName": "Brendan",
+    "lastName": "Bayliss",
+    "phone": "970-867-5309",
+    "isDisplayable": true,
+    "isAdmin": false,
+    "isLocked": false
+  },
+  {
+    "_id": "6398fb54494aa98f85992da3",
+    "username":  "a@a.com",
+    "email": "a@a.com",
+    "password": "12345",
+    "firstName": "Ryan",
+    "lastName": "Stasick",
+    "phone": "719-867-5309",
+    "isDisplayable": true,
+    "isAdmin": true,
+    "isLocked": false
+  },
+  {
+    "_id": "6498fb54494aa98f85992da5",
+    "username": "callasteven@gmail.com",
+    "email": "callasteven@gmail.com",
+    "password": "12345",
+    "firstName": "Steve",
+    "lastName": "Calla",
+    "phone": "123-456-2526",
+    "isDisplayable": false,
+    "isAdmin": true,
+    "isLocked": false
+  }
+]

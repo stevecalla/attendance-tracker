@@ -8,10 +8,23 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; //v6
 
 import { apis } from "./apis";
 // import axios from "axios";
+import Auth from "./utils/auth";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import { Home } from "./pages/Home";
+import Login from "./pages/Login";
+import SignupForm from "./components/Login/SignupForm";
+import Message from "./components/Login/Message";
+import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
+import ForgotPassword from "./components/ResetPassword/ForgotPassword";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -255,6 +268,35 @@ function App() {
     // fetchData();
   }, []);
 
+  // fix //======== apollo client start
+  const httpLink = new HttpLink({
+    uri:
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3001/graphql"
+        : "/graphql",
+  });
+
+  // Construct request middleware that will attach the JWT token to every request as an `authorization` header
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem("id_token");
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    };
+  });
+
+  const client = new ApolloClient({
+    // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
+  // fix// ======== apollo client end
+
   // if (isLoading) {
   //   return (
   //     <div className="d-flex justify-content-center align-items-center" style={{ width: "300px", height: "200px", color: "red" }}>
@@ -263,24 +305,60 @@ function App() {
   //   );
   // } else {
   return (
-    <div className="App">
-      {/* <Router> */}
-      {/* <Switch> */}
-      <Routes>
-        {/* <MainPortal /> */}
-        {/* <Home /> */}
-        <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="*" element={<WrongPage />} />
-
-        {/* <Route exact path="/"><MainPortal /></Route>
-            <Route exact path="/home"><Home /></Route>
-            <Route path="*"><WrongPage /></Route> */}
-      </Routes>
-      {/* </Switch> */}
-      {/* </Router> */}
-    </div>
+    <ApolloProvider client={client}>
+      <div className="App">
+        {/* <Router> */}
+        {/* <Switch> */}
+        <Routes>
+          <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route
+            exact
+            path="/login"
+            element={
+              <Login
+                renderPanel={"login"}
+                messageButtonIsActive={false}
+                loginButtonIsActive={true}
+                signupButtonIsActive={false}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/signup"
+            element={
+              <Login
+                renderPanel={"signup"}
+                messageButtonIsActive={false}
+                loginButtonIsActive={false}
+                signupButtonIsActive={true}
+              />
+            }
+          />
+          <Route
+            exact
+            path="/messages"
+            element={
+              <Login
+                renderPanel={"messages"}
+                messageButtonIsActive={true}
+                loginButtonIsActive={false}
+                signupButtonIsActive={false}
+              />
+            }
+          />
+          <Route exact path="/forgotpassword" element={<ForgotPassword />} />
+          <Route
+            exact
+            path="/resetpassword/:token"
+            element={<ResetPassword />}
+          />
+          <Route path="*" element={<WrongPage />} />
+        </Routes>
+      </div>
+    </ApolloProvider>
   );
 }
 // }

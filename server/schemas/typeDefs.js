@@ -1,15 +1,18 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  #type User {
-  #  _id: ID
-  #  username: String
-  #  email: String
-  #  password: String
-  #  firstName: String
-  #  lastName: String
-  #  cell: String
-  #}
+  type User {
+    _id: ID
+    username: String
+    email: String
+    password: String
+    firstName: String
+    lastName: String
+    cell: String
+    isAdmin: Boolean
+    isLocked: Boolean
+    isDisplayable: Boolean
+  }
 
   type Employee {
     _id: ID
@@ -52,8 +55,8 @@ const typeDefs = gql`
 
   type Auth {
     token: ID!
-    #user: User
-    employee: Employee
+    user: User
+    #employee: Employee
   }
 
   type Client {
@@ -82,9 +85,10 @@ const typeDefs = gql`
   }
 
   type Query {
-    #users: [User]!
+    users: [User]!
+    userByEmail(email: String!): User
     #user(email: String!): User
-    #me(_id: ID!): User
+    me(_id: ID!): User
     #clients: [Client]!
     clients(isDisplayable: Boolean): [Client]!
     client(_id: ID!): Client
@@ -105,8 +109,6 @@ const typeDefs = gql`
 
   # SECTION SEND EMAILS
   type Query {
-
-
     # send email via SendGrid
     sendEmail(
       toEmail: String
@@ -118,8 +120,10 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    # SECTION LOGIN & RESET PASSWORD
+    # SECTION LOGIN, SIGNUP/ADD USER, RESET PASSWORD
     login(email: String!, password: String!): Auth
+    
+    addUser(username: String!, email: String!, password: String!): Auth
 
     forgotPassword(email: String!, password: String!): Auth
 

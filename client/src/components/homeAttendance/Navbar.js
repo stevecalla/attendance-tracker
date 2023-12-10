@@ -1,7 +1,9 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+// import NavDropdown from "react-bootstrap/NavDropdown";
+import Auth from "../../utils/auth";
 
 function Headerbar() {
   return (
@@ -19,9 +21,22 @@ function Headerbar() {
         <Navbar.Collapse className="flex-grow-0" id="basic-navbar-nav">
           {/* <Nav className="me-auto"> */}
           <Nav className="">
-            <Nav.Link href="#home">Login</Nav.Link>
-            <Nav.Link href="#link">Logout</Nav.Link>
-            <NavDropdown
+            {Auth.loggedIn() ? (
+              <Nav.Link onClick={Auth.logout} as={Link}>
+                Logout
+              </Nav.Link>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+                <Nav.Link as={Link} to="/signup">
+                  Sign Up
+                </Nav.Link>
+              </>
+            )}
+
+            {/* <NavDropdown
               // drop="start"
               title="Account"
               id="basic-nav-dropdown"
@@ -36,7 +51,7 @@ function Headerbar() {
               <NavDropdown.Item href="#action/3.4">
                 Separated link
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

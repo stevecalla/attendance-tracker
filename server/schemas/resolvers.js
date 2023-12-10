@@ -1,18 +1,27 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Schedule, Client, Employee, Hour } = require("../models");
+const { Schedule, Client, Employee, Hour, User } = require("../models");
 const { signToken } = require("../utils/auth");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+
+// const { sendMail } = require("../utils/nodeMailer");
 
 let expiration = "2h"; // 2 hours
 
 const resolvers = {
   Query: {
-    // me: async (parent, { _id }, context) => {
-    //   // if (context.user) {
-    //   return User.findById({ _id }).populate("locations");
-    //   // }
-    //   // throw new AuthenticationError("You need to be logged in!");
-    // },
+    me: async (parent, { _id }, context) => {
+      // if (context.user) {
+      return User.findById({ _id });
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    users: async (parent, args, context) => {
+      // if (context.user) {
+      return User.find();
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
 
     clients: async (parent, { isDisplayable }, context) => {
       // if (context.user) {
@@ -72,6 +81,14 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
+    //section users
+    userByEmail: async (parent, { email }, context) => {
+      // if (context.user) {
+      return User.findOne({ email: email });
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
     //section hour queries
     hours: async (parent, args, context) => {
       // if (context.user) {
@@ -127,64 +144,111 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
+    //NODEMAIL VERSION
     sendEmail: async (parent, args, context) => {
-      const sgMail = require("@sendgrid/mail");
-      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      console.log(args);
 
-      let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
+      const {
+        transporter,
+        // mailOptions,
+        sendMail,
+      } = require("../utils/nodeMailer");
 
-      const msg = {
-        to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
-        from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
-        subject: args.subject,
+      let message = `Your information was sent to support at Zoom Attendance App. A represenative will be in touch soon.`;
+
+      const mailOptionsDirect = {
+        from: {
+          name: "Calla",
+          address: args.fromEmail
+            ? `${args.fromEmail}`
+            : process.env.SENDER_EMAIL,
+        },
+        to: args.toEmail ? [`${args.toEmail}`] : [process.env.SENDER_EMAIL],
+        subject: args.subject ? args.subject : "Something Went Wrong",
         text: args.textContent,
         html: args.htmlContent,
       };
 
-      sgMail
-        .send(msg)
-        .then(() => {
-          console.log("Email sent");
-        })
-        .catch((error) => {
-          console.error(error);
-          console.error(error.response.body.errors);
-          message = "Something went wrong. Give us a call at 555-555-1212.";
-        });
+      try {
+        // console.log(mailOptionsDirect);
+        sendMail(transporter, mailOptionsDirect);
+      } catch (error) {
+        console.log("2)", error);
+        message =
+          "Something went wrong. Contact support at support@zoomattendance.com.";
+      }
+
+      console.log("resolver message=======", message);
 
       return message;
     },
+
+    // SENDGRID VERSION
+    // sendEmail: async (parent, args, context) => {
+    //   const sgMail = require("@sendgrid/mail");
+    //   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    //   let message = `Your information was sent to Integral Solutions. A represenative will be in touch soon.`;
+
+    //   const msg = {
+    //     to: args.toEmail ? `${args.toEmail}` : "callasteven@gmail.com",
+    //     from: args.fromEmail ? `${args.fromEmail}` : "callasteven@gmail.com",
+    //     subject: args.subject,
+    //     text: args.textContent,
+    //     html: args.htmlContent,
+    //   };
+
+    //   sgMail
+    //     .send(msg)
+    //     .then(() => {
+    //       console.log("Email sent");
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //       console.error(error.response.body.errors);
+    //       message = "Something went wrong. Give us a call at 555-555-1212.";
+    //     });
+
+    //   return message;
+    // },
   },
 
   Mutation: {
-    signupEmployee: async (parent, { email, password }, context) => {
-      const employee = await Employee.create({ email, password });
+    // signupEmployee: async (parent, { email, password }, context) => {
+    //   const employee = await Employee.create({ email, password });
 
-      expiration = "2h"; // 15 minutes
-      const token = signToken(employee, expiration);
+    //   expiration = "2h"; // 2hr
+    //   const token = signToken(employee, expiration);
 
-      return { token, employee };
-    },
+    //   return { token, employee };
+    // },
 
     login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
 
-      const employee = await Employee.findOne({ email });
-
-      if (!employee) {
+      if (!user) {
         throw new AuthenticationError("No email found with this email address");
       }
 
-      const correctPw = await employee.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
         throw new AuthenticationError("Incorrect credentials");
       }
 
-      expiration = "2h"; // 15 minutes
-      const token = signToken(employee, expiration);
-      // const token = signToken(employee);
+      expiration = "2h"; // 2 hours
+      const token = signToken(user, expiration);
 
-      return { token, employee };
+      return { token, user };
+    },
+
+    addUser: async (parent, { username, email, password }, context) => {
+      const user = await User.create({ username, email, password });
+
+      expiration = "2h"; // 2 hours
+      const token = signToken(user, expiration);
+
+      return { token, user };
     },
 
     forgotPassword: async (parent, { email, password }) => {
@@ -601,7 +665,7 @@ const resolvers = {
         employees,
         isDisplayable,
       });
-      return schedule
+      return schedule;
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },

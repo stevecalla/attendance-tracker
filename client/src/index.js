@@ -21,6 +21,8 @@ import {
   faRotateRight,
   faSave,
   faCloud,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -33,7 +35,9 @@ library.add(
   faClipboard,
   faRotateRight,
   faSave,
-  faCloud
+  faCloud,
+  faEye,
+  faEyeSlash,
 );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -45,7 +49,6 @@ root.render(
     {/* <Router history={history}> */}
     <Router>
       <App />
-    {/* </Router> */}
     </Router>
   </React.StrictMode>
 );
