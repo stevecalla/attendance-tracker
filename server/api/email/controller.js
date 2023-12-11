@@ -30,7 +30,7 @@ module.exports = {
         html: htmlContent,
       };
       
-      sendMail(transporter, mailOptions);
+      // sendMail(transporter, mailOptions);
       res.status(200).json(req.body);
       
     } catch (err) {

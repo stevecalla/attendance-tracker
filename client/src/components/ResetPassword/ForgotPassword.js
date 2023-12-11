@@ -122,31 +122,62 @@ function ForgotPassword() {
   const [contentTrigger, setContentTrigger] = useState(false);
 
   useEffect(() => {
-    // if payLoadToken does exits then fetch TinyURL
-    if (Object.entries(payLoadToken).length > 0) {
-      const fetchTinyURL = async () => {
-        let response = await getTinyURL(payLoadToken);
-        // console.log(response);
-        // console.log(response.data.tiny_url);
-        // const json = await response.json();
-        let { tiny_url } = response.data;
+    const dataFetch = async () => {
+      // waiting for allthethings in parallel
+      // if payLoadToken does exits then fetch TinyURL
+      if (Object.entries(payLoadToken).length > 0) {
+        const results = (
+          await Promise.allSettled([
+            getTinyURL(payLoadToken), 
+            createURL(payLoadToken)
+          ])
+        ).map((data) => data);
+
+        // call the promise all method
+        const [tinyResponse, urlResponse] = await Promise.allSettled(results);
+        let { tiny_url } = tinyResponse.value.value.data;
+        let backUpUrl = urlResponse.value.value;
+
+        // when the data is ready, save it to state
         setTinyURL(tiny_url);
-      };
+        setBackUpUrl(createURL(backUpUrl));
+      }
+    };
 
-      fetchTinyURL().catch(console.error);
-      setBackUpUrl(createURL(payLoadToken));
-      // setTimeout(() => {
-      // }, 250);
+    dataFetch();
 
-      setTimeout(() => {
-        setContentTrigger(true);
-      }, 500);
-    }
-
-    // eslint-disable-next-line
+    return () => {
+      setContentTrigger(true); //kickoff next useEffect
+    };
   }, [payLoadToken]);
 
+  // useEffect(() => {
+  //   // if payLoadToken does exits then fetch TinyURL
+  //   if (Object.entries(payLoadToken).length > 0) {
+  //     const fetchTinyURL = async () => {
+  //       let response = await getTinyURL(payLoadToken);
+  //       // console.log(response);
+  //       // console.log(response.data.tiny_url);
+  //       // const json = await response.json();
+  //       let { tiny_url } = response.data;
+  //       setTinyURL(tiny_url);
+  //     };
+
+  //     fetchTinyURL().catch(console.error);
+  //     setBackUpUrl(createURL(payLoadToken));
+  //     // setTimeout(() => {
+  //     // }, 250);
+
+  //     setTimeout(() => {
+  //       setContentTrigger(true);
+  //     }, 500);
+  //   }
+
+  //   // eslint-disable-next-line
+  // }, [payLoadToken]);
+
   // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
+  
   useEffect(() => {
     if (contentTrigger) {
       console.log(tinyURL);
@@ -166,12 +197,6 @@ function ForgotPassword() {
         htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
       });
     }
-
-    // setTimeout(() => {
-    // }, 250);
-    // if (user?.email) {
-    //   setEmailTrigger(true);
-    // }
 
     return () => {
       setEmailTrigger(true);
