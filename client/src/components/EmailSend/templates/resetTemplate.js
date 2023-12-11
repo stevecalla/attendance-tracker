@@ -19,7 +19,7 @@ export const RESET_TEXT_TEMPLATE = (props, tinyURI = "blank", { uri }) => {
   
   Click on the link below to create a new password:
   
-  ${tinyURI ? tinyURI : uri}
+  "${tinyURI ? tinyURI : uri}"
   
   This link will expire 15 minutes from the receipt of this email.
   
@@ -38,9 +38,9 @@ export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
   <p>Click on the link below to create a new password:</p>
 
   <p>
-    <a style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px" href= ${
+    <a style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px" href="${
       tinyURI ? tinyURI : uri
-    }
+    }"
     >
       Click Here
     </a>

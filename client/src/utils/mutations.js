@@ -548,3 +548,23 @@ export const UPDATE_EMPLOYEE_HOUR = gql`
     }
   }
 `;
+
+// SECTION SEND EMAIL
+export const SEND_EMAIL = gql`
+  mutation sendEmail(
+    $toEmail: String
+    $fromEmail: String
+    $subject: String
+    $textContent: String
+    $htmlContent: String
+  ) {
+    sendEmail(
+      toEmail: $toEmail
+      fromEmail: $fromEmail
+      subject: $subject
+      textContent: $textContent
+      htmlContent: $htmlContent
+    )
+  }
+`;
+

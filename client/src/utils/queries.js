@@ -283,13 +283,13 @@ export const QUERY_SINGLE_SCHEDULE = gql`
 
 // SECTION SEND EMAIL
 export const SEND_EMAIL = gql`
-  query emailContent(
+  query sendEmail(
     $toEmail: String
     $fromEmail: String
     $subject: String
     $textContent: String
     $htmlContent: String
-  ) {
+  )  {
     sendEmail(
       toEmail: $toEmail
       fromEmail: $fromEmail

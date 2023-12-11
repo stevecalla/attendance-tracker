@@ -170,7 +170,6 @@ const resolvers = {
       };
 
       try {
-        // console.log(mailOptionsDirect);
         sendMail(transporter, mailOptionsDirect);
       } catch (error) {
         console.log("2)", error);
@@ -180,7 +179,8 @@ const resolvers = {
 
       console.log("resolver message=======", message);
 
-      return message;
+      // return message;
+      res.send(200).send(message);
     },
 
     // SENDGRID VERSION

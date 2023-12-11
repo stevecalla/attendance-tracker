@@ -4,10 +4,20 @@ import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
+// import { emailNodeMailer } from "../../utils/emailNodeMailer";
+
+import {
+  RESET_TEXT_TEMPLATE,
+  RESET_HTML_TEMPLATE,
+  RESET_SUBJECT,
+  FROM_EMAIL,
+  TO_EMAIL,
+} from "../../components/EmailSend/templates/resetTemplate";
+import { getTinyURL, createURL } from "../../utils/tinyURL";
 
 import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
-import useEmailSend from "../../components/EmailSend";
+// import useEmailSend from "../../components/EmailSend";
 
 import { Form, Button, Alert } from "react-bootstrap";
 import "../../styles/button-home.css";
@@ -24,6 +34,7 @@ function ForgotPassword() {
   const [toEmail, setToEmail] = useState("");
   const [skipUseQuery, setSkipUseQuery] = useState(true); // ensures useQuery only runs on button submit, not if characters are entered in the input element
   const [emailContent, setEmailContent] = useState({});
+  const [emailTrigger, setEmailTrigger] = useState(false);
 
   // SECTION GET USER Query
   const { refetch } = useQuery(QUERY_USER_BYEMAIL, {
@@ -36,8 +47,7 @@ function ForgotPassword() {
     },
   });
 
-  const [updatePassword] =
-    useMutation(UPDATE_PASSWORD);
+  const [updatePassword] = useMutation(UPDATE_PASSWORD);
 
   const setPassword = async () => {
     // console.log('setPassword');
@@ -77,7 +87,7 @@ function ForgotPassword() {
       return false;
     }
 
-    setSkipUseQuery(false); //allows use query to run
+    setSkipUseQuery(false); //allows useQuery to run
     await refetch(); //get user information
     setSkipUseQuery(true);
 
@@ -107,26 +117,92 @@ function ForgotPassword() {
     }
   };
 
-  // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
-  useEffect(() => {
-    setEmailContent({
-      source: "resetPassword",
-      token: payLoadToken,
-      toEmail: toEmail,
-      firstName: user.firstName
-    });
+  const [tinyURL, setTinyURL] = useState("");
+  const [backUpUrl, setBackUpUrl] = useState({});
+  const [contentTrigger, setContentTrigger] = useState(false);
 
-    // setUser({});
+  useEffect(() => {
+    // if payLoadToken does exits then fetch TinyURL
+    if (Object.entries(payLoadToken).length > 0) {
+      const fetchTinyURL = async () => {
+        let response = await getTinyURL(payLoadToken);
+        // console.log(response);
+        // console.log(response.data.tiny_url);
+        // const json = await response.json();
+        let { tiny_url } = response.data;
+        setTinyURL(tiny_url);
+      };
+
+      fetchTinyURL().catch(console.error);
+      setBackUpUrl(createURL(payLoadToken));
+      // setTimeout(() => {
+      // }, 250);
+
+      setTimeout(() => {
+        setContentTrigger(true);
+      }, 500);
+    }
+
     // eslint-disable-next-line
   }, [payLoadToken]);
 
+  // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
+  useEffect(() => {
+    if (contentTrigger) {
+      console.log(tinyURL);
+      console.log(backUpUrl);
+
+      let firstName = { firstName: user?.firstName };
+
+      setEmailContent({
+        source: "resetPassword",
+        token: payLoadToken,
+        // toEmail: user?.email,
+        toEmail: TO_EMAIL(),
+        fromEmail: FROM_EMAIL,
+        firstName: user.firstName,
+        subject: RESET_SUBJECT(),
+        textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
+        htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
+      });
+    }
+
+    // setTimeout(() => {
+    // }, 250);
+    // if (user?.email) {
+    //   setEmailTrigger(true);
+    // }
+
+    return () => {
+      setEmailTrigger(true);
+      setContentTrigger(false);
+    };
+    // eslint-disable-next-line
+  }, [contentTrigger]);
+
   // eslint-disable-next-line
-  const submitEmailContent = useEmailSend(emailContent);
+  // const submitEmailContent = useEmailSend(emailContent, []);
 
   useEffect(() => {
-    console.log(submitEmailContent);
-  // eslint-disable-next-line
-  }, [user])
+    if (emailTrigger && user?.email) {
+      // console.log(emailTrigger);
+      // console.log(user?.email);
+      // console.log(emailContent);
+      // console.log(JSON.stringify(emailContent));
+
+      // fetch("http://localhost:3001/api/email-server", {
+      fetch("http://localhost:3001/api/email/passwordreset", {
+        method: "POST",
+        body: JSON.stringify(emailContent),
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return () => {
+      setEmailTrigger(false);
+    };
+    // eslint-disable-next-line
+  }, [emailTrigger]);
 
   return (
     <div className="d-flex justify-content-center">

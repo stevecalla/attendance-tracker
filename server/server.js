@@ -3,27 +3,19 @@ const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const compression = require("compression"); //added to address lighthouse text compression performance issue
+const cors = require("cors");
 
 // require("dotenv").config();
-
-// //section cors start
-const cors = require("cors");
-const ALLOWED_DOMAIN = [
-  "http://localhost:3000", 
-  "http://localhost:8080", 
-  "https://studio.apollographql.com"
-];
-// //section cors end
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
 //fix start
 const middleware = require("./middleware");
-
 const zoomAppRouter = require("./api/zoomapp/router");
 const zoomRouter = require("./api/zoom/router");
 const thirdPartyOAuthRouter = require("./api/thirdpartyauth/router");
+const emailRouter = require("./api/email/router");
 //fix end
 
 const PORT = process.env.PORT || 3001;
@@ -34,7 +26,7 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use("/test", (req, res, next) => {
+app.get("/test", (req, res, next) => {
   console.log("Request made to /test route");
   res.json({ message: "This is your API data" });
   // You can perform additional operations here if needed
@@ -64,9 +56,19 @@ app.get("/view-session", (req, res) => {
 });
 
 // //section cors start
+// const ALLOWED_DOMAIN = "*";
+// const ALLOWED_DOMAIN = [
+//   "http://127.0.0.1:3000",
+//   "http://localhost:3000", 
+//   "http://localhost:8080", 
+//   "https://studio.apollographql.com"
+// ];
+// //section cors end
 var corsOptions = {
   // origin: FRONTEND_DOMAIN,
-  origin: ALLOWED_DOMAIN,
+  // origin: ALLOWED_DOMAIN,
+  origin: "*",
+  methods: [ "GET", "POST" ],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -79,7 +81,34 @@ app.use(compression()); //added to address lighthouse text compression performan
 app.use(middleware.session);
 app.use(middleware.setResponseHeaders);
 
-// Zoom App routes
+// SECTION EMAIL SERVER
+// route = ./api/email/router");
+app.use("/api/email", emailRouter);
+
+// original test api email server
+// app.post("/api/email-server", (req, res) => {
+//   console.log("Request made to /email-server route");
+//   console.log(req.body);
+  
+//   try {
+//     if (!req.body) {
+//       res
+//       .status(400)
+//       .json({ message: 'No email content' });
+//       return;
+//     }
+    
+//     res.status(200).json(req.body);
+    
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// });
+
+// SECTION ZOOM SERVER / APP ROUTES
+// const zoomAppRouter = require("./api/zoomapp/router");
+// SECTION EMAIL SERVER END
+
 app.use("/api/zoomapp", zoomAppRouter);
 if (
   process.env.AUTH0_CLIENT_ID &&

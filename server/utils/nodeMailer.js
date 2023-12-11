@@ -24,23 +24,13 @@ const transporter = nodemailer.createTransport({
 //   html: `<h1>Hello there</h1>
 //     <p>Isn't NodeMailer useful?</p>
 //     `,
-//   // cc: [],
-//   // bcc: [],
-//   dsn: {
-//     id: "some random message specific id",
-//     return: "headers",
-//     notify: ["failure", "delay", "success"],
-//     recipient: process.env.SENDER_EMAIL,
-//   },
-//   debug: true, // show debug output
-//   logger: true // log information in console
 // };
 
 // Define and send message inside transporter.sendEmail() and await info about send from
 
-const sendMail = async (transporter, mailOptionsDirect) => {
+const sendMail = async (transporter, mailOptions) => {
   try {
-    const info = await transporter.sendMail(mailOptionsDirect);
+    const info = await transporter.sendMail(mailOptions);
     console.log(info.messageId);
     console.log(info.envelope);
     console.log('successfully delivered', info.accepted);
@@ -53,13 +43,14 @@ const sendMail = async (transporter, mailOptionsDirect) => {
   }
 };
 
+// sendMail(transporter, mailOptions);
+
 module.exports = {
   transporter,
   // mailOptions,
   sendMail
 };
 
-// sendMail(transporter, mailOptions).catch((error) => console.log("2)", error));
 
 // SECTION - SOURCES
 // https://www.youtube.com/watch?v=QDIOBsMBEI0
