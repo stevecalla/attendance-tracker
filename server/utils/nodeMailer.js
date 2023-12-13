@@ -49,13 +49,14 @@ const sendMail = async (mailOptions) => {
   try {
     const info = await transporter.sendMail(mailOptions);
 
-    console.log(info.messageId);
-    console.log(info.envelope);
-    console.log('successfully delivered', info.accepted);
-    console.log('rejected delivery', info.rejected);
-    console.log('pending delivery', info.pending);
-    console.log('response', info.response);
+    console.log(info.messageId); //<d593580d-54c4-acf9-0003-d2dfeca67038@gmail.com>
+    console.log(info.envelope); //{ from: 'callasteven@gmail.com', to: [ 'scalla2@instructors.2u.com' ] }
+    console.log('successfully delivered', info.accepted); //successfully delivered [ 'scalla2@instructors.2u.com' ]
+    console.log('rejected delivery', info.rejected); //rejected delivery []
+    console.log('pending delivery', info.pending); //pending delivery undefined
+    console.log('response', info.response); //response 250 2.0.0 OK  1702444461 g3-20020a92c7c3000000b0035d6800582dsm147616ilk.37 - gsmtp
     console.log("Successful send"); // Random ID generated after successful send (optional)
+
   } catch (error) {
     console.log("1)", error);
   }
