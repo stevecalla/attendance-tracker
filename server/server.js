@@ -93,7 +93,7 @@ app.use(middleware.setResponseHeaders);
 
 // SECTION EMAIL SERVER
 // route = ./api/email/router");
-app.use("/api/email", emailRouter);
+// app.use("/api/email", emailRouter);
 
 // original test api email server
 // app.post("/api/email-server", (req, res) => {
