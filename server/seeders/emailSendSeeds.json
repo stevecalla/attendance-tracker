@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "6398fb54494aa98f85992d25",
+    "fromEmail": "callasteven@gmail.com",
+    "toEmail":  "scalla2@instructors.2u.com",
+    "subject":  "Email Seed Test",
+    "firstName": "Brendan",
+    "source": "tbd",
+    "token": "tbd",
+    "textContent": "tbd",
+    "htmlContent": "tbd",
+    "wasSent": false,
+    "isDisplayable": true,
+    "user": "6498fb54494aa98f85992da5"
+  }
+]

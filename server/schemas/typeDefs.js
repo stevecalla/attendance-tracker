@@ -12,6 +12,22 @@ const typeDefs = gql`
     isAdmin: Boolean
     isLocked: Boolean
     isDisplayable: Boolean
+    emailSend: [EmailSend]
+  }
+
+  type EmailSend {
+    _id: ID
+    fromEmail: String
+    toEmail: String
+    subject: String
+    firstName: String
+    source: String
+    token: String
+    textContent: String
+    htmlContent: String
+    wasSent: Boolean
+    isDisplayable: Boolean
+    user: User
   }
 
   type Employee {
@@ -72,7 +88,6 @@ const typeDefs = gql`
     email: String
     schedule: [Schedule]
     isDisplayable: Boolean
-
   }
 
   type Hour {
@@ -117,17 +132,52 @@ const typeDefs = gql`
       textContent: String
       htmlContent: String
     ): String
+    emailSends: [EmailSend]!
+    emailsByNotSent(wasSent: Boolean): [EmailSend]!
   }
 
+  # SECTION MUTATIONS
   type Mutation {
     # SECTION LOGIN, SIGNUP/ADD USER, RESET PASSWORD
     login(email: String!, password: String!): Auth
-    
+
     addUser(username: String!, email: String!, password: String!): Auth
 
     forgotPassword(email: String!, password: String!): Auth
 
     updatePassword(_id: ID, password: String): Employee
+
+    # SECTION EMAILSEND
+    addEmailSend(
+      toEmail: String
+      fromEmail: String
+      subject: String
+      firstName: String
+      source: String
+      token: String
+      textContent: String
+      htmlContent: String
+      user: String
+    ): EmailSend
+
+    updateEmailSend(
+      _id: ID!
+      toEmail: String
+      fromEmail: String
+      subject: String
+      firstName: String
+      source: String
+      token: String
+      textContent: String
+      htmlContent: String
+      wasSent: String
+      isDisplayable: String
+      user: String
+    ): EmailSend
+
+    deleteEmailSend(_id: ID!): EmailSend
+
+    softDeleteEmailSend(_id: ID!, isDisplayable: Boolean): EmailSend
 
     # SECTION CLIENT
     addClient(

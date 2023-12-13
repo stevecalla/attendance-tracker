@@ -87,7 +87,7 @@ export const QUERY_ALL_EMPLOYEES = gql`
       password
       hasDriversLicense
       hour {
-        jobDate,
+        jobDate
         hoursWorked
       }
       schedule {
@@ -141,6 +141,7 @@ export const QUERY_SINGLE_EMPLOYEE = gql`
 // `;
 
 // SECTION EMPLOYEE
+
 export const QUERY_USER_BYEMAIL = gql`
   query UserByEmail($email: String!) {
     userByEmail(email: $email) {
@@ -282,6 +283,28 @@ export const QUERY_SINGLE_SCHEDULE = gql`
 `;
 
 // SECTION SEND EMAIL
+export const QUERY_ALL_SENT_EMAILS = gql`
+  query AllEmailSends {
+    emailSends {
+      _id
+      fromEmail
+      isDisplayable
+      htmlContent
+      toEmail
+      subject
+      firstName
+      source
+      token
+      textContent
+      wasSent
+      user {
+        _id
+        email
+      }
+    }
+  }
+`;
+
 export const SEND_EMAIL = gql`
   query sendEmail(
     $toEmail: String
@@ -289,7 +312,7 @@ export const SEND_EMAIL = gql`
     $subject: String
     $textContent: String
     $htmlContent: String
-  )  {
+  ) {
     sendEmail(
       toEmail: $toEmail
       fromEmail: $fromEmail

@@ -1,5 +1,12 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { Schedule, Client, Employee, Hour, User } = require("../models");
+const {
+  Schedule,
+  Client,
+  Employee,
+  Hour,
+  User,
+  EmailSend,
+} = require("../models");
 const { signToken } = require("../utils/auth");
 // const bcrypt = require("bcrypt");
 
@@ -16,11 +23,9 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
+    //all users, sort by lastName
     users: async (parent, args, context) => {
-      // if (context.user) {
-      return User.find();
-      // }
-      // throw new AuthenticationError("You need to be logged in!");
+      return User.find().sort({ lastName: -1 }).populate("emailSend");
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -65,9 +70,6 @@ const resolvers = {
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },
-
-    // employeeById: async (parent, { _id, isDisplayable }, context) => {
-    // return Employee.findOne({ _id: _id, schedule: { isDisplayable: isDisplayable } }).populate({
 
     employeeById: async (parent, { _id }, context) => {
       //fix
@@ -144,7 +146,23 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    //NODEMAIL VERSION
+    //section email = NODEMAIL VERSION
+    // get all email sends
+    emailSends: async (parent, args, context) => {
+      return EmailSend.find().sort({ createdAt: -1 }).populate("user");
+    },
+
+    //find emails not sent by wasSent === false; created date
+    emailsByNotSent: async (parent, { wasSent }, context) => {
+      return EmailSend.find({ wasSent })
+        .populate("hour")
+        .populate({
+          path: "schedule",
+          populate: { path: "client" },
+        });
+    },
+
+    // NODEMAILER VERSION
     sendEmail: async (parent, args, context) => {
       console.log(args);
 
@@ -277,7 +295,100 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    // SECTION client
+    // SECTION EMAILSEND
+    // //modeled after addClient
+    addEmailSend: async (
+      parent,
+      {
+        toEmail,
+        fromEmail,
+        subject,
+        firstName,
+        source,
+        token,
+        textContent,
+        htmlContent,
+        user,
+      },
+      context
+    ) => {
+      const emailSend = await EmailSend.create({
+        toEmail,
+        fromEmail,
+        subject,
+        firstName,
+        source,
+        token,
+        textContent,
+        htmlContent,
+        user,
+      });
+      return {
+        toEmail,
+        fromEmail,
+        subject,
+        firstName,
+        source,
+        token,
+        textContent,
+        htmlContent,
+        user,
+       };
+    },
+
+    //SECTION modeled after updateClient; not tested
+    updateEmailSend: async (
+      parent,
+      {
+        _id,
+        toEmail,
+        fromEmail,
+        subject,
+        firstName,
+        source,
+        token,
+        textContent,
+        htmlContent,
+        wasSent,
+        isDisplayable,
+      },
+      context
+    ) => {
+      return EmailSend.findOneAndUpdate(
+        { _id },
+        {
+          toEmail,
+          fromEmail,
+          subject,
+          firstName,
+          source,
+          token,
+          textContent,
+          htmlContent,
+          wasSent,
+          isDisplayable,
+        },
+        { new: true }
+      );
+    },
+
+    //SECTION modeled after updateClient; not tested
+    deleteEmailSend: async (parent, { _id }, context) => {
+      return EmailSend.findOneAndDelete({ _id });
+    },
+
+    //SECTION modeled after updateClient; not tested
+    // soft delete client
+    softDeleteEmailSend: async (parent, { _id, isDisplayable }, client) => {
+      return EmailSend.findOneAndUpdate(
+        { _id },
+        {
+          isDisplayable,
+        }
+      );
+    },
+
+    // SECTION CLIENT
     addClient: async (
       parent,
       {
@@ -320,7 +431,7 @@ const resolvers = {
     },
 
     // soft delete client
-    softDeleteClient: async (parent, { _id, isDisplayable }, client) => {
+    softDeleteClient: async (parent, { _id, isDisplayable }, context) => {
       // if (context.user) {
 
       return Client.findOneAndUpdate(

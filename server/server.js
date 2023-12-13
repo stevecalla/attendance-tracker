@@ -39,9 +39,9 @@ app.get("/view-session", (req, res) => {
   // console.log(req.session);
 
   // let test = middleware.getSession();
-  
-  res.json('whatever');
-  
+
+  res.json("whatever");
+
   // redisClient.lpush("viewSession", "z", redisClient.print);
   // // Check if a session exists
   // if (!req.session) {
@@ -59,8 +59,8 @@ app.get("/view-session", (req, res) => {
 // const ALLOWED_DOMAIN = "*";
 // const ALLOWED_DOMAIN = [
 //   "http://127.0.0.1:3000",
-//   "http://localhost:3000", 
-//   "http://localhost:8080", 
+//   "http://localhost:3000",
+//   "http://localhost:8080",
 //   "https://studio.apollographql.com"
 // ];
 // //section cors end
@@ -68,7 +68,7 @@ var corsOptions = {
   // origin: FRONTEND_DOMAIN,
   // origin: ALLOWED_DOMAIN,
   origin: "*",
-  methods: [ "GET", "POST" ],
+  methods: ["GET", "POST"],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -81,6 +81,31 @@ app.use(compression()); //added to address lighthouse text compression performan
 app.use(middleware.session);
 app.use(middleware.setResponseHeaders);
 
+//TEST MIDDLEWARE TO WATCH THE REQ.BODY FROM GRAPHQL
+app.use(function(req, res, next) {
+  console.log('----------------')
+  console.log('----------------')
+  console.log('----------------')
+  console.log('hello middleware');
+  console.log(req.body);
+
+// Extracting the mutation string
+// const mutationString = req.body.query.replace(/\s+/g, ' ');
+
+// Using a regular expression to extract the mutation
+// const regex = /mutation (\w+) \{/;
+// const matches = mutationString.match(regex);
+// const mutationName = matches && matches[1];
+
+// console.log(mutationName); // Output: AddEmailSend
+
+  console.log('----------------')
+  console.log('----------------')
+  console.log('----------------')
+  // console.log(res);
+  next();
+});
+
 // SECTION EMAIL SERVER
 // route = ./api/email/router");
 app.use("/api/email", emailRouter);
@@ -89,7 +114,7 @@ app.use("/api/email", emailRouter);
 // app.post("/api/email-server", (req, res) => {
 //   console.log("Request made to /email-server route");
 //   console.log(req.body);
-  
+
 //   try {
 //     if (!req.body) {
 //       res
@@ -97,9 +122,9 @@ app.use("/api/email", emailRouter);
 //       .json({ message: 'No email content' });
 //       return;
 //     }
-    
+
 //     res.status(200).json(req.body);
-    
+
 //   } catch (err) {
 //     res.status(400).json(err);
 //   }
@@ -147,6 +172,10 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
   // store.on
 };
+
+//SECTION ATTEMPT TO WATCH DATABASE FOR CHANGES
+// const { run } = require("./config/watch");
+// run().catch(console.dir);
 
 // Call the async function to start the server
 startApolloServer(typeDefs, resolvers);

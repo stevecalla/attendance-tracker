@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
+import { ADD_EMAIL_SEND } from "../../utils/mutations";
 // import { emailNodeMailer } from "../../utils/emailNodeMailer";
 
 import {
@@ -119,17 +120,16 @@ function ForgotPassword() {
 
   const [tinyURL, setTinyURL] = useState("");
   const [backUpUrl, setBackUpUrl] = useState({});
-  const [contentTrigger, setContentTrigger] = useState(false);
 
   useEffect(() => {
     const dataFetch = async () => {
-      // waiting for allthethings in parallel
-      // if payLoadToken does exits then fetch TinyURL
       if (Object.entries(payLoadToken).length > 0) {
+        // waiting for allthethings in parallel
+        // if payLoadToken does exits then fetch TinyURL
         const results = (
           await Promise.allSettled([
-            getTinyURL(payLoadToken), 
-            createURL(payLoadToken)
+            getTinyURL(payLoadToken),
+            createURL(payLoadToken),
           ])
         ).map((data) => data);
 
@@ -137,6 +137,7 @@ function ForgotPassword() {
         const [tinyResponse, urlResponse] = await Promise.allSettled(results);
         let { tiny_url } = tinyResponse.value.value.data;
         let backUpUrl = urlResponse.value.value;
+        console.log(tiny_url, backUpUrl);
 
         // when the data is ready, save it to state
         setTinyURL(tiny_url);
@@ -145,10 +146,6 @@ function ForgotPassword() {
     };
 
     dataFetch();
-
-    return () => {
-      setContentTrigger(true); //kickoff next useEffect
-    };
   }, [payLoadToken]);
 
   // useEffect(() => {
@@ -177,37 +174,37 @@ function ForgotPassword() {
   // }, [payLoadToken]);
 
   // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
-  
-  useEffect(() => {
-    if (contentTrigger) {
-      console.log(tinyURL);
-      console.log(backUpUrl);
 
+  useEffect(() => {
+    if (tinyURL) {
       let firstName = { firstName: user?.firstName };
 
       setEmailContent({
-        source: "resetPassword",
-        token: payLoadToken,
         // toEmail: user?.email,
         toEmail: TO_EMAIL(),
         fromEmail: FROM_EMAIL,
-        firstName: user.firstName,
         subject: RESET_SUBJECT(),
+        firstName: user.firstName,
+        source: "resetPassword",
+        token: payLoadToken,
         textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
         htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
       });
+
+      saveEmailToDB(firstName);
     }
 
     return () => {
       setEmailTrigger(true);
-      setContentTrigger(false);
     };
     // eslint-disable-next-line
-  }, [contentTrigger]);
+  }, [tinyURL]);
 
   // eslint-disable-next-line
   // const submitEmailContent = useEmailSend(emailContent, []);
 
+  // SEND EMAIL USING NODEMAILER VIA POST ROUTE TO SERVER
+  // ADJUSTED TO THIS METHOD BECAUSE THE GRAPHQL VERSION SENT 2 EMAILS EACH TIME
   useEffect(() => {
     if (emailTrigger && user?.email) {
       // console.log(emailTrigger);
@@ -228,6 +225,37 @@ function ForgotPassword() {
     };
     // eslint-disable-next-line
   }, [emailTrigger]);
+
+  const [saveEmail] = useMutation(ADD_EMAIL_SEND, {
+    // refetchQueries: [
+    //   { query: QUERY_ALL_CLIENTS }, // DocumentNode object parsed with gql
+    //   "getAllClients", // Query name
+    // ],
+  });
+
+  const saveEmailToDB = async (firstName) => {
+    try {
+      // eslint-disable-next-line
+      console.log(user);
+      console.log(user._id);
+      const { data } = await saveEmail({
+        variables: {
+          fromEmail: FROM_EMAIL,
+          // toEmail: user?.email,
+          toEmail: TO_EMAIL(),
+          subject: RESET_SUBJECT(),
+          firstName: user.firstName,
+          source: "resetPassword",
+          token: payLoadToken.token,
+          textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
+          htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
+          user: user?._id,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="d-flex justify-content-center">
