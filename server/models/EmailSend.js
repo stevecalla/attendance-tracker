@@ -52,6 +52,7 @@ const emailSendSchema = new Schema(
   },
   {
     timestamps: true,
+    useCreateIndex: true,
   },
   {
     toJSON: {

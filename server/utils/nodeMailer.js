@@ -75,8 +75,11 @@ const verifyTransporterConnection = () => {
   });
 }
 
-// get id for just added email with a status of wasSent = false
-// update wasSent to true, update
+// create query to get the most recent added record
+// use the id from the most recent added record to update the email status
+// ... wasSent = from false to true
+
+// append additionail fields from the email info status response
 // SETUP CODE TO UPDATE THE DB WITH THE EMAIL INFORMATION
 
 module.exports = {
