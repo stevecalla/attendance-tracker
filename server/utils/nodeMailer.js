@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// const mailOptions = {
+// const mailOptionsTemplate = {
 //   from: {
 //     name: "Calla",
 //     address: process.env.SENDER_EMAIL,
@@ -26,11 +26,29 @@ const transporter = nodemailer.createTransport({
 //     `,
 // };
 
-// Define and send message inside transporter.sendEmail() and await info about send from
+const mailDetails = (toEmail, fromEmail, subject, textContent, htmlContent) => {
+  //construct mail details/options object
+  const mailOptions = {
+    from: {
+      name: "The Attendance Tracker",
+      address: fromEmail,
+    },
+    to: [toEmail],
+    subject: subject,
+    text: textContent,
+    html: htmlContent,
+  };
+  
+  //pass mail options to sendMail
+  sendMail(mailOptions);
+}
 
-const sendMail = async (transporter, mailOptions) => {
+// SEND THE EMAIL INSIDE transporter.sendEmail() USING MAIL OPTIONS AND AWAIT INFO STATUS FORM SEND; PASS INFO STATUS TO EMAILSEND DB/MODEL
+// const sendMail = async (transporter, mailOptions) => {
+const sendMail = async (mailOptions) => {
   try {
     const info = await transporter.sendMail(mailOptions);
+
     console.log(info.messageId);
     console.log(info.envelope);
     console.log('successfully delivered', info.accepted);
@@ -43,12 +61,14 @@ const sendMail = async (transporter, mailOptions) => {
   }
 };
 
+// SETUP CODE TO UPDATE THE DB WITH THE EMAIL INFORMATION
+
 // sendMail(transporter, mailOptions);
 
 module.exports = {
-  transporter,
-  // mailOptions,
-  sendMail
+  mailDetails,
+  // transporter,
+  // sendMail
 };
 
 

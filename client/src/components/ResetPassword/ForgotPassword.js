@@ -27,15 +27,17 @@ function ForgotPassword() {
   const [tempPassword] = useState("20000");
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [user, setUser] = useState({});
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
+  const [saveEmail] = useMutation(ADD_EMAIL_SEND);
+  const [toEmail, setToEmail] = useState(""); //fix uncomment below to set real email
+  const [emailContent, setEmailContent] = useState({}); //fix uncomment below to send email
   const [payLoadToken, setPayLoadToken] = useState({});
+  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [toEmail, setToEmail] = useState("");
+  const [tinyURL, setTinyURL] = useState("");
+  const [backUpUrl, setBackUpUrl] = useState({});
   const [skipUseQuery, setSkipUseQuery] = useState(true); // ensures useQuery only runs on button submit, not if characters are entered in the input element
-  const [emailContent, setEmailContent] = useState({});
-  const [emailTrigger, setEmailTrigger] = useState(false);
 
   // SECTION GET USER Query
   const { refetch } = useQuery(QUERY_USER_BYEMAIL, {
@@ -43,7 +45,7 @@ function ForgotPassword() {
     // if skip is true, this query will not be executed; in this instance, ensures useQuery only runs on button submit, not if characters are entered in the input element
     skip: skipUseQuery,
     onCompleted: (data) => {
-      console.log(data);
+      // console.log(data);
       setUser(data?.userByEmail);
     },
   });
@@ -108,18 +110,13 @@ function ForgotPassword() {
       setShowAlert(true);
       setShowSuccess(true);
       setUserFormData({ email: "", password: "" });
-      // setUser({});
     } catch (e) {
       console.log("error2", user);
       setShowAlert(true);
       setShowSuccess(false);
       setUserFormData({ email: "", password: "" });
-      // setUser({});
     }
   };
-
-  const [tinyURL, setTinyURL] = useState("");
-  const [backUpUrl, setBackUpUrl] = useState({});
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -148,31 +145,6 @@ function ForgotPassword() {
     dataFetch();
   }, [payLoadToken]);
 
-  // useEffect(() => {
-  //   // if payLoadToken does exits then fetch TinyURL
-  //   if (Object.entries(payLoadToken).length > 0) {
-  //     const fetchTinyURL = async () => {
-  //       let response = await getTinyURL(payLoadToken);
-  //       // console.log(response);
-  //       // console.log(response.data.tiny_url);
-  //       // const json = await response.json();
-  //       let { tiny_url } = response.data;
-  //       setTinyURL(tiny_url);
-  //     };
-
-  //     fetchTinyURL().catch(console.error);
-  //     setBackUpUrl(createURL(payLoadToken));
-  //     // setTimeout(() => {
-  //     // }, 250);
-
-  //     setTimeout(() => {
-  //       setContentTrigger(true);
-  //     }, 500);
-  //   }
-
-  //   // eslint-disable-next-line
-  // }, [payLoadToken]);
-
   // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
 
   useEffect(() => {
@@ -186,17 +158,18 @@ function ForgotPassword() {
         subject: RESET_SUBJECT(),
         firstName: user.firstName,
         source: "resetPassword",
-        token: payLoadToken,
+        token: payLoadToken.token,
         textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
         htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
+        user: user?._id,
       });
 
-      saveEmailToDB(firstName);
+      saveEmailToDB();
     }
 
-    return () => {
-      setEmailTrigger(true);
-    };
+    // return () => {
+    //   setEmailTrigger(true);
+    // };
     // eslint-disable-next-line
   }, [tinyURL]);
 
@@ -205,53 +178,25 @@ function ForgotPassword() {
 
   // SEND EMAIL USING NODEMAILER VIA POST ROUTE TO SERVER
   // ADJUSTED TO THIS METHOD BECAUSE THE GRAPHQL VERSION SENT 2 EMAILS EACH TIME
-  useEffect(() => {
-    if (emailTrigger && user?.email) {
-      // console.log(emailTrigger);
-      // console.log(user?.email);
-      // console.log(emailContent);
-      // console.log(JSON.stringify(emailContent));
+  // useEffect(() => {
+  //   if (emailTrigger && user?.email) {
+  //     fetch("http://localhost:3001/api/email/passwordreset", {
+  //       method: "POST",
+  //       body: JSON.stringify(emailContent),
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+  //   }
 
-      // fetch("http://localhost:3001/api/email-server", {
-      fetch("http://localhost:3001/api/email/passwordreset", {
-        method: "POST",
-        body: JSON.stringify(emailContent),
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    return () => {
-      setEmailTrigger(false);
-    };
-    // eslint-disable-next-line
-  }, [emailTrigger]);
-
-  const [saveEmail] = useMutation(ADD_EMAIL_SEND, {
-    // refetchQueries: [
-    //   { query: QUERY_ALL_CLIENTS }, // DocumentNode object parsed with gql
-    //   "getAllClients", // Query name
-    // ],
-  });
+  //   return () => {
+  //     setEmailTrigger(false);
+  //   };
+  //   // eslint-disable-next-line
+  // }, [emailTrigger]);
 
   const saveEmailToDB = async (firstName) => {
     try {
-      // eslint-disable-next-line
-      console.log(user);
-      console.log(user._id);
-      const { data } = await saveEmail({
-        variables: {
-          fromEmail: FROM_EMAIL,
-          // toEmail: user?.email,
-          toEmail: TO_EMAIL(),
-          subject: RESET_SUBJECT(),
-          firstName: user.firstName,
-          source: "resetPassword",
-          token: payLoadToken.token,
-          textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
-          htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
-          user: user?._id,
-        },
-      });
+      // execute saveEmail mutation by passing in emailConent
+      // await saveEmail({variables: emailContent}); //fix uncomment to execute email
     } catch (err) {
       console.error(err);
     }

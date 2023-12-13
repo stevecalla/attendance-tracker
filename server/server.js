@@ -82,29 +82,14 @@ app.use(middleware.session);
 app.use(middleware.setResponseHeaders);
 
 //TEST MIDDLEWARE TO WATCH THE REQ.BODY FROM GRAPHQL
-app.use(function(req, res, next) {
-  console.log('----------------')
-  console.log('----------------')
-  console.log('----------------')
-  console.log('hello middleware');
-  console.log(req.body);
-
-// Extracting the mutation string
-// const mutationString = req.body.query.replace(/\s+/g, ' ');
-
-// Using a regular expression to extract the mutation
-// const regex = /mutation (\w+) \{/;
-// const matches = mutationString.match(regex);
-// const mutationName = matches && matches[1];
-
-// console.log(mutationName); // Output: AddEmailSend
-
-  console.log('----------------')
-  console.log('----------------')
-  console.log('----------------')
-  // console.log(res);
-  next();
-});
+// app.use(function(req, res, next) {
+//   console.log('----------------')
+//   console.log('----------------')
+//   console.log('----------------')
+//   console.log('hello middleware');
+//   console.log(req.body);
+//   next();
+// });
 
 // SECTION EMAIL SERVER
 // route = ./api/email/router");

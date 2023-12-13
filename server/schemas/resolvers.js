@@ -10,7 +10,6 @@ const {
 const { signToken } = require("../utils/auth");
 // const bcrypt = require("bcrypt");
 
-// const { sendMail } = require("../utils/nodeMailer");
 
 let expiration = "2h"; // 2 hours
 
@@ -127,7 +126,7 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    //section schedule/job
+    // SECTION JOBS/SCHEDULES
     schedules: async (parent, { isDisplayable }, context) => {
       // if (context.user) {
       return Schedule.find({ isDisplayable })
@@ -146,7 +145,7 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    //section email = NODEMAIL VERSION
+    // SECTION EMAIL QUERIES
     // get all email sends
     emailSends: async (parent, args, context) => {
       return EmailSend.find().sort({ createdAt: -1 }).populate("user");
@@ -296,9 +295,11 @@ const resolvers = {
     },
 
     // SECTION EMAILSEND
-    // //modeled after addClient
+    // modeled after addClient
+    // adds email to the emailSend model/db, then triggers email
     addEmailSend: async (
       parent,
+      // destructured args
       {
         toEmail,
         fromEmail,
@@ -323,6 +324,16 @@ const resolvers = {
         htmlContent,
         user,
       });
+
+      console.log("=====");
+
+      // SEND MAIL DETAILS TO NODEMAILER UTILITY TO SEND EMAIL & UPDATE DB WITH EMAIL STATUS
+      console.log("addEmailSend mutation");
+      const { mailDetails } = require("../utils/nodeMailer");
+      mailDetails(toEmail, fromEmail, subject, textContent, htmlContent);
+
+      console.log("=====");
+
       return {
         toEmail,
         fromEmail,
@@ -336,7 +347,7 @@ const resolvers = {
        };
     },
 
-    //SECTION modeled after updateClient; not tested
+    // modeled after updateClient; not tested
     updateEmailSend: async (
       parent,
       {
@@ -372,12 +383,12 @@ const resolvers = {
       );
     },
 
-    //SECTION modeled after updateClient; not tested
+    // modeled after updateClient; not tested
     deleteEmailSend: async (parent, { _id }, context) => {
       return EmailSend.findOneAndDelete({ _id });
     },
 
-    //SECTION modeled after updateClient; not tested
+    // modeled after updateClient; not tested
     // soft delete client
     softDeleteEmailSend: async (parent, { _id, isDisplayable }, client) => {
       return EmailSend.findOneAndUpdate(

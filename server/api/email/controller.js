@@ -19,7 +19,7 @@ module.exports = {
         return;
       }
 
-      let mailOptions = {
+      const mailOptions = {
         from: {
           name: "The Attendance Tracker",
           address: fromEmail,
