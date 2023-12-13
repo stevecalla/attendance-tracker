@@ -57,17 +57,16 @@ app.get("/view-session", (req, res) => {
 
 // //section cors start
 // const ALLOWED_DOMAIN = "*";
-// const ALLOWED_DOMAIN = [
-//   "http://127.0.0.1:3000",
-//   "http://localhost:3000",
-//   "http://localhost:8080",
-//   "https://studio.apollographql.com"
-// ];
+const ALLOWED_DOMAIN = [
+  "http://127.0.0.1:3000",
+  "http://localhost:3000",
+  "http://localhost:8080",
+  "https://studio.apollographql.com"
+];
 // //section cors end
 var corsOptions = {
   // origin: FRONTEND_DOMAIN,
-  // origin: ALLOWED_DOMAIN,
-  origin: "*",
+  origin: ALLOWED_DOMAIN,
   methods: ["GET", "POST"],
   credentials: true,
 };
@@ -154,13 +153,8 @@ const startApolloServer = async (typeDefs, resolvers) => {
       );
     });
   });
-
   // store.on
 };
-
-//SECTION ATTEMPT TO WATCH DATABASE FOR CHANGES
-// const { run } = require("./config/watch");
-// run().catch(console.dir);
 
 // Call the async function to start the server
 startApolloServer(typeDefs, resolvers);

@@ -79,12 +79,8 @@ const verifyTransporterConnection = () => {
 // update wasSent to true, update
 // SETUP CODE TO UPDATE THE DB WITH THE EMAIL INFORMATION
 
-// sendMail(transporter, mailOptions);
-
 module.exports = {
   mailDetails,
-  // transporter,
-  // sendMail
 };
 
 // SECTION - SOURCES
