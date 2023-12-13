@@ -327,11 +327,11 @@ const resolvers = {
 
       console.log("=====");
 
-      // SEND MAIL DETAILS TO NODEMAILER UTILITY TO SEND EMAIL & UPDATE DB WITH EMAIL STATUS
+      // SECTION //SEND MAIL DETAILS TO NODEMAILER UTILITY TO SEND EMAIL & UPDATE DB WITH EMAIL STATUS
       console.log("addEmailSend mutation");
       const { mailDetails } = require("../utils/nodeMailer");
       mailDetails(toEmail, fromEmail, subject, textContent, htmlContent);
-
+      // AFTER NODEMAIL SENDS EMAIL, IT CALLS FUNCTION TO UPDATE EMAIL WASSENT FIELD
       console.log("=====");
 
       return {

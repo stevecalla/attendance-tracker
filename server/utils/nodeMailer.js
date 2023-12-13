@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const findOneAndUpdateMutation = require("../api/email")
 require("dotenv").config();
 
 // First, define send settings by creating a new transporter:
@@ -50,6 +51,7 @@ const sendMail = async (mailOptions) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
+    findOneAndUpdateMutation(true);
 
     console.log(info.messageId); //<d593580d-54c4-acf9-0003-d2dfeca67038@gmail.com>
     console.log(info.envelope); //{ from: 'callasteven@gmail.com', to: [ 'scalla2@instructors.2u.com' ] }
