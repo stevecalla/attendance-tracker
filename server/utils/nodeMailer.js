@@ -38,30 +38,45 @@ const mailDetails = (toEmail, fromEmail, subject, textContent, htmlContent) => {
     text: textContent,
     html: htmlContent,
   };
-  
+
   //pass mail options to sendMail
   sendMail(mailOptions);
-}
+};
 
 // SEND THE EMAIL INSIDE transporter.sendEmail() USING MAIL OPTIONS AND AWAIT INFO STATUS FORM SEND; PASS INFO STATUS TO EMAILSEND DB/MODEL
 // const sendMail = async (transporter, mailOptions) => {
 const sendMail = async (mailOptions) => {
+  verifyTransporterConnection();
+
   try {
     const info = await transporter.sendMail(mailOptions);
 
     console.log(info.messageId); //<d593580d-54c4-acf9-0003-d2dfeca67038@gmail.com>
     console.log(info.envelope); //{ from: 'callasteven@gmail.com', to: [ 'scalla2@instructors.2u.com' ] }
-    console.log('successfully delivered', info.accepted); //successfully delivered [ 'scalla2@instructors.2u.com' ]
-    console.log('rejected delivery', info.rejected); //rejected delivery []
-    console.log('pending delivery', info.pending); //pending delivery undefined
-    console.log('response', info.response); //response 250 2.0.0 OK  1702444461 g3-20020a92c7c3000000b0035d6800582dsm147616ilk.37 - gsmtp
+    console.log("successfully delivered", info.accepted); //successfully delivered [ 'scalla2@instructors.2u.com' ]
+    console.log("rejected delivery", info.rejected); //rejected delivery []
+    console.log("pending delivery", info.pending); //pending delivery undefined
+    console.log("response", info.response); //response 250 2.0.0 OK  1702444461 g3-20020a92c7c3000000b0035d6800582dsm147616ilk.37 - gsmtp
     console.log("Successful send"); // Random ID generated after successful send (optional)
-
   } catch (error) {
     console.log("1)", error);
   }
 };
 
+const verifyTransporterConnection = () => {
+  // verify connection configuration
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("External Email Server is ready to take our messages");
+      console.log(success);
+    }
+  });
+}
+
+// get id for just added email with a status of wasSent = false
+// update wasSent to true, update
 // SETUP CODE TO UPDATE THE DB WITH THE EMAIL INFORMATION
 
 // sendMail(transporter, mailOptions);
@@ -72,10 +87,9 @@ module.exports = {
   // sendMail
 };
 
-
 // SECTION - SOURCES
 // https://www.youtube.com/watch?v=QDIOBsMBEI0
 // https://openjavascript.info/2023/01/10/nodemailer-tutorial-send-emails-in-node-js/#Basic%20example
 //https://mailtrap.io/blog/sending-emails-with-nodemailer/
 // templates https://codedmails.com/reset-emails-preview
-// mock app at /Users/stevecalla/du_coding/utilities/node-mailer/index.js 
+// mock app at /Users/stevecalla/du_coding/utilities/node-mailer/index.js
