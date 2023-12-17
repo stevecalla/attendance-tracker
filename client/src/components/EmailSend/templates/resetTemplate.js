@@ -32,7 +32,6 @@ export const RESET_TEXT_TEMPLATE = (props, tinyURI = "blank", { uri }) => {
 // DEFAULT HTML TEMPLATE WILL BE USED BY MOST BUT NOT ALL PLATFORMS
 // export const reset_html_template = (tokenURL, firstName) => {
 export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
-
   const template = `<p>Hello ${props.firstName},</p>
   
   <p>Click on the link below to create a new password:</p>
@@ -51,8 +50,8 @@ export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
   <p>Thank you,</p>
   <p>The Attendance Tracker</p>
 
-  <p>Test Email Tracker</p>
-  <img src="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px">`;
+  <p>Test Email Tracker Anchor Tag</p>
+  <a href="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened"><img src="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px"></a>`;
 
   return template;
 };

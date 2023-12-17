@@ -118,6 +118,7 @@ function ForgotPassword() {
     }
   };
 
+  // GET TINY URL
   useEffect(() => {
     const dataFetch = async () => {
       if (Object.entries(payLoadToken).length > 0) {
@@ -145,62 +146,65 @@ function ForgotPassword() {
     dataFetch();
   }, [payLoadToken]);
 
-  // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
-
+  // CREATE EMAIL CONTENT
   useEffect(() => {
-    if (tinyURL) {
-      let firstName = { firstName: user?.firstName };
+    const dataFetch = async () => {
+      if (tinyURL) {
+        let firstName = { firstName: user?.firstName };
+        const results = (
+          await Promise.allSettled([
+            TO_EMAIL(),
+            RESET_SUBJECT(),
+            RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
+            RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
+          ])
+        ).map((data) => data);
 
-      setEmailContent({
-        // toEmail: user?.email,
-        toEmail: TO_EMAIL(),
-        fromEmail: FROM_EMAIL,
-        subject: RESET_SUBJECT(),
-        firstName: user.firstName,
-        source: "resetPassword",
-        token: payLoadToken.token,
-        textContent: RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
-        htmlContent: RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
-        user: user?._id,
-      });
+        console.log(results);
 
-      saveEmailToDB();
-    }
+        // call the promise all method
+        const [toResponse, subjectResponse, textResponse, htmlResponse] =
+          await Promise.allSettled(results);
 
-    // return () => {
-    //   setEmailTrigger(true);
-    // };
+        // when the data is ready, save it to state
+        setEmailContent({
+          // toEmail: user?.email,
+          toEmail: toResponse.value.value,
+          fromEmail: FROM_EMAIL,
+          subject: subjectResponse.value.value,
+          firstName: user.firstName,
+          source: "resetPassword",
+          token: payLoadToken.token,
+          textContent: textResponse.value.value,
+          htmlContent: htmlResponse.value.value,
+          user: user?._id,
+        });
+      }
+    };
+
+    dataFetch();
+
     // eslint-disable-next-line
   }, [tinyURL]);
 
-  // eslint-disable-next-line
-  // const submitEmailContent = useEmailSend(emailContent, []);
+  // SAVE & SEND EMAIL
+  useEffect(() => {
+    // SEND EMAIL & SAVE TO MONGODB
+    const dataFetch = async () => {
+      if (Object.entries(emailContent).length > 0) {
+        const results = (
+          await Promise.allSettled([saveEmail({ variables: emailContent })])
+        ).map((data) => data);
 
-  // SEND EMAIL USING NODEMAILER VIA POST ROUTE TO SERVER
-  // ADJUSTED TO THIS METHOD BECAUSE THE GRAPHQL VERSION SENT 2 EMAILS EACH TIME
-  // useEffect(() => {
-  //   if (emailTrigger && user?.email) {
-  //     fetch("http://localhost:3001/api/email/passwordreset", {
-  //       method: "POST",
-  //       body: JSON.stringify(emailContent),
-  //       headers: { "Content-Type": "application/json" },
-  //     });
-  //   }
+        // call the promise all method
+        // eslint-disable-next-line
+        const [responseData] = await Promise.allSettled(results);
+      }
+    };
 
-  //   return () => {
-  //     setEmailTrigger(false);
-  //   };
-  //   // eslint-disable-next-line
-  // }, [emailTrigger]);
-
-  const saveEmailToDB = async () => {
-    try {
-      // execute saveEmail mutation by passing in emailConent
-      await saveEmail({variables: emailContent}); //fix uncomment to execute email
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    dataFetch();
+    // eslint-disable-next-line
+  }, [emailContent]);
 
   return (
     <div className="d-flex justify-content-center">

@@ -81,9 +81,9 @@ const sendMail = async (mailOptions, dev) => {
       messageTime: 569,
       messageSize: 592,
       response:
-        "250 2.0.0 OK  1702779031 fi3-20020a056638630300b0046b3ee6c730sm167894jab.118 - gsmtp",
+        "DEVELOPMENT EXAMPLE 250 2.0.0 OK  1702779031 fi3-20020a056638630300b0046b3ee6c730sm167894jab.118 - gsmtp",
       envelope: { from: "test@gmail.com", to: ["scalla2@instructors.2u.com"] },
-      messageId: "dev <da829168-b46d-23a1-74d0-c9887e14d468@gmail.com>",
+      messageId: "DEVELOPMENT EXAMPLE  <da829168-b46d-23a1-74d0-c9887e14d468@gmail.com>",
     };
   } else {
     info = await transporter.sendMail(mailOptions);
