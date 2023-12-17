@@ -308,8 +308,9 @@ const resolvers = {
 
       // create the record in the database with the mail maildetails and response
       const { createEmailRecord } = require("../api/email/");
+      let createAndSendEmail = await createEmailRecord(args, sendResponse)
 
-      return createEmailRecord(args, sendResponse);
+      return createAndSendEmail;
     },
 
     // modeled after updateClient; not tested

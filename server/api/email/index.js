@@ -33,20 +33,20 @@ const createEmailRecord = async ({
   textContent,
   htmlContent,
   user,
-}, info) => {
+}, sendResponse) => {
 
   let wasSent;
-  let messageId = info.messageId;
-  let response = info.response;
+  let messageId = sendResponse.messageId;
+  let response = sendResponse.response;
 
   try {
-    console.log('create record 123', info);
+    console.log('create record 123', sendResponse);
 
-    if (info.accepted.length === 1) {
+    if (sendResponse.accepted.length === 1) {
       // set wasSent to true
       console.log('wasSent=', true);
       wasSent = true;
-    } else if (info.rejected.length === 1) {
+    } else if (sendResponse.rejected.length === 1) {
       // set wasSent to false
       console.log('wasSent=', false);
       wasSent = false;
