@@ -4,8 +4,7 @@ const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const compression = require("compression"); //added to address lighthouse text compression performance issue
 const cors = require("cors");
-
-// require("dotenv").config();
+const axios = require('axios');
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
@@ -120,8 +119,8 @@ app.use(middleware.setResponseHeaders);
 
 // SECTION EMAIL TRACKING
 // original test api email server
-app.get("/api/email-tracker/:recipient/:metric", (req, res) => {
-  console.log("===============")
+app.get("/api/email-tracker/:recipient/:metric", async (req, res) => {
+  console.log("===============");
   console.log("Request made to /email-server route");
 
   let recipient = req.params["recipient"];
@@ -134,23 +133,24 @@ app.get("/api/email-tracker/:recipient/:metric", (req, res) => {
     clicked: metric === "clicked" ? 1 : null,
   };
 
-  // <p>Test Email Tracker</p><img src="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px"></img>
-  //<img src = "https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="display:none">
-
-  // https://mailstat.us/tr/opt-out?guid=jtvlnhxlq9fcrn0&attempts=3
-  // <img src="https://mailstat.us/tr/optout-blk-nologo.png?guid=jtvlnhxlq9fcrn0"></img>
-
-  // <a href="https://mailstat.us/tr/opt-out?guid=jtvlnhxlq9fcrn0" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://mailstat.us/tr/opt-out?guid%3Djtvlnhxlq9fcrn0&amp;source=gmail&amp;ust=1702900936143000&amp;usg=AOvVaw1Wdb75Yx8vdphFNhhzxCu4"><img src="https://ci3.googleusercontent.com/meips/ADKq_NYjlzBd4_kuijeLmTKAc3LGqJoB3zR-nFFsy3MssrRecxBhcaj_AbTAt6zJpONv9HzgEXR6j6pDvG2mZCFPxQTsMp01Q-updsNKYnvpEs4PiDkwvrey2Q=s0-d-e1-ft#https://mailstat.us/tr/optout-blk-nologo.png?guid=jtvlnhxlq9fcrn0" class="CToWUd" data-bit="iit"></a>
-
-  // <a href="https://mailstat.us/tr/opt-out?guid=hs328qgdlq9g813x" class="b4g-open-track b4g-track-wont"><img src="https://mailstat.us/tr/optout-blk-nologo.png?guid=hs328qgdlq9g813x"></a>
-
-
-
-
   console.log(trackingInfo);
 
-  return res.json(trackingInfo);
+  try {
+    const response = await axios.get("https://mailstat.us/tr/optout-blk-nologo.png", {
+      responseType: 'stream', // Set the response type to 'stream' for binary data
+    });
 
+    // Set the appropriate content type
+    res.set({ 'Content-Type': 'image/json' });
+
+    // Pipe the stream directly to the response object
+    response.data.pipe(res);
+  } catch (error) {
+    console.error('Error making request:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+
+  // return res.json(trackingInfo);
 });
 
 // SECTION EMAIL TRACKING END
