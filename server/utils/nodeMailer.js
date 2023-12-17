@@ -4,6 +4,7 @@ require("dotenv").config();
 // First, define send settings by creating a new transporter:
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com", // SMTP server address (usually mail.your-domain.com)
+  pool: true,
   port: 587, // Port for SMTP (usually 465)
   secure: false, // Usually true if connecting to port 465
   auth: {
@@ -58,7 +59,7 @@ const mailDetails = (args) => {
 
 const sendMail = async (mailOptions, dev) => {
   let info;
-  verifyTransporterConnection()
+  verifyTransporterConnection();
 
   if (dev) {
     // Example repsonse object
