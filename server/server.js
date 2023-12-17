@@ -147,8 +147,8 @@ const startApolloServer = async (typeDefs, resolvers) => {
 
 
 
-console.log(process.env)
-console.log(process.env.DB_NAME)
+// console.log(process.env)
+// console.log(process.env.DB_NAME)
 
   db.once("open", () => {
     app.listen(PORT, () => {

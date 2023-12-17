@@ -8,8 +8,9 @@ const {
   EmailSend,
 } = require("../models");
 const { signToken } = require("../utils/auth");
+const { mailDetails, sendMail } = require("../utils/nodeMailer");
+// const { transporter, sendMail } = require("../utils/nodeMailer");
 // const bcrypt = require("bcrypt");
-
 
 let expiration = "2h"; // 2 hours
 
@@ -162,43 +163,42 @@ const resolvers = {
     },
 
     // NODEMAILER VERSION
-    sendEmail: async (parent, args, context) => {
-      console.log(args);
+    // sendEmail: async (parent, args, context) => {
+    //   console.log(args);
 
-      const {
-        transporter,
-        // mailOptions,
-        sendMail,
-      } = require("../utils/nodeMailer");
+    //   let message = `Your information was sent to support at Zoom Attendance App. A represenative will be in touch soon.`;
 
-      let message = `Your information was sent to support at Zoom Attendance App. A represenative will be in touch soon.`;
+    //   // CREATE EMAIL CONTENT
+    //   const mailOptionsDirect = {
+    //     from: {
+    //       name: "Calla",
+    //       address: args.fromEmail
+    //         ? `${args.fromEmail}`
+    //         : process.env.SENDER_EMAIL,
+    //     },
+    //     to: args.toEmail ? [`${args.toEmail}`] : [process.env.SENDER_EMAIL],
+    //     subject: args.subject ? args.subject : "Something Went Wrong",
+    //     text: args.textContent,
+    //     html: args.htmlContent,
+    //   };
 
-      const mailOptionsDirect = {
-        from: {
-          name: "Calla",
-          address: args.fromEmail
-            ? `${args.fromEmail}`
-            : process.env.SENDER_EMAIL,
-        },
-        to: args.toEmail ? [`${args.toEmail}`] : [process.env.SENDER_EMAIL],
-        subject: args.subject ? args.subject : "Something Went Wrong",
-        text: args.textContent,
-        html: args.htmlContent,
-      };
+    //   try {
 
-      try {
-        sendMail(transporter, mailOptionsDirect);
-      } catch (error) {
-        console.log("2)", error);
-        message =
-          "Something went wrong. Contact support at support@zoomattendance.com.";
-      }
+    //     sendMail(transporter, mailOptionsDirect);
 
-      console.log("resolver message=======", message);
+    //   } catch (error) {
 
-      // return message;
-      res.send(200).send(message);
-    },
+    //     console.log("2)", error);
+    //     message =
+    //       "Something went wrong. Contact support at support@zoomattendance.com.";
+
+    //   }
+
+    //   console.log("resolver message=======", message);
+
+    //   // return message;
+    //   res.send(200).send(message);
+    // },
 
     // SENDGRID VERSION
     // sendEmail: async (parent, args, context) => {
@@ -297,54 +297,19 @@ const resolvers = {
     // SECTION EMAILSEND
     // modeled after addClient
     // adds email to the emailSend model/db, then triggers email
-    addEmailSend: async (
-      parent,
-      // destructured args
-      {
-        toEmail,
-        fromEmail,
-        subject,
-        firstName,
-        source,
-        token,
-        textContent,
-        htmlContent,
-        user,
-      },
-      context
-    ) => {
-      const emailSend = await EmailSend.create({
-        toEmail,
-        fromEmail,
-        subject,
-        firstName,
-        source,
-        token,
-        textContent,
-        htmlContent,
-        user,
-      });
+    addEmailSend: async (parent, args, context) => {
+      //create the mail details
+      const mailOptions = mailDetails(args);
 
-      console.log("=====");
+      // send the email; return the email details
+      // let dev = false;
+      let dev = true;
+      let sendResponse = await sendMail(mailOptions, dev);
 
-      // SECTION //SEND MAIL DETAILS TO NODEMAILER UTILITY TO SEND EMAIL & UPDATE DB WITH EMAIL STATUS
-      console.log("addEmailSend mutation");
-      const { mailDetails } = require("../utils/nodeMailer");
-      mailDetails(toEmail, fromEmail, subject, textContent, htmlContent);
-      // AFTER NODEMAIL SENDS EMAIL, IT CALLS FUNCTION TO UPDATE EMAIL WASSENT FIELD
-      console.log("=====");
+      // create the record in the database with the mail maildetails and response
+      const { createEmailRecord } = require("../api/email/");
 
-      return {
-        toEmail,
-        fromEmail,
-        subject,
-        firstName,
-        source,
-        token,
-        textContent,
-        htmlContent,
-        user,
-       };
+      return createEmailRecord(args, sendResponse);
     },
 
     // modeled after updateClient; not tested

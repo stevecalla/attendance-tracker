@@ -27,6 +27,8 @@ const typeDefs = gql`
     htmlContent: String
     wasSent: Boolean
     isDisplayable: Boolean
+    messageId: String
+    response: String
     user: User
   }
 

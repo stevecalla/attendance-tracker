@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const findOneAndUpdateMutation = require("../api/email")
 require("dotenv").config();
 
 // First, define send settings by creating a new transporter:
@@ -14,6 +13,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const verifyTransporterConnection = async () => {
+  // verify connection configuration
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("External Email Server is ready to take our messages");
+      console.log(success);
+    }
+  });
+};
+
 // const mailOptionsTemplate = {
 //   from: {
 //     name: "Calla",
@@ -27,65 +38,62 @@ const transporter = nodemailer.createTransport({
 //     `,
 // };
 
-const mailDetails = (toEmail, fromEmail, subject, textContent, htmlContent) => {
+const mailDetails = (args) => {
   //construct mail details/options object
   const mailOptions = {
     from: {
       name: "The Attendance Tracker",
-      address: fromEmail,
+      address: args.fromEmail,
     },
-    to: [toEmail],
-    subject: subject,
-    text: textContent,
-    html: htmlContent,
+    to: [args.toEmail],
+    subject: args.subject,
+    text: args.textContent,
+    html: args.htmlContent,
   };
 
-  //pass mail options to sendMail
-  sendMail(mailOptions);
+  // pass mail options to sendMail
+  // sendMail(args, mailOptions);
+  return mailOptions;
 };
 
-// SEND THE EMAIL INSIDE transporter.sendEmail() USING MAIL OPTIONS AND AWAIT INFO STATUS FORM SEND; PASS INFO STATUS TO EMAILSEND DB/MODEL
-// const sendMail = async (transporter, mailOptions) => {
-const sendMail = async (mailOptions) => {
-  verifyTransporterConnection();
+const sendMail = async (mailOptions, dev) => {
+  let info;
+  verifyTransporterConnection()
 
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    findOneAndUpdateMutation(true);
-
-    console.log(info.messageId); //<d593580d-54c4-acf9-0003-d2dfeca67038@gmail.com>
-    console.log(info.envelope); //{ from: 'callasteven@gmail.com', to: [ 'scalla2@instructors.2u.com' ] }
-    console.log("successfully delivered", info.accepted); //successfully delivered [ 'scalla2@instructors.2u.com' ]
-    console.log("rejected delivery", info.rejected); //rejected delivery []
-    console.log("pending delivery", info.pending); //pending delivery undefined
-    console.log("response", info.response); //response 250 2.0.0 OK  1702444461 g3-20020a92c7c3000000b0035d6800582dsm147616ilk.37 - gsmtp
-    console.log("Successful send"); // Random ID generated after successful send (optional)
-  } catch (error) {
-    console.log("1)", error);
+  if (dev) {
+    // Example repsonse object
+    info = {
+      accepted: ["scalla2@instructors.2u.com"],
+      rejected: [],
+      // accepted: [],
+      // rejected: ["scalla2@instructors.2u.com"],
+      ehlo: [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8",
+      ],
+      envelopeTime: 212,
+      messageTime: 569,
+      messageSize: 592,
+      response:
+        "250 2.0.0 OK  1702779031 fi3-20020a056638630300b0046b3ee6c730sm167894jab.118 - gsmtp",
+      envelope: { from: "test@gmail.com", to: ["scalla2@instructors.2u.com"] },
+      messageId: "dev <da829168-b46d-23a1-74d0-c9887e14d468@gmail.com>",
+    };
+  } else {
+    info = await transporter.sendMail(mailOptions);
   }
+
+  return info;
 };
-
-const verifyTransporterConnection = () => {
-  // verify connection configuration
-  transporter.verify(function (error, success) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("External Email Server is ready to take our messages");
-      console.log(success);
-    }
-  });
-}
-
-// create query to get the most recent added record
-// use the id from the most recent added record to update the email status
-// ... wasSent = from false to true
-
-// append additionail fields from the email info status response
-// SETUP CODE TO UPDATE THE DB WITH THE EMAIL INFORMATION
 
 module.exports = {
   mailDetails,
+  sendMail,
 };
 
 // SECTION - SOURCES

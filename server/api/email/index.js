@@ -1,28 +1,94 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+// const mongoose = require("mongoose");
+// require("dotenv").config({ path: "../../../server/.env" }); // needed to add the path above to access .env variables
+// require("dotenv").config();
 
 // console.log(process.env)
 // console.log(process.env.DB_NAME)
 // console.log(process.env.SENDER_EMAIL);
 // console.log(process.env.OLDPWD)
 
+// otherFile.js
+// const dbConnection = require("../../config/connection");
+
 // Connect to MongoDB (if not connected)
-if (mongoose.connection.readyState === 0) {
-  mongoose.connect(
-    process.env.MONGODB_URI || 
-    "mongodb://localhost:27017/attendance-tracker",
-    // `mongodb://localhost:27017/${process.env.DB_NAME}`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    }
-  );
-}
+// if (mongoose.connection.readyState === 0) {
+//   mongoose.connect(
+//     process.env.MONGODB_URI ||
+//     `mongodb://localhost:27017/${process.env.DB_NAME}`,
+//     // "mongodb://localhost:27017/attendance-tracker",
+//     {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//       useCreateIndex: true,
+//       useFindAndModify: false,
+//     }
+//   );
+// }
 
 const { EmailSend } = require("../../models");
-console.log(EmailSend);
+
+const createEmailRecord = async ({
+  toEmail,
+  fromEmail,
+  subject,
+  firstName,
+  source,
+  token,
+  textContent,
+  htmlContent,
+  user,
+}, info) => {
+
+  let wasSent;
+  let messageId = info.messageId;
+  let response = info.response;
+
+  try {
+    console.log('create record 123', info);
+
+    if (info.accepted.length === 1) {
+      // set wasSent to true
+      console.log('wasSent=', true);
+      wasSent = true;
+    } else if (info.rejected.length === 1) {
+      // set wasSent to false
+      console.log('wasSent=', false);
+      wasSent = false;
+    } else {
+      console.log('response from emal send was neither accepted or rejected')
+    }
+
+    EmailSend.create({
+      toEmail,
+      fromEmail,
+      subject,
+      firstName,
+      source,
+      token,
+      textContent,
+      htmlContent,
+      wasSent,
+      messageId,
+      response,
+      user,
+    });
+
+    return {
+      toEmail,
+      fromEmail,
+      subject,
+      firstName,
+      source,
+      token,
+      textContent,
+      htmlContent,
+      wasSent,
+      messageId,
+      response,
+      user,
+    };
+  } catch (error) {}
+};
 
 // SECTION //GET ALL EMAIL SEND RECORDS
 const findAllQuery = () => {
@@ -72,22 +138,29 @@ const findOneQuery = () => {
 };
 
 // Usage example:
-findOneQuery()
-  .then((result) => {
-    console.log("Promise resolved with result:", result);
-    // convertDateToMST(result.createdAt);
-  })
-  .catch((err) => {
-    console.error("Promise rejected with error:", err);
-  });
+// findOneQuery()
+//   .then((result) => {
+//     console.log("Promise resolved with result:", result);
+//     // convertDateToMST(result.createdAt);
+//   })
+//   .catch((err) => {
+//     console.error("Promise rejected with error:", err);
+//   });
 
 // SECTION //FIND AND UPDATE THE MOST RECENT RECORD (AND RETURN THE UPDATED RECORD)
 const findOneAndUpdateMutation = (wasSentUpdate) => {
+  console.log("kicked off");
+  console.log(wasSentUpdate);
+
   return new Promise((resolve, reject) => {
     EmailSend.findOneAndUpdate(
       {},
       { $set: { wasSent: wasSentUpdate } }, // Set wasSent to false
-      { sort: { createdAt: -1 }, new: true, useFindAndModify: false } // Sort by createdAt in descending order and return the updated document
+      {
+        sort: { createdAt: -1 },
+        returnOriginal: false,
+        useFindAndModify: false,
+      } // Sort by createdAt in descending order and return the updated document
     )
       .then((updatedRecord) => {
         console.log("Conditions:", {}); // No specific conditions in this case
@@ -95,32 +168,17 @@ const findOneAndUpdateMutation = (wasSentUpdate) => {
         if (!updatedRecord) {
           console.log("No matching record found to update.");
           resolve(null);
-          mongoose.connection.close();
           return;
         }
-
-        // Close the connection if needed
-        mongoose.connection.close();
-
+        console.log("1) updated record", updatedRecord);
         resolve(updatedRecord);
       })
       .catch((err) => {
         console.error("Error updating the record:", err);
-        mongoose.connection.close();
         reject(err);
       });
   });
 };
-
-// Usage example:
-// findOneAndUpdateMutation(true)
-//   .then((result) => {
-//     console.log("Record updated successfully:", result);
-//     convertDateToMST(result?.createdAt);
-//   })
-//   .catch((err) => {
-//     console.error("Promise rejected with error:", err);
-//   });
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
@@ -152,7 +210,34 @@ function convertDateToMST(date) {
 }
 
 module.exports = {
-  findAllQuery,
-  findOneQuery,
-  findOneAndUpdateMutation,
+  createEmailRecord,
+  // findAllQuery,
+  // findOneQuery,
+  // findOneAndUpdateMutation,
 };
+
+// // otherFile.js
+// const dbConnection = require("./db");
+
+// // Open the connection
+// dbConnection.on("open", () => {
+//   console.log("MongoDB connection opened");
+//   // Your code that relies on the open connection can go here
+// });
+
+// // Handle connection errors
+// dbConnection.on("error", (err) => {
+//   console.error("MongoDB connection error:", err);
+// });
+
+// // Close the connection when needed
+// // For example, if you want to close it after performing some operations
+// // Note: Ensure that you close the connection only when you are done with database operations
+// // Closing the connection immediately after opening might prevent other parts of your application from using it.
+// // You might want to close it in a specific lifecycle event or when your application is shutting down.
+// // Here, we're just demonstrating how to close it programmatically.
+// setTimeout(() => {
+//   dbConnection.close(() => {
+//     console.log("MongoDB connection closed");
+//   });
+// }, 5000); // Close the connection after 5 seconds (adjust as needed)

@@ -196,7 +196,7 @@ function ForgotPassword() {
   const saveEmailToDB = async (firstName) => {
     try {
       // execute saveEmail mutation by passing in emailConent
-      // await saveEmail({variables: emailContent}); //fix uncomment to execute email
+      await saveEmail({variables: emailContent}); //fix uncomment to execute email
     } catch (err) {
       console.error(err);
     }

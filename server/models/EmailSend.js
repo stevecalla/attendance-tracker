@@ -39,11 +39,19 @@ const emailSendSchema = new Schema(
     },
     wasSent: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     isDisplayable: {
       type: Boolean,
       default: true,
+    },
+    messageId: {
+      type: String,
+      trim: true,
+    },
+    response: {
+      type: String,
+      trim: true,
     },
     user: {
       type: Schema.Types.String,
