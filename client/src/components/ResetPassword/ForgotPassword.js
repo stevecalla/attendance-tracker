@@ -50,27 +50,28 @@ function ForgotPassword() {
     },
   });
 
-  const [updatePassword] = useMutation(UPDATE_PASSWORD);
+  // const [updatePassword] = useMutation(UPDATE_PASSWORD);
 
-  const setPassword = async () => {
-    // console.log('setPassword');
-    try {
-      await updatePassword({
-        variables: {
-          id: user?._id,
-          password: tempPassword,
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const setPassword = async () => {
+  //   console.log('setPassword');
+  //   try {
+  //     await updatePassword({
+  //       variables: {
+  //         id: user?._id,
+  //         password: tempPassword,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   // set temp password when user state is updated (query retrieves user info)
-  useEffect(() => {
-    setPassword();
-    // eslint-disable-next-line
-  }, [user]);
+  // useEffect(() => {
+  //   console.log('useEffect setpassword');
+  //   setPassword();
+  //   // eslint-disable-next-line
+  // }, [user]);
 
   // for email mask input
   const handleInputChange = (event) => {
@@ -106,12 +107,14 @@ function ForgotPassword() {
         variables: { ...payload },
       });
 
+      console.log(data);
+
       setPayLoadToken({ token: data.forgotPassword.token });
       setShowAlert(true);
       setShowSuccess(true);
       setUserFormData({ email: "", password: "" });
     } catch (e) {
-      console.log("error2", user);
+      // console.log("error2", user);
       setShowAlert(true);
       setShowSuccess(false);
       setUserFormData({ email: "", password: "" });
@@ -135,7 +138,7 @@ function ForgotPassword() {
         const [tinyResponse, urlResponse] = await Promise.allSettled(results);
         let { tiny_url } = tinyResponse.value.value.data;
         let backUpUrl = urlResponse.value.value;
-        console.log(tiny_url, backUpUrl);
+        // console.log(tiny_url, backUpUrl);
 
         // when the data is ready, save it to state
         setTinyURL(tiny_url);
@@ -160,7 +163,7 @@ function ForgotPassword() {
           ])
         ).map((data) => data);
 
-        console.log(results);
+        // console.log(results);
 
         // call the promise all method
         const [toResponse, subjectResponse, textResponse, htmlResponse] =

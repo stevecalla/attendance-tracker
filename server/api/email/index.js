@@ -40,18 +40,18 @@ const createEmailRecord = async ({
   let response = sendResponse.response;
 
   try {
-    console.log('create record 123', sendResponse);
+    // console.log('create record 123', sendResponse);
 
     if (sendResponse.accepted.length === 1) {
       // set wasSent to true
-      console.log('wasSent=', true);
+      // console.log('wasSent=', true);
       wasSent = true;
     } else if (sendResponse.rejected.length === 1) {
       // set wasSent to false
-      console.log('wasSent=', false);
+      // console.log('wasSent=', false);
       wasSent = false;
     } else {
-      console.log('response from emal send was neither accepted or rejected')
+      // console.log('response from emal send was neither accepted or rejected')
     }
 
     EmailSend.create({
@@ -145,8 +145,8 @@ const findOneQuery = () => {
 
 // SECTION //FIND AND UPDATE THE MOST RECENT RECORD (AND RETURN THE UPDATED RECORD)
 const findOneAndUpdateMutation = (wasSentUpdate) => {
-  console.log("kicked off");
-  console.log(wasSentUpdate);
+  // console.log("kicked off");
+  // console.log(wasSentUpdate);
 
   return new Promise((resolve, reject) => {
     EmailSend.findOneAndUpdate(
@@ -159,14 +159,14 @@ const findOneAndUpdateMutation = (wasSentUpdate) => {
       } // Sort by createdAt in descending order and return the updated document
     )
       .then((updatedRecord) => {
-        console.log("Conditions:", {}); // No specific conditions in this case
+        // console.log("Conditions:", {}); // No specific conditions in this case
 
         if (!updatedRecord) {
           console.log("No matching record found to update.");
           resolve(null);
           return;
         }
-        console.log("1) updated record", updatedRecord);
+        // console.log("1) updated record", updatedRecord);
         resolve(updatedRecord);
       })
       .catch((err) => {

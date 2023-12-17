@@ -269,22 +269,25 @@ const resolvers = {
     },
 
     forgotPassword: async (parent, { email, password }) => {
-      const employee = await Employee.findOne({ email });
+      // const employee = await Employee.findOne({ email });
+      const user = await User.findOne({ email });
+      console.log('resolver forgot password=', user);
 
-      if (!employee) {
+      if (!user) {
         throw new AuthenticationError("Email address not found.");
       }
 
       expiration = 900; // 15 minutes
-      const token = signToken(employee, expiration);
-      // const token = signToken(employee);
+      const token = signToken(user, expiration);
 
-      return { token, employee };
+      return { token, user };
     },
 
     updatePassword: async (parent, { _id, password }, context) => {
       // if (context.user) {
-      return Employee.findOneAndUpdate(
+      console.log('resolver update password', _id, password);
+
+      return User.findOneAndUpdate(
         { _id },
         {
           password,
@@ -302,8 +305,8 @@ const resolvers = {
       const mailOptions = mailDetails(args);
 
       // send the email; return the email details
-      // let dev = false;
-      let dev = true;
+      let dev = false;
+      // let dev = true;
       let sendResponse = await sendMail(mailOptions, dev);
 
       // create the record in the database with the mail maildetails and response

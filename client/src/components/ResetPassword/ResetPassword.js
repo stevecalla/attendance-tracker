@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Auth from "../../utils/auth";
 import decode from "jwt-decode";
-
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { QUERY_EMPLOYEE_BYEMAIL } from "../../utils/queries";
+
+import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 
 import { Form, Button, InputGroup } from "react-bootstrap";
@@ -26,7 +26,7 @@ const ResetPassword = () => {
   const decoded = decode(params.token); 
 
   // section use email address to get user information
-  const [employee, setEmployee] = useState({});
+  const [user, setUser] = useState({});
   const { //fix
     // eslint-disable-next-line
     loading,
@@ -36,12 +36,12 @@ const ResetPassword = () => {
     error: getEmployeeError,
     // eslint-disable-next-line
     refetch,
-  } = useQuery(QUERY_EMPLOYEE_BYEMAIL, {
+  } = useQuery(QUERY_USER_BYEMAIL, {
     variables: { email: decoded.data.email },
     // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
     skip: !Auth.loggedIn(),
     onCompleted: (data) => {
-      setEmployee(data?.employeeByEmail);
+      setUser(data?.userByEmail);
     },
   });
 
@@ -51,24 +51,34 @@ const ResetPassword = () => {
     useMutation(UPDATE_PASSWORD);
 
   const setPassword = async () => {
-
+    // console.log('setpassword 54', data);
+    // console.log('setpassword 55', passwordFormData);
+    // console.log('setpassword 55', passwordFormData.password);
+    // console.log("userId", user)
     try {
-      const { data } = await updatePassword({
-        variables: {
-          id: employee?._id,
-          password: passwordFormData.password,
-        },
-      });
+      // console.log('if statement', passwordFormData.password !== "");
+      if (passwordFormData.password !== "") {
+        // console.log('if statement', passwordFormData);
+        await updatePassword({
+          variables: {
+            id: user?._id,
+            password: passwordFormData.password,
+          },
+        });
+      }
+
+
     } catch (e) {
-      console.error(e);
+      // console.error(e);
     }
   };
 
-  // set temp password when employee state is updated (query retrieves employee info)
+  // set temp password when user state is updated (query retrieves user info)
   useEffect(() => {
+    console.log('useeffect reset password=');
     setPassword();
   // eslint-disable-next-line
-  }, [employee]);
+  }, [user]);
 
   //section handle input
   const handleInputChange = (event) => {
@@ -78,6 +88,8 @@ const ResetPassword = () => {
 
   //section handle submit
   const handleFormSubmit = async (event) => {
+    console.log('handleformsubmit');
+
     event.preventDefault();
 
     // check if form has everything (as per react-bootstrap docs)
@@ -88,8 +100,10 @@ const ResetPassword = () => {
     }
 
     try {
-      await refetch();
-      window.location.assign(`/login`);
+      let refetchData = await refetch();
+      console.log('refetch 99', refetchData);
+      setPassword();
+      // window.location.assign(`/login`);
     } catch (e) {
       console.error(e);
       // setShowAlert(true);

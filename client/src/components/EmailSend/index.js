@@ -22,7 +22,7 @@ import "../../styles/Contact.css";
 // function useEmailSend(props) {
 function useEmailSend(props) {
   //props = source, token, toEmail, firstName, triggerEmail
-  console.log(props);
+  // console.log(props);
   const [tinyURI, setTinyURI] = useState("");
   const [fromEmail, setFromEmail] = useState("");
   const [toEmail, setToEmail] = useState("");

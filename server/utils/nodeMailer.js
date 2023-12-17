@@ -18,10 +18,10 @@ const verifyTransporterConnection = async () => {
   // verify connection configuration
   transporter.verify(function (error, success) {
     if (error) {
-      console.log(error);
+      // console.log(error);
     } else {
-      console.log("External Email Server is ready to take our messages");
-      console.log(success);
+      // console.log("External Email Server is ready to take our messages");
+      // console.log(success);
     }
   });
 };
