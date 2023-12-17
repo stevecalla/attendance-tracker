@@ -1,15 +1,11 @@
+// SECTION //to test queries below using node. uncomment line 2/3 then either section #1 or #2 below to establish a connection. 
 // const mongoose = require("mongoose");
 // require("dotenv").config({ path: "../../../server/.env" }); // needed to add the path above to access .env variables
-// require("dotenv").config();
 
-// console.log(process.env)
-// console.log(process.env.DB_NAME)
-// console.log(process.env.SENDER_EMAIL);
-// console.log(process.env.OLDPWD)
-
-// otherFile.js
+// SECTION#1//create a connection using the config/connection file
 // const dbConnection = require("../../config/connection");
 
+// SECTION#2 //create a connection using mongoose
 // Connect to MongoDB (if not connected)
 // if (mongoose.connection.readyState === 0) {
 //   mongoose.connect(
@@ -209,35 +205,11 @@ function convertDateToMST(date) {
   }
 }
 
+findOneAndUpdateMutation(false);
+
 module.exports = {
   createEmailRecord,
   // findAllQuery,
   // findOneQuery,
   // findOneAndUpdateMutation,
 };
-
-// // otherFile.js
-// const dbConnection = require("./db");
-
-// // Open the connection
-// dbConnection.on("open", () => {
-//   console.log("MongoDB connection opened");
-//   // Your code that relies on the open connection can go here
-// });
-
-// // Handle connection errors
-// dbConnection.on("error", (err) => {
-//   console.error("MongoDB connection error:", err);
-// });
-
-// // Close the connection when needed
-// // For example, if you want to close it after performing some operations
-// // Note: Ensure that you close the connection only when you are done with database operations
-// // Closing the connection immediately after opening might prevent other parts of your application from using it.
-// // You might want to close it in a specific lifecycle event or when your application is shutting down.
-// // Here, we're just demonstrating how to close it programmatically.
-// setTimeout(() => {
-//   dbConnection.close(() => {
-//     console.log("MongoDB connection closed");
-//   });
-// }, 5000); // Close the connection after 5 seconds (adjust as needed)

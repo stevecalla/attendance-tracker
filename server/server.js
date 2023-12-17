@@ -61,7 +61,7 @@ const ALLOWED_DOMAIN = [
   "http://127.0.0.1:3000",
   "http://localhost:3000",
   "http://localhost:8080",
-  "https://studio.apollographql.com"
+  "https://studio.apollographql.com",
 ];
 // //section cors end
 var corsOptions = {
@@ -118,6 +118,33 @@ app.use(middleware.setResponseHeaders);
 // const zoomAppRouter = require("./api/zoomapp/router");
 // SECTION EMAIL SERVER END
 
+// SECTION EMAIL TRACKING
+// original test api email server
+app.get("/api/email-tracker/:recipient/:metric", (req, res) => {
+  console.log("===============")
+  console.log("Request made to /email-server route");
+
+  let recipient = req.params["recipient"];
+  let metric = req.params["metric"];
+
+  let trackingInfo = {
+    message: "Request made to /email-tracker route",
+    receipient: recipient,
+    opened: metric === "opened" ? 1 : null,
+    clicked: metric === "clicked" ? 1 : null,
+  };
+
+  // <p>Test Email Tracker</p><img src="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px"></img>
+  //<img src = "https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="display:none">
+
+  console.log(trackingInfo);
+
+  return res.json(trackingInfo);
+
+});
+
+// SECTION EMAIL TRACKING END
+
 app.use("/api/zoomapp", zoomAppRouter);
 if (
   process.env.AUTH0_CLIENT_ID &&
@@ -144,11 +171,6 @@ if (process.env.NODE_ENV === "production") {
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
-
-
-
-// console.log(process.env)
-// console.log(process.env.DB_NAME)
 
   db.once("open", () => {
     app.listen(PORT, () => {

@@ -49,7 +49,10 @@ export const RESET_HTML_TEMPLATE = (props, tinyURI, { uri }) => {
   <p>This link will expire 15 minutes from the receipt of this email.</p>
 
   <p>Thank you,</p>
-  <p>The Attendance Tracker</p>`;
+  <p>The Attendance Tracker</p>
+
+  <p>Test Email Tracker</p>
+  <img src="https://koala-huge-goldfish.ngrok-free.app/api/email-tracker/2/opened" style="background-color: #1a73e8; padding: 10px 20px; color: white; text-decoration:none; font-size:14px; font-family:Roboto,sans-serif;border-radius:5px">`;
 
   return template;
 };

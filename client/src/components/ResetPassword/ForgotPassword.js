@@ -193,7 +193,7 @@ function ForgotPassword() {
   //   // eslint-disable-next-line
   // }, [emailTrigger]);
 
-  const saveEmailToDB = async (firstName) => {
+  const saveEmailToDB = async () => {
     try {
       // execute saveEmail mutation by passing in emailConent
       await saveEmail({variables: emailContent}); //fix uncomment to execute email
