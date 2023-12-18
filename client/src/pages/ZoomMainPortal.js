@@ -66,21 +66,22 @@ export const ZoomMainPortal = () => {
         retrieveDate,
       }}
     >
-      <Tabs
-        defaultActiveKey="participants"
-        // defaultActiveKey="attendance"
-        id=""
-        className="mb-3 flex-nowrap"
-        fill
-        style={{ flexWrap: "nowrap", width: "300px" }}
-      >
-        <Tab eventKey="participants" title="Participants">
-          <ZoomParticipants />
-        </Tab>
-        <Tab eventKey="attendance" title="Attendance">
-          <ZoomAttendance />
-        </Tab>
-      </Tabs>
+      <div className="d-flex flex-column justify-content-center align-items-center">
+        <Tabs
+          defaultActiveKey="participants"
+          id="test"
+          fill
+          className="d-flex flex-nowrap justify-content-center"
+          style={{ width: "300px" }}
+        >
+          <Tab eventKey="participants" title="Participants">
+            <ZoomParticipants />
+          </Tab>
+          <Tab eventKey="attendance" title="Attendance">
+            <ZoomAttendance />
+          </Tab>
+        </Tabs>
+      </div>
     </ParticipantContext.Provider>
   );
 };
