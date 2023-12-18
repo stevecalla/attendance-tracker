@@ -24,7 +24,8 @@ import { Form, Button, Alert } from "react-bootstrap";
 import "../../styles/button-home.css";
 
 function ForgotPassword() {
-  const [tempPassword] = useState("20000");
+  // const [tempPassword] = useState("20000");
+  const [tempPassword] = useState(`${process.env.REACT_APP_RESET_PASSWORD}`);
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [user, setUser] = useState({});
   const [saveEmail] = useMutation(ADD_EMAIL_SEND);
