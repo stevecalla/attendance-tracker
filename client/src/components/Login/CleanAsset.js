@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Lottie from "react-lottie-player";
-// import cleanMop from "../../assets/cleanMop.json";
-// import mopClean from "../../assets/mopClean.png";
 import cleanMop from "../../assets/images/cleanMop.json";
 import mopClean from "../../assets/images/mopClean.png";
 
@@ -17,7 +15,7 @@ export const CleanAsset = () => {
   return (
     <>
       <img
-        className="imgStyle"
+        // className="imgStyle"
         src={mopClean}
         alt="Pristine clean"
         style={display ? isDisplayed : isNotDisplayed}
@@ -29,7 +27,7 @@ export const CleanAsset = () => {
         loop
         speed={2}
         alt="Pristine clean"
-        style={display ? isNotDisplayed : isDisplayed}
+        style={!display ? isDisplayed : isNotDisplayed}
       />
     </>
   );

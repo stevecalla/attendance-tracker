@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/Login/LoginForm";
 import SignupForm from "../components/Login/SignupForm";
 import Message from "../components/Login/Message";
-import { CleanAsset } from "../components/Login/CleanAsset";
+import { CheckAsset } from "../components/Login/CheckAsset";
 
 import Container from "react-bootstrap/Container";
 import "../styles/button-home.css";
-
-// import littleFella from "../assets/images-avif/logo-no-slogan.avif";
 
 const Login = ({
   renderPanel,
@@ -34,7 +32,7 @@ const Login = ({
         >
           <div className="mx-4 mt-4 mb-4" style={{ height: "150px" }}>
             <div className="d-flex justify-content-center align-content-center align-item-center">
-              <CleanAsset />
+              <CheckAsset widthArg={"160px"} heightArg={"150px"} />
             </div>
           </div>
           <div style={{ display: "flex", flex: "auto", width: "100%" }}>
