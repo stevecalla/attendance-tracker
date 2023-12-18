@@ -25,6 +25,7 @@ import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
 import ForgotPassword from "./components/ResetPassword/ForgotPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import TermsPrivacy from "./components/Terms/TermsPrivacy";
 // import OptOutImage from "./components/ResetPassword/OptOutImage";
 
 import "./App.css";
@@ -314,6 +315,8 @@ function App() {
           <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/terms-privacy" element={<TermsPrivacy />} />
+          <Route path="/contact-us" element={<TermsPrivacy />} />
           {/* <Route path="/optout-image" element={<OptOutImage />} /> */}
           <Route
             exact
