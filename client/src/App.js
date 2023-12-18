@@ -30,6 +30,7 @@ import TermsPrivacy from "./components/Terms/TermsPrivacy";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ContactUs from "./components/Contact/Contact";
 
 let once = 0; // to prevent increasing number of event listeners being added
 
@@ -316,7 +317,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/terms-privacy" element={<TermsPrivacy />} />
-          <Route path="/contact-us" element={<TermsPrivacy />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           {/* <Route path="/optout-image" element={<OptOutImage />} /> */}
           <Route
             exact
