@@ -22,7 +22,7 @@ function TermsPrivacy() {
           <Accordion.Header>Privacy Policy</Accordion.Header>
           <Accordion.Body>
             <p>Privacy Policy</p>
-            <main class="container text-start">
+            <main className="container text-start">
               <p>
                 This Privacy Policy applies to the{" "}
                 <a href={url}>The Attendance Tracker</a>{" "}
@@ -229,7 +229,7 @@ function TermsPrivacy() {
           <Accordion.Header>Terms & Conditions</Accordion.Header>
           <Accordion.Body>
             <p>Terms & Conditions</p>
-            <main class="container text-start">
+            <main className="container text-start">
               {/* <h2>Who we are and how to contact us</h2> */}
               <p>
                 <a href={url} target="_self" rel="nofollow noopener">
