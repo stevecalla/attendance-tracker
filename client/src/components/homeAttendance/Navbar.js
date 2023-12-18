@@ -17,7 +17,6 @@ function Headerbar() {
       data-bs-theme="dark"
     >
       <Container className="">
-        {/* <Navbar.Brand href="#home">Attendance Tracker</Navbar.Brand> */}
         <Navbar.Brand
         as={Link}
         reloadDocument
@@ -27,10 +26,6 @@ function Headerbar() {
         <img className="logo" src={logoCheckmark} alt="Integral Solutions logo" style={{ width: "35px", height: "35px"}}></img>
         <div className="d-flex align-items-center ms-2">
           The Attendance Tracker
-          {/* <h2 className="brand-name">The Attendance Tracker</h2> */}
-          {/* <h6 className="slogan">
-            Office Furniture Installation At The Snap Of Your Fingers!
-          </h6> */}
         </div>
       </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
