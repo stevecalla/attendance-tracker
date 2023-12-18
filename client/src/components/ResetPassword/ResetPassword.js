@@ -62,7 +62,6 @@ const ResetPassword = () => {
   // section //Use email address to get user information
   const [user, setUser] = useState({});
   const {
-    //fix
     // eslint-disable-next-line
     loading,
     // eslint-disable-next-line
@@ -92,7 +91,7 @@ const ResetPassword = () => {
     // console.log("userId", user)
     try {
       // Only allow password change if new password & expiration > current date
-      if (passwordFormData.password !== "" && (expiration > currentDate)) {
+      if (passwordFormData.password !== "" && expiration > currentDate) {
         // console.log('if statement', passwordFormData);
         await updatePassword({
           variables: {
@@ -101,9 +100,8 @@ const ResetPassword = () => {
           },
         });
       } else {
-        console.log('Can not change password');
+        console.log("Can not change password");
       }
-
     } catch (e) {
       console.error(e);
     }
@@ -165,19 +163,34 @@ const ResetPassword = () => {
 
   return (
     <>
-      <div className="d-flex flex-column align-items-center mt-3">
-        <div className="d-flex flex-column align-items-center box-making">
-          <h2>Reset Password</h2>
-          <p style={{ textAlign: "center" }}>
-            This will assign a new password to your account.{" "}
+      <div className="d-flex justify-content-center">
+        <div
+          className="d-flex flex-column align-items-center mt-3"
+          style={{
+            border: "1px solid black",
+            borderRadius: "10px",
+            margin: "0px 10px",
+            maxWidth: "600px",
+          }}
+        >
+          <h2 className="mt-3">Reset Password</h2>
+          <p
+            style={{
+              margin: "0px 10px",
+              padding: "0px 7px",
+              textWrap: "pretty",
+              textAlign: "center",
+            }}
+          >
+            Enter a new password for your account{" "}
           </p>
 
           <Form
             noValidate
             validated={validated}
             onSubmit={handleFormSubmit}
-            className="mx-2 mt-2 mb-1"
-            style={{ width: "280px" }}
+          className="mx-2 mb-1"
+          style={{ width: "80%" }}
           >
             <Form.Group style={{ marginTop: "25px" }}>
               <Form.Label htmlFor="password">Create new password</Form.Label>
