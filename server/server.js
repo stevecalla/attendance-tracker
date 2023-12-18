@@ -3,27 +3,18 @@ const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const compression = require("compression"); //added to address lighthouse text compression performance issue
-
-// require("dotenv").config();
-
-// //section cors start
 const cors = require("cors");
-const ALLOWED_DOMAIN = [
-  "http://localhost:3000", 
-  "http://localhost:8080", 
-  "https://studio.apollographql.com"
-];
-// //section cors end
+const axios = require('axios');
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
 
 //fix start
 const middleware = require("./middleware");
-
 const zoomAppRouter = require("./api/zoomapp/router");
 const zoomRouter = require("./api/zoom/router");
 const thirdPartyOAuthRouter = require("./api/thirdpartyauth/router");
+const emailRouter = require("./api/email/router");
 //fix end
 
 const PORT = process.env.PORT || 3001;
@@ -34,7 +25,7 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
-app.use("/test", (req, res, next) => {
+app.get("/test", (req, res, next) => {
   console.log("Request made to /test route");
   res.json({ message: "This is your API data" });
   // You can perform additional operations here if needed
@@ -47,9 +38,9 @@ app.get("/view-session", (req, res) => {
   // console.log(req.session);
 
   // let test = middleware.getSession();
-  
-  res.json('whatever');
-  
+
+  res.json("whatever");
+
   // redisClient.lpush("viewSession", "z", redisClient.print);
   // // Check if a session exists
   // if (!req.session) {
@@ -64,9 +55,18 @@ app.get("/view-session", (req, res) => {
 });
 
 // //section cors start
+// const ALLOWED_DOMAIN = "*";
+const ALLOWED_DOMAIN = [
+  "http://127.0.0.1:3000",
+  "http://localhost:3000",
+  "http://localhost:8080",
+  "https://studio.apollographql.com",
+];
+// //section cors end
 var corsOptions = {
   // origin: FRONTEND_DOMAIN,
   origin: ALLOWED_DOMAIN,
+  methods: ["GET", "POST"],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -79,7 +79,82 @@ app.use(compression()); //added to address lighthouse text compression performan
 app.use(middleware.session);
 app.use(middleware.setResponseHeaders);
 
-// Zoom App routes
+//TEST MIDDLEWARE TO WATCH THE REQ.BODY FROM GRAPHQL
+// app.use(function(req, res, next) {
+//   console.log('----------------')
+//   console.log('----------------')
+//   console.log('----------------')
+//   console.log('hello middleware');
+//   console.log(req.body);
+//   next();
+// });
+
+// SECTION EMAIL SERVER
+// route = ./api/email/router");
+// app.use("/api/email", emailRouter);
+
+// original test api email server
+// app.post("/api/email-server", (req, res) => {
+//   console.log("Request made to /email-server route");
+//   console.log(req.body);
+
+//   try {
+//     if (!req.body) {
+//       res
+//       .status(400)
+//       .json({ message: 'No email content' });
+//       return;
+//     }
+
+//     res.status(200).json(req.body);
+
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// });
+
+// SECTION ZOOM SERVER / APP ROUTES
+// const zoomAppRouter = require("./api/zoomapp/router");
+// SECTION EMAIL SERVER END
+
+// SECTION EMAIL TRACKING
+// original test api email server
+app.get("/api/email-tracker/:recipient/:metric", async (req, res) => {
+  console.log("===============");
+  console.log("Request made to /email-server route");
+
+  let recipient = req.params["recipient"];
+  let metric = req.params["metric"];
+
+  let trackingInfo = {
+    message: "Request made to /email-tracker route",
+    receipient: recipient,
+    opened: metric === "opened" ? 1 : null,
+    clicked: metric === "clicked" ? 1 : null,
+  };
+
+  console.log(trackingInfo);
+
+  try {
+    const response = await axios.get("https://mailstat.us/tr/optout-blk-nologo.png", {
+      responseType: 'stream', // Set the response type to 'stream' for binary data
+    });
+
+    // Set the appropriate content type
+    res.set({ 'Content-Type': 'image/json' });
+
+    // Pipe the stream directly to the response object
+    response.data.pipe(res);
+  } catch (error) {
+    console.error('Error making request:', error.message);
+    res.status(500).send('Internal Server Error');
+  }
+
+  // return res.json(trackingInfo);
+});
+
+// SECTION EMAIL TRACKING END
+
 app.use("/api/zoomapp", zoomAppRouter);
 if (
   process.env.AUTH0_CLIENT_ID &&
@@ -115,7 +190,6 @@ const startApolloServer = async (typeDefs, resolvers) => {
       );
     });
   });
-
   // store.on
 };
 

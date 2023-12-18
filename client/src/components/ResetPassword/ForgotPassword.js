@@ -4,26 +4,40 @@ import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
 import { FORGOT_PASSWORD } from "../../utils/mutations";
+import { ADD_EMAIL_SEND } from "../../utils/mutations";
+// import { emailNodeMailer } from "../../utils/emailNodeMailer";
+
+import {
+  RESET_TEXT_TEMPLATE,
+  RESET_HTML_TEMPLATE,
+  RESET_SUBJECT,
+  FROM_EMAIL,
+  TO_EMAIL,
+} from "../../components/EmailSend/templates/resetTemplate";
+import { getTinyURL, createURL } from "../../utils/tinyURL";
 
 import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
-import useEmailSend from "../../components/EmailSend";
+// import useEmailSend from "../../components/EmailSend";
 
 import { Form, Button, Alert } from "react-bootstrap";
 import "../../styles/button-home.css";
 
 function ForgotPassword() {
-  const [tempPassword] = useState("20000");
+  const [tempPassword] = useState(`${process.env.REACT_APP_RESET_PASSWORD}`);
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [user, setUser] = useState({});
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
+  const [saveEmail] = useMutation(ADD_EMAIL_SEND);
+  const [toEmail, setToEmail] = useState(""); //fix uncomment below to set real email
+  const [emailContent, setEmailContent] = useState({}); //fix uncomment below to send email
   const [payLoadToken, setPayLoadToken] = useState({});
+  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [toEmail, setToEmail] = useState("");
+  const [tinyURL, setTinyURL] = useState("");
+  const [backUpUrl, setBackUpUrl] = useState({});
   const [skipUseQuery, setSkipUseQuery] = useState(true); // ensures useQuery only runs on button submit, not if characters are entered in the input element
-  const [emailContent, setEmailContent] = useState({});
 
   // SECTION GET USER Query
   const { refetch } = useQuery(QUERY_USER_BYEMAIL, {
@@ -31,33 +45,33 @@ function ForgotPassword() {
     // if skip is true, this query will not be executed; in this instance, ensures useQuery only runs on button submit, not if characters are entered in the input element
     skip: skipUseQuery,
     onCompleted: (data) => {
-      console.log(data);
+      // console.log(data);
       setUser(data?.userByEmail);
     },
   });
 
-  const [updatePassword] =
-    useMutation(UPDATE_PASSWORD);
+  // const [updatePassword] = useMutation(UPDATE_PASSWORD);
 
-  const setPassword = async () => {
-    // console.log('setPassword');
-    try {
-      await updatePassword({
-        variables: {
-          id: user?._id,
-          password: tempPassword,
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const setPassword = async () => {
+  //   console.log('setPassword');
+  //   try {
+  //     await updatePassword({
+  //       variables: {
+  //         id: user?._id,
+  //         password: tempPassword,
+  //       },
+  //     });
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   // set temp password when user state is updated (query retrieves user info)
-  useEffect(() => {
-    setPassword();
-    // eslint-disable-next-line
-  }, [user]);
+  // useEffect(() => {
+  //   console.log('useEffect setpassword');
+  //   setPassword();
+  //   // eslint-disable-next-line
+  // }, [user]);
 
   // for email mask input
   const handleInputChange = (event) => {
@@ -77,7 +91,7 @@ function ForgotPassword() {
       return false;
     }
 
-    setSkipUseQuery(false); //allows use query to run
+    setSkipUseQuery(false); //allows useQuery to run
     await refetch(); //get user information
     setSkipUseQuery(true);
 
@@ -93,40 +107,110 @@ function ForgotPassword() {
         variables: { ...payload },
       });
 
+      console.log(data);
+
       setPayLoadToken({ token: data.forgotPassword.token });
       setShowAlert(true);
       setShowSuccess(true);
       setUserFormData({ email: "", password: "" });
-      // setUser({});
+      setTimeout(() => {
+        window.location.assign(`/login`);
+      }, 2000);
     } catch (e) {
-      console.log("error2", user);
+      // console.log("error2", user);
       setShowAlert(true);
       setShowSuccess(false);
       setUserFormData({ email: "", password: "" });
-      // setUser({});
     }
   };
 
-  // after payLoadToken state is updated, setEmailContent, will trigger useEmailSend
+  // GET TINY URL
   useEffect(() => {
-    setEmailContent({
-      source: "resetPassword",
-      token: payLoadToken,
-      toEmail: toEmail,
-      firstName: user.firstName
-    });
+    const dataFetch = async () => {
+      if (Object.entries(payLoadToken).length > 0) {
+        // waiting for allthethings in parallel
+        // if payLoadToken does exits then fetch TinyURL
+        const results = (
+          await Promise.allSettled([
+            getTinyURL(payLoadToken),
+            createURL(payLoadToken),
+          ])
+        ).map((data) => data);
 
-    // setUser({});
-    // eslint-disable-next-line
+        // call the promise all method
+        const [tinyResponse, urlResponse] = await Promise.allSettled(results);
+        let { tiny_url } = tinyResponse.value.value.data;
+        let backUpUrl = urlResponse.value.value;
+        // console.log(tiny_url, backUpUrl);
+
+        // when the data is ready, save it to state
+        setTinyURL(tiny_url);
+        setBackUpUrl(createURL(backUpUrl));
+      }
+    };
+
+    dataFetch();
   }, [payLoadToken]);
 
-  // eslint-disable-next-line
-  const submitEmailContent = useEmailSend(emailContent);
-
+  // CREATE EMAIL CONTENT
   useEffect(() => {
-    console.log(submitEmailContent);
-  // eslint-disable-next-line
-  }, [user])
+    const dataFetch = async () => {
+      if (tinyURL) {
+        let firstName = { firstName: user?.firstName };
+        const results = (
+          await Promise.allSettled([
+            TO_EMAIL(),
+            RESET_SUBJECT(),
+            RESET_TEXT_TEMPLATE(firstName, tinyURL, backUpUrl),
+            RESET_HTML_TEMPLATE(firstName, tinyURL, backUpUrl),
+          ])
+        ).map((data) => data);
+
+        // console.log(results);
+
+        // call the promise all method
+        const [toResponse, subjectResponse, textResponse, htmlResponse] =
+          await Promise.allSettled(results);
+
+        // when the data is ready, save it to state
+        setEmailContent({
+          // toEmail: user?.email,
+          toEmail: toResponse.value.value,
+          fromEmail: FROM_EMAIL,
+          subject: subjectResponse.value.value,
+          firstName: user.firstName,
+          source: "resetPassword",
+          token: payLoadToken.token,
+          textContent: textResponse.value.value,
+          htmlContent: htmlResponse.value.value,
+          user: user?._id,
+        });
+      }
+    };
+
+    dataFetch();
+
+    // eslint-disable-next-line
+  }, [tinyURL]);
+
+  // SAVE & SEND EMAIL
+  useEffect(() => {
+    // SEND EMAIL & SAVE TO MONGODB
+    const dataFetch = async () => {
+      if (Object.entries(emailContent).length > 0) {
+        const results = (
+          await Promise.allSettled([saveEmail({ variables: emailContent })])
+        ).map((data) => data);
+
+        // call the promise all method
+        // eslint-disable-next-line
+        const [responseData] = await Promise.allSettled(results);
+      }
+    };
+
+    dataFetch();
+    // eslint-disable-next-line
+  }, [emailContent]);
 
   return (
     <div className="d-flex justify-content-center">

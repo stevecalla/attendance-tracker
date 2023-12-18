@@ -22,7 +22,7 @@ import "../../styles/Contact.css";
 // function useEmailSend(props) {
 function useEmailSend(props) {
   //props = source, token, toEmail, firstName, triggerEmail
-  console.log(props);
+  // console.log(props);
   const [tinyURI, setTinyURI] = useState("");
   const [fromEmail, setFromEmail] = useState("");
   const [toEmail, setToEmail] = useState("");
@@ -54,9 +54,17 @@ function useEmailSend(props) {
     fetchPolicy: "cache-and-network", // ensure the query executes after each click
   });
 
+  // const sendPasswordResetEmail = () => {
+  //     fetch("http://localhost:3001/api/email/passwordreset", {
+  //       method: "POST",
+  //       body: JSON.stringify({ toEmail, fromEmail, subject, textContent, htmlContent }),
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+  // }
+
   // SECTION GET TINY URL //executes on load
   useEffect(() => {
-    console.log('1=', handleSendEmail);
+    // console.log('1=', handleSendEmail);
     if (props?.token?.token) {
       tiny_url();
     }
@@ -65,10 +73,10 @@ function useEmailSend(props) {
 
   // SECTION SET EMAIL CONTENT //executes 2nd after tiny url fetch
   useEffect(() => {
-    console.log('2=', handleSendEmail);
+    // console.log('2=', handleSendEmail);
     if (props?.token?.token) {
       let getBackupUrl = createURL(props.token);
-      console.log("x=", getBackupUrl);
+      // console.log("x=", getBackupUrl);
       console.log(tinyURI);
 
       setFromEmail(FROM_EMAIL);
@@ -104,11 +112,12 @@ function useEmailSend(props) {
 
   //SECTION SEND EMAIL //executes 3rd after email content set
   useEffect(() => {
-    console.log('3=', handleSendEmail);
+    // console.log('3=', handleSendEmail);
     if (handleSendEmail) {
       // send email
       console.log("send email");
-      sendEmail();
+      // sendEmail();
+      // sendPasswordResetEmail();
     }
     setReset(!reset);
     // eslint-disable-next-line
@@ -119,7 +128,7 @@ function useEmailSend(props) {
     SetHandleSendEmail(false);
   }, [reset])
   
-  console.log(emailData);
+  // console.log(emailData);
   return emailData;
 }
 

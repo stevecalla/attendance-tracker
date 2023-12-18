@@ -9,7 +9,8 @@
     "phone": "970-867-5309",
     "isDisplayable": true,
     "isAdmin": false,
-    "isLocked": false
+    "isLocked": false,
+    "emailSend": []
   },
   {
     "_id": "6398fb54494aa98f85992da3",
@@ -21,7 +22,8 @@
     "phone": "719-867-5309",
     "isDisplayable": true,
     "isAdmin": true,
-    "isLocked": false
+    "isLocked": false,
+    "emailSend": []
   },
   {
     "_id": "6498fb54494aa98f85992da5",
@@ -33,6 +35,7 @@
     "phone": "123-456-2526",
     "isDisplayable": false,
     "isAdmin": true,
-    "isLocked": false
+    "isLocked": false,
+    "emailSend": ["6398fb54494aa98f85992d25", "6398fb54494aa98f85992d25"]
   }
 ]

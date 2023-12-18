@@ -9,7 +9,7 @@ export const createURL = (token) => {
 
   let encodedURI = encodeURI(uri);
 
-  console.log(encodedURI);
+  // console.log(encodedURI);
 
   return { encodedURI, uri };
 };

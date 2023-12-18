@@ -45,12 +45,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 // const history = createHashHistory();
 
 root.render(
-  <React.StrictMode>
-    {/* <Router history={history}> */}
+  // <React.StrictMode>
+    // <Router history={history}>
     <Router>
       <App />
     </Router>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change

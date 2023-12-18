@@ -548,3 +548,60 @@ export const UPDATE_EMPLOYEE_HOUR = gql`
     }
   }
 `;
+
+// SECTION SEND EMAIL
+export const ADD_EMAIL_SEND = gql`
+  mutation AddEmailSend(
+    $toEmail: String
+    $fromEmail: String
+    $subject: String
+    $firstName: String
+    $source: String
+    $token: String
+    $textContent: String
+    $htmlContent: String
+    $user: String
+  ) {
+    addEmailSend(
+      toEmail: $toEmail
+      fromEmail: $fromEmail
+      subject: $subject
+      firstName: $firstName
+      source: $source
+      token: $token
+      textContent: $textContent
+      htmlContent: $htmlContent
+      user: $user
+    ) {
+      _id
+      toEmail
+      fromEmail
+      subject
+      firstName
+      source
+      token
+      textContent
+      htmlContent
+      wasSent
+      isDisplayable
+    }
+  }
+`;
+
+// export const SEND_EMAIL = gql`
+//   mutation sendEmail(
+//     $toEmail: String
+//     $fromEmail: String
+//     $subject: String
+//     $textContent: String
+//     $htmlContent: String
+//   ) {
+//     sendEmail(
+//       toEmail: $toEmail
+//       fromEmail: $fromEmail
+//       subject: $subject
+//       textContent: $textContent
+//       htmlContent: $htmlContent
+//     )
+//   }
+// `;

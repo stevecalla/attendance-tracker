@@ -5,7 +5,6 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
       unique: true,
     },
     email: {
@@ -42,6 +41,10 @@ const userSchema = new Schema(
     isLocked: {
       type: Boolean,
       default: false,
+    },
+    emailSend: {
+      type: Schema.Types.Array,
+      ref: "EmailSend",
     },
   },
   {
