@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
 import Auth from "../../utils/auth";
-import logoCheckmark from "../../assets/images/lottie-static-checkmark-offblack.png";
 import { CheckAsset } from "../../components/Login/CheckAsset";
 
 function Headerbar() {
