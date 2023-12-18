@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
 import Auth from "../../utils/auth";
+import logoCheckmark from "../../assets/images/lottie-static-checkmark-black2.png";
 
 function Headerbar() {
   return (
@@ -16,7 +17,22 @@ function Headerbar() {
       data-bs-theme="dark"
     >
       <Container className="">
-        <Navbar.Brand href="#home">Attendance Tracker</Navbar.Brand>
+        {/* <Navbar.Brand href="#home">Attendance Tracker</Navbar.Brand> */}
+        <Navbar.Brand
+        as={Link}
+        reloadDocument
+        to="/"
+        className="d-flex flex-nowrap mx-0"
+      >
+        <img className="logo" src={logoCheckmark} alt="Integral Solutions logo" style={{ width: "35px", height: "35px"}}></img>
+        <div className="d-flex align-items-center ms-2">
+          The Attendance Tracker
+          {/* <h2 className="brand-name">The Attendance Tracker</h2> */}
+          {/* <h6 className="slogan">
+            Office Furniture Installation At The Snap Of Your Fingers!
+          </h6> */}
+        </div>
+      </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="flex-grow-0" id="basic-navbar-nav">
           {/* <Nav className="me-auto"> */}
