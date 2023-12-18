@@ -8,30 +8,33 @@ function Footer() {
   return (
     <Container
       fluid
-      className="bg-body-tertiary w-100"
+      className="bg-body-tertiary w-100 mt-4"
       // bg="dark"
       data-bs-theme="dark"
-      style={{
-        position: "fixed",
-        right: 0,
-        bottom: 0,
-        left: 0,
-      }}
+      // style={{
+      //   position: "fixed",
+      //   right: 0,
+      //   bottom: 0,
+      //   left: 0,
+      // }}
     >
       <Nav>
-        <Nav.Link className="col-6" as={Link} to="/terms-privacy">
+        <Nav.Link className="col-4" as={Link} to="/terms-privacy">
           Terms & Privacy
         </Nav.Link>
-        <Nav.Link className="col-6" as={Link} to="/contact-us">
+        <Col className="col-4 m-0 text-light">
+          CallaCodes LLC. &copy;{new Date().getFullYear()} 
+        </Col>
+        <Nav.Link className="col-4" as={Link} to="/contact-us">
           Contact Us
         </Nav.Link>
       </Nav>
 
-      <Row>
+      {/* <Row>
         <Col className="col-12 m-0 mb-2 text-light">
           CallaCodes LLC. &copy;{new Date().getFullYear()} 
         </Col>
-      </Row>
+      </Row> */}
     </Container>
   );
 }
