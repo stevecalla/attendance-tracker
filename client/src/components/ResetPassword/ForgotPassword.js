@@ -113,6 +113,9 @@ function ForgotPassword() {
       setShowAlert(true);
       setShowSuccess(true);
       setUserFormData({ email: "", password: "" });
+      setTimeout(() => {
+        window.location.assign(`/login`);
+      }, 2000);
     } catch (e) {
       // console.log("error2", user);
       setShowAlert(true);

@@ -139,16 +139,16 @@ const ResetPassword = () => {
       let refetchData = await refetch();
       console.log("refetch 99", refetchData);
       setPassword();
-      // window.location.assign(`/login`);
+      window.location.assign(`/login`);
     } catch (e) {
       console.error(e);
       // setShowAlert(true);
     }
 
-    // setPasswordFormData({
-    //   password: "",
-    //   passwordCheck: "",
-    // });
+    setPasswordFormData({
+      password: "",
+      passwordCheck: "",
+    });
   };
 
   const [display, setDisplay] = useState(true);
