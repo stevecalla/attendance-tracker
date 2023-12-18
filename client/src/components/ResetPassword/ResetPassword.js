@@ -33,21 +33,21 @@ const ResetPassword = () => {
   let expiration = new Date(decoded.exp * 1000); //Convert seconds to milliseconds
   const currentDate = new Date();
 
-  // const convertToMountainTime = (date) => {
-  //   return date.toLocaleString("en-US", {
-  //     timeZone: "America/Denver", // 'America/Denver' corresponds to Mountain Time
-  //   });
-  // };
+  const convertToMountainTime = (date) => {
+    return date.toLocaleString("en-US", {
+      timeZone: "America/Denver", // 'America/Denver' corresponds to Mountain Time
+    });
+  };
 
-  // console.log("Issue at:", convertToMountainTime(issuedAt));
-  // console.log("Expiration Time:", convertToMountainTime(expiration));
-  // console.log("Current Time:", convertToMountainTime(currentDate));
+  console.log("Issue at:", convertToMountainTime(issuedAt));
+  console.log("Expiration Time:", convertToMountainTime(expiration));
+  console.log("Current Time:", convertToMountainTime(currentDate));
 
   // SECTION //Render expiration notice if expiration < current date/time
   useEffect(() => {
     if (expiration < currentDate) {
       setTimeout(() => {
-        setTokenExpired(true); //render password change for 1 second then change to expired notice
+        setTokenExpired(true); //render reset expired modal
       }, 750);
       setTimeout(() => {
         window.location.assign(`/login`);
@@ -91,8 +91,8 @@ const ResetPassword = () => {
     // console.log('setpassword 55', passwordFormData.password);
     // console.log("userId", user)
     try {
-      // console.log('if statement', passwordFormData.password !== "");
-      if (passwordFormData.password !== "") {
+      // Only allow password change if new password & expiration > current date
+      if (passwordFormData.password !== "" && (expiration > currentDate)) {
         // console.log('if statement', passwordFormData);
         await updatePassword({
           variables: {
@@ -100,9 +100,12 @@ const ResetPassword = () => {
             password: passwordFormData.password,
           },
         });
+      } else {
+        console.log('Can not change password');
       }
+
     } catch (e) {
-      // console.error(e);
+      console.error(e);
     }
   };
 
