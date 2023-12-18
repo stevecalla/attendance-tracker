@@ -32,15 +32,15 @@ const ResetPassword = () => {
   let expiration = new Date(decoded.exp * 1000); //Convert seconds to milliseconds
   const currentDate = new Date();
 
-  const convertToMountainTime = (date) => {
-    return date.toLocaleString("en-US", {
-      timeZone: "America/Denver", // 'America/Denver' corresponds to Mountain Time
-    });
-  };
+  // const convertToMountainTime = (date) => {
+  //   return date.toLocaleString("en-US", {
+  //     timeZone: "America/Denver", // 'America/Denver' corresponds to Mountain Time
+  //   });
+  // };
 
-  console.log("Issue at:", convertToMountainTime(issuedAt));
-  console.log("Expiration Time:", convertToMountainTime(expiration));
-  console.log("Current Time:", convertToMountainTime(currentDate));
+  // console.log("Issue at:", convertToMountainTime(issuedAt));
+  // console.log("Expiration Time:", convertToMountainTime(expiration));
+  // console.log("Current Time:", convertToMountainTime(currentDate));
 
   // Render expiration notice if expiration < current date/time
   useEffect(() => {
