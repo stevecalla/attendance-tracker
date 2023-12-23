@@ -22,7 +22,7 @@ function Footer() {
         <Nav.Link className="col-4" as={Link} to="/terms-privacy">
           Terms & Privacy
         </Nav.Link>
-        <Col className="col-4 m-0 text-light">
+        <Col className="d-flex justify-content-center align-items-center col-4 m-0 text-light">
           CallaCodes LLC. &copy;{new Date().getFullYear()} 
         </Col>
         <Nav.Link className="col-4" as={Link} to="/contact-us">
