@@ -28,9 +28,9 @@ function FeaturesCarousel() {
         slide={false}
         // interval={false}
         variant="dark"
-        className="col-12 col-lg-9 d-flex justify-center"
+        className="col-12 col-lg-9 m-3"
         style={{
-          marginTop: "80px",
+          // marginTop: "80px",
         }}
       >
         {slides.map((variant, index) => (

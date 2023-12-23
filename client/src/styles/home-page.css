@@ -1,0 +1,29 @@
+.top-container{
+  margin-top: 75px;
+}
+
+.custom-background {
+  background-color: #F4F5F6;
+  border-radius: 5px;
+}
+
+.title {
+  margin-top: 50px;
+  font-family: 'Open Sans', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.title-color {
+  color: #1A73EA;
+}
+
+.subtitle {
+  font-family: 'Open Sans', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 500;
+}
+
+.static-image {
+  height: 375px;
+  /* width: 200px; */
+}

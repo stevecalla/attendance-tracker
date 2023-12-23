@@ -19,8 +19,8 @@ import { setContext } from "@apollo/client/link/context";
 
 import { Home } from "./pages/Home";
 import Login from "./pages/Login";
-import SignupForm from "./components/Login/SignupForm";
-import Message from "./components/Login/Message";
+// import SignupForm from "./components/Login/SignupForm";
+// import Message from "./components/Login/Message";
 import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
 import ForgotPassword from "./components/ResetPassword/ForgotPassword";
