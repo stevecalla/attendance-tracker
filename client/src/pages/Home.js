@@ -16,7 +16,7 @@ export const Home = () => {
     <>
       <Headerbar />
       {/* panel #1 */}
-      <Container className="top-container custom-background">
+      <Container className="top-container custom-background border">
         <Row>
           <Col>
             <h2 className="title mt-3">
@@ -102,16 +102,16 @@ export const Home = () => {
               </p>
             </div>
           </Col>
-          <Col className="d-flex justify-content-center align-items-center col-12 col-md-6">
+          <Col className="d-flex justify-content-center align-items-center col-12 col-md-6 mt-3 mb-3">
             <img
-              className="static-image mt-sm-3 mb-3"
+              className="static-image "
               src={appStatic}
               alt="Attendance Tracker"
             />
           </Col>
         </Row>
       </Container>
-      <Container className="d-flex justify-content-center mt-3 custom-background">
+      <Container className="d-flex justify-content-center mt-3 custom-background border">
         <FeaturesCarousel />
       </Container>
       <Footer />
