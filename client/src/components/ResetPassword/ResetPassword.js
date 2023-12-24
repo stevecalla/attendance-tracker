@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+
+import Headerbar from "../../components/homeAttendance/Navbar";
+
 import Auth from "../../utils/auth";
 import decode from "jwt-decode";
 import { useParams } from "react-router-dom";
@@ -163,7 +166,8 @@ const ResetPassword = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center">
+      <Headerbar />
+      <div className="d-flex justify-content-center" style={{ marginTop: "75px", }}>
         <div
           className="d-flex flex-column align-items-center mt-3"
           style={{
@@ -189,8 +193,8 @@ const ResetPassword = () => {
             noValidate
             validated={validated}
             onSubmit={handleFormSubmit}
-          className="mx-2 mb-1"
-          style={{ width: "80%" }}
+            className="mx-2 mb-1"
+            style={{ width: "80%" }}
           >
             <Form.Group style={{ marginTop: "25px" }}>
               <Form.Label htmlFor="password">Create new password</Form.Label>

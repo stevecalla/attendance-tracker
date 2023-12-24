@@ -1,6 +1,7 @@
 import React from "react";
 import Auth from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import Headerbar from "../components/homeAttendance/Navbar";
 import LoginForm from "../components/Login/LoginForm";
 import SignupForm from "../components/Login/SignupForm";
 import Message from "../components/Login/Message";
@@ -18,6 +19,8 @@ const Login = ({
   let navigate = useNavigate();
 
   return (
+    <>
+    <Headerbar />
     <Container style={{ marginTop: "85px" }}>
       <div className="d-flex flex-column align-items-center mt-3 overflow-auto">
         <div
@@ -77,6 +80,7 @@ const Login = ({
         </div>
       </div>
     </Container>
+    </>
   );
 };
 
