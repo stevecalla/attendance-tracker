@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import Headerbar from "../../components/homeAttendance/Navbar";
+import Footer from "../../components/homeAttendance/Footer";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
@@ -304,6 +305,8 @@ function ForgotPassword() {
           )}
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

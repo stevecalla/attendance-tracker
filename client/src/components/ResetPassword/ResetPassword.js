@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Headerbar from "../../components/homeAttendance/Navbar";
+import Footer from "../../components/homeAttendance/Footer";
 
 import Auth from "../../utils/auth";
 import decode from "jwt-decode";
@@ -292,6 +293,8 @@ const ResetPassword = () => {
           {tokenExpired && <StaticModal />}
         </div>
       </div>
+
+      <Footer />
     </>
   );
 };

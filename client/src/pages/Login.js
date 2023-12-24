@@ -5,6 +5,7 @@ import Headerbar from "../components/homeAttendance/Navbar";
 import LoginForm from "../components/Login/LoginForm";
 import SignupForm from "../components/Login/SignupForm";
 import Message from "../components/Login/Message";
+import Footer from "../components/homeAttendance/Footer";
 import { CheckAsset } from "../components/Login/CheckAsset";
 
 import Container from "react-bootstrap/Container";
@@ -80,6 +81,7 @@ const Login = ({
         </div>
       </div>
     </Container>
+    <Footer />
     </>
   );
 };
