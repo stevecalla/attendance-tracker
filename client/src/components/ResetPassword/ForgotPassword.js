@@ -23,7 +23,7 @@ import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
 // import useEmailSend from "../../components/EmailSend";
 
-import { Form, Button, Alert, Container } from "react-bootstrap";
+import { Form, Button, Alert, Container, Col } from "react-bootstrap";
 import "../../styles/button-home.css";
 
 function ForgotPassword() {
@@ -220,7 +220,7 @@ function ForgotPassword() {
       <Headerbar />
       <div style={{ height: "83vh" }}>
       <Container className="d-flex justify-content-center" style={{ marginTop: "75px" }}>
-        <div
+        <Col
           className="d-flex flex-column align-items-center mt-3"
           style={{
             border: "1px solid black",
@@ -304,7 +304,7 @@ function ForgotPassword() {
               )}
             </Alert>
           )}
-        </div>
+        </Col>
       </Container>
       </div>
 

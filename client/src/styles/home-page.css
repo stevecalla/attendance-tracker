@@ -4,11 +4,11 @@
 
 .custom-background {
   background-color: #F4F5F6;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .title {
-  margin-top: 50px;
+  /* margin-top: 50px; */
   font-family: 'Open Sans', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 700;
   letter-spacing: -1px;
@@ -25,5 +25,4 @@
 
 .static-image {
   height: 375px;
-  /* width: 200px; */
 }
