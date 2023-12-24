@@ -73,7 +73,7 @@ export const Home = () => {
             </div>
           </Col>
           <Col className="col-12 col-md-6 custom-padding-right">
-            <div className="d-flex flex-column align-items-center border custom-border mt-2 mt-md-0 w-100">
+            <div className="d-flex flex-column align-items-center border custom-border-fancy custom-background mt-2 mt-md-0 w-100">
               <img
                 className="static-image my-2"
                 src={appStatic}
