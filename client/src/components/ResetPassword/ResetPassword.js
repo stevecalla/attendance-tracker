@@ -14,7 +14,7 @@ import { UPDATE_PASSWORD } from "../../utils/mutations";
 import CountdownTimer from "../Timer/countDown";
 import StaticModal from "../Modal/StaticModal";
 
-import { Form, Button, InputGroup } from "react-bootstrap";
+import { Form, Button, InputGroup, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../styles/button-home.css";
 
@@ -168,132 +168,138 @@ const ResetPassword = () => {
   return (
     <>
       <Headerbar />
-      <div className="d-flex justify-content-center" style={{ marginTop: "75px", }}>
-        <div
-          className="d-flex flex-column align-items-center mt-3"
-          style={{
-            border: "1px solid black",
-            borderRadius: "10px",
-            margin: "0px 10px",
-            maxWidth: "600px",
-          }}
+      <div style={{ height: "85vh" }}>
+        <Container
+          className="d-flex justify-content-center"
+          style={{ marginTop: "75px" }}
         >
-          <h2 className="mt-3">Reset Password</h2>
-          <p
+          <div
+            className="d-flex flex-column align-items-center mt-3"
             style={{
+              border: "1px solid black",
+              borderRadius: "10px",
               margin: "0px 10px",
-              padding: "0px 7px",
-              textWrap: "pretty",
-              textAlign: "center",
+              maxWidth: "600px",
             }}
           >
-            Enter a new password for your account{" "}
-          </p>
-
-          <Form
-            noValidate
-            validated={validated}
-            onSubmit={handleFormSubmit}
-            className="mx-2 mb-1"
-            style={{ width: "80%" }}
-          >
-            <Form.Group style={{ marginTop: "25px" }}>
-              <Form.Label htmlFor="password">Create new password</Form.Label>
-              <InputGroup className="mb-3">
-                <Form.Control
-                  type={showHidePassword}
-                  placeholder="Password (5 character minimum)"
-                  minLength="5"
-                  name="password"
-                  onChange={handleInputChange}
-                  value={passwordFormData.password}
-                  required
-                  autoComplete="true"
-                  style={{ borderRight: "none" }}
-                />
-                <Form.Control.Feedback type="invalid">
-                  <p>Password is required!</p>
-                </Form.Control.Feedback>
-                <InputGroup.Text
-                  id="basic-addon1"
-                  style={{
-                    borderRadius: "0px 4px 4px 0px",
-                    background: "white",
-                    borderLeft: "none",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon="fa-eye"
-                    onClick={() => handlePassClick()}
-                    style={display ? isDisplayed : isNotDisplayed}
-                  />
-                  <FontAwesomeIcon
-                    icon="fa-eye-slash"
-                    onClick={() => handlePassClick()}
-                    style={!display ? isDisplayed : isNotDisplayed}
-                  />
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label htmlFor="passwordCheck">Re-enter password</Form.Label>
-              <InputGroup className="mb-3">
-                <Form.Control
-                  type={showHidePassword}
-                  placeholder="password"
-                  name="passwordCheck"
-                  onChange={handleInputChange}
-                  value={passwordFormData.passwordCheck}
-                  required
-                  autoComplete="true"
-                  style={{ borderRight: "none" }}
-                />
-                <Form.Control.Feedback type="invalid">
-                  <p>Password is required!</p>
-                </Form.Control.Feedback>
-                <InputGroup.Text
-                  id="basic-addon2"
-                  style={{
-                    borderRadius: "0px 4px 4px 0px",
-                    background: "white",
-                    borderLeft: "none",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon="fa-eye"
-                    onClick={() => handlePassClick()}
-                    style={display ? isDisplayed : isNotDisplayed}
-                  />
-                  <FontAwesomeIcon
-                    icon="fa-eye-slash"
-                    onClick={() => handlePassClick()}
-                    style={!display ? isDisplayed : isNotDisplayed}
-                  />
-                </InputGroup.Text>
-              </InputGroup>
-            </Form.Group>
-
-            <Button
-              disabled={
-                !(
-                  passwordFormData.password !== "" &&
-                  passwordFormData.password === passwordFormData.passwordCheck
-                )
-              }
-              className="mb-3 submit-button-style"
-              type="submit"
-              variant="success"
+            <h2 className="mt-3">Reset Password</h2>
+            <p
+              style={{
+                margin: "0px 10px",
+                padding: "0px 7px",
+                textWrap: "pretty",
+                textAlign: "center",
+              }}
             >
-              Submit
-            </Button>
-          </Form>
+              Enter a new password for your account{" "}
+            </p>
 
-          {/* Render static modal if tokenExpired */}
-          {tokenExpired && <StaticModal />}
-        </div>
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleFormSubmit}
+              className="mx-2 mb-1"
+              style={{ width: "80%" }}
+            >
+              <Form.Group style={{ marginTop: "25px" }}>
+                <Form.Label htmlFor="password">Create new password</Form.Label>
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    type={showHidePassword}
+                    placeholder="Password (5 character minimum)"
+                    minLength="5"
+                    name="password"
+                    onChange={handleInputChange}
+                    value={passwordFormData.password}
+                    required
+                    autoComplete="true"
+                    style={{ borderRight: "none" }}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    <p>Password is required!</p>
+                  </Form.Control.Feedback>
+                  <InputGroup.Text
+                    id="basic-addon1"
+                    style={{
+                      borderRadius: "0px 4px 4px 0px",
+                      background: "white",
+                      borderLeft: "none",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon="fa-eye"
+                      onClick={() => handlePassClick()}
+                      style={display ? isDisplayed : isNotDisplayed}
+                    />
+                    <FontAwesomeIcon
+                      icon="fa-eye-slash"
+                      onClick={() => handlePassClick()}
+                      style={!display ? isDisplayed : isNotDisplayed}
+                    />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label htmlFor="passwordCheck">
+                  Re-enter password
+                </Form.Label>
+                <InputGroup className="mb-3">
+                  <Form.Control
+                    type={showHidePassword}
+                    placeholder="password"
+                    name="passwordCheck"
+                    onChange={handleInputChange}
+                    value={passwordFormData.passwordCheck}
+                    required
+                    autoComplete="true"
+                    style={{ borderRight: "none" }}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    <p>Password is required!</p>
+                  </Form.Control.Feedback>
+                  <InputGroup.Text
+                    id="basic-addon2"
+                    style={{
+                      borderRadius: "0px 4px 4px 0px",
+                      background: "white",
+                      borderLeft: "none",
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon="fa-eye"
+                      onClick={() => handlePassClick()}
+                      style={display ? isDisplayed : isNotDisplayed}
+                    />
+                    <FontAwesomeIcon
+                      icon="fa-eye-slash"
+                      onClick={() => handlePassClick()}
+                      style={!display ? isDisplayed : isNotDisplayed}
+                    />
+                  </InputGroup.Text>
+                </InputGroup>
+              </Form.Group>
+
+              <Button
+                disabled={
+                  !(
+                    passwordFormData.password !== "" &&
+                    passwordFormData.password === passwordFormData.passwordCheck
+                  )
+                }
+                className="mb-3 submit-button-style"
+                type="submit"
+                variant="success"
+              >
+                Submit
+              </Button>
+            </Form>
+
+            {/* Render static modal if tokenExpired */}
+            {tokenExpired && <StaticModal />}
+          </div>
+        </Container>
       </div>
-
       <Footer />
     </>
   );

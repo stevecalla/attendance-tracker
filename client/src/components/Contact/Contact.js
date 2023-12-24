@@ -22,6 +22,7 @@ function ContactUs() {
         className="d-flex justify-content-center"
         style={{
           marginTop: "100px",
+          height: "80vh",
         }}
       >
         <p>Contact us at: </p>
