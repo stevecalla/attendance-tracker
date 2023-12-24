@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../styles/home-page.css";
+import "../styles/min-width.css";
 // import background from "../assets/images/BoulderBackgroundImage.jpeg";
 import appStatic from "../assets/images/homePage-app-static.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +17,7 @@ export const Home = () => {
     <>
       <Headerbar />
       {/* panel #1 */}
-      <Container className="d-flex justify-content-center top-container px-3">
+      <Container className="d-flex justify-content-center top-container px-3 min-width">
         <Col className="d-flex flex-column align-items-center w-100 custom-background border px-4">
           <h2 className="title mt-3">
             Attendance Tracking.{" "}
@@ -39,7 +40,7 @@ export const Home = () => {
         {/* </Row> */}
       </Container>
       {/* panel #2 */}
-      <Container className="mt-3">
+      <Container className="mt-3  min-width">
         <Row className="h-100 px-3">
           <Col
             className="d-flex flex-column align-items-center col-12 col-md-6 custom-background border"
@@ -115,7 +116,7 @@ export const Home = () => {
           </Col>
         </Row>
       </Container>
-      <Container className="mt-3 px-3">
+      <Container className="mt-3 px-3 min-width">
         <Col className="d-flex flex-column align-items-center w-100 custom-background border">
           <FeaturesCarousel />
         </Col>

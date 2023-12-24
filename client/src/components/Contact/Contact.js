@@ -1,6 +1,7 @@
 import Headerbar from "../homeAttendance/Navbar";
 import Footer from "../homeAttendance/Footer";
 // import Button from "react-bootstrap/Button";
+import "../../styles/min-width.css";
 
 function ContactUs() {
   const handleShiftEmail = (e) => {
@@ -19,7 +20,7 @@ function ContactUs() {
     <>
       <Headerbar />
       <div
-        className="d-flex justify-content-center"
+        className="d-flex justify-content-center min-width"
         style={{
           marginTop: "100px",
           height: "80vh",

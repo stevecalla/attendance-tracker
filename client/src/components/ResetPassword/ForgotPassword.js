@@ -25,6 +25,7 @@ import emailMask from "text-mask-addons/dist/emailMask";
 
 import { Form, Button, Alert, Container, Col } from "react-bootstrap";
 import "../../styles/button-home.css";
+import "../../styles/min-width.css";
 
 function ForgotPassword() {
   const [tempPassword] = useState(`${process.env.REACT_APP_RESET_PASSWORD}`);
@@ -218,7 +219,7 @@ function ForgotPassword() {
   return (
     <>
       <Headerbar />
-      <div style={{ height: "83vh" }}>
+      <div className="min-width" style={{ height: "83vh" }}>
       <Container className="d-flex justify-content-center" style={{ marginTop: "75px" }}>
         <Col
           className="d-flex flex-column align-items-center mt-3"

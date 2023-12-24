@@ -1,22 +1,17 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
-import Row from "react-bootstrap/Row";
+// import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import "../../styles/min-width.css";
 
 function Footer() {
   return (
     <Container
       fluid
-      className="bg-body-tertiary w-100 mt-4"
+      className="bg-body-tertiary w-100 mt-4 min-width"
       // bg="dark"
       data-bs-theme="dark"
-      // style={{
-      //   position: "fixed",
-      //   right: 0,
-      //   bottom: 0,
-      //   left: 0,
-      // }}
     >
       <Nav>
         <Nav.Link className="col-4" as={Link} to="/terms-privacy">

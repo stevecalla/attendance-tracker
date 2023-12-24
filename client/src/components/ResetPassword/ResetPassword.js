@@ -17,6 +17,7 @@ import StaticModal from "../Modal/StaticModal";
 import { Form, Button, InputGroup, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../styles/button-home.css";
+import "../../styles/min-width.css";
 
 const ResetPassword = () => {
   const [validated] = useState(false);
@@ -168,7 +169,7 @@ const ResetPassword = () => {
   return (
     <>
       <Headerbar />
-      <div style={{ height: "85vh" }}>
+      <div className="min-width" style={{ height: "85vh" }}>
         <Container
           className="d-flex justify-content-center"
           style={{ marginTop: "75px" }}

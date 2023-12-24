@@ -10,6 +10,7 @@ import { CheckAsset } from "../components/Login/CheckAsset";
 
 import Container from "react-bootstrap/Container";
 import "../styles/button-home.css";
+import "../styles/min-width.css";
 
 const Login = ({
   renderPanel,
@@ -22,7 +23,7 @@ const Login = ({
   return (
     <>
     <Headerbar />
-    <Container style={{ marginTop: "85px" }}>
+    <Container className="min-width" style={{ marginTop: "85px"}}>
       <div className="d-flex flex-column align-items-center mt-3 overflow-auto">
         <div
           style={{

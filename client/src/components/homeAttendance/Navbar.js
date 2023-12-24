@@ -5,6 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
 import Auth from "../../utils/auth";
 import { CheckAsset } from "../../components/Login/CheckAsset";
+import "../../styles/min-width.css";
 
 function Headerbar() {
   return (
@@ -12,9 +13,12 @@ function Headerbar() {
       fixed="top"
       // sticky="top"
       expand="md"
-      className="bg-body-tertiary mb-3"
+      className="bg-body-tertiary mb-3 min-width"
       bg="dark"
       data-bs-theme="dark"
+      // style={{
+      //   minWidth: "350px",
+      // }}
     >
       <Container className="">
         <Navbar.Brand
