@@ -11,6 +11,7 @@ import "../styles/min-width.css";
 // import background from "../assets/images/BoulderBackgroundImage.jpeg";
 import appStatic from "../assets/images/homePage-app-static.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Check from "../components/homeAttendance/Check";
 
 export const Home = () => {
   return (
@@ -44,75 +45,34 @@ export const Home = () => {
       {/* panel #2 */}
       <Container className="mt-3 min-width">
         <Row className="row">
-          <Col
-            className="col-12 col-md-6 custom-padding-left"
-            // style={{ padding: "0px 0.5rem 0px 1rem" }}
-          >
+          <Col className="col-12 col-md-6 custom-padding-left">
             <div className="d-flex flex-column align-items-center custom-border  w-100 h-100">
               <h2 className="title mt-3">Powerful Features</h2>
               <div className="d-flex flex-column text-start w-75 subtitle">
                 <p className="">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-check"
-                    size="lg"
-                    className="me-2"
-                    style={{
-                      color: "green",
-                    }}
-                  />
+                  <Check />
                   Mark present or absent
                 </p>
                 <p className="">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-check"
-                    size="lg"
-                    className="me-2"
-                    style={{
-                      color: "green",
-                    }}
-                  />
+                  <Check />
                   Fuzzy logic match
                 </p>
                 <p className="">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-check"
-                    size="lg"
-                    className="me-2"
-                    style={{
-                      color: "green",
-                    }}
-                  />
+                  <Check />
                   Search, filter, delete
                 </p>
                 <p className="">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-check"
-                    size="lg"
-                    className="me-2"
-                    style={{
-                      color: "green",
-                    }}
-                  />
+                  <Check />
                   Copy to clipboard
                 </p>
                 <p className="">
-                  <FontAwesomeIcon
-                    icon="fa-solid fa-check"
-                    size="lg"
-                    className="me-2"
-                    style={{
-                      color: "green",
-                    }}
-                  />
+                  <Check />
                   Save roster
                 </p>
               </div>
             </div>
           </Col>
-          <Col
-            className="col-12 col-md-6 custom-padding-right"
-            // style={{ padding: "0px 1rem 0px 0.5rem" }}
-          >
+          <Col className="col-12 col-md-6 custom-padding-right">
             <div className="d-flex flex-column align-items-center border custom-border mt-2 mt-md-0 w-100">
               <img
                 className="static-image my-2"
@@ -124,6 +84,7 @@ export const Home = () => {
         </Row>
       </Container>
 
+      {/* panel #3 */}
       <Container className="mt-3 px-3 min-width">
         <Col className="d-flex flex-column align-items-center w-100 custom-background custom-border">
           <FeaturesCarousel />
