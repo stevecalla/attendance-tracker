@@ -1,3 +1,7 @@
+html {
+  min-width: 350px;
+}
+
 .top-container{
   margin-top: 75px;
 }
