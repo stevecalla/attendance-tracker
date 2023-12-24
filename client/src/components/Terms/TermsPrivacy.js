@@ -13,7 +13,7 @@ function TermsPrivacy() {
   return (
     <>
       <Headerbar />
-      <div className="min-width" style={{ height: "80vh" }}>
+      <div className="min-width" style={{ height: "85vh" }}>
         <Accordion
           className="container"
           style={{
@@ -23,7 +23,7 @@ function TermsPrivacy() {
         >
           <Accordion.Item eventKey="0">
             <Accordion.Header>Privacy Policy</Accordion.Header>
-            <Accordion.Body>
+            <Accordion.Body style={{ height: "65vh", overflow: "scroll" }}>
               <p>Privacy Policy</p>
               <main className="container text-start">
                 <p>
@@ -229,7 +229,7 @@ function TermsPrivacy() {
           </Accordion.Item>
           <Accordion.Item eventKey="1">
             <Accordion.Header>Terms & Conditions</Accordion.Header>
-            <Accordion.Body>
+            <Accordion.Body style={{ height: "65vh", overflow: "scroll" }}>
               <p>Terms & Conditions</p>
               <main className="container text-start">
                 {/* <h2>Who we are and how to contact us</h2> */}
