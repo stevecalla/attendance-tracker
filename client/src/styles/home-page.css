@@ -4,7 +4,13 @@
 
 .custom-background {
   background-color: #F4F5F6;
+}
+
+.custom-border {
   border-radius: 10px;
+  border-color: #dee2e6;
+  border-width: 1px;
+  border-style: solid;
 }
 
 .title {
@@ -25,4 +31,23 @@
 
 .static-image {
   height: 375px;
+}
+
+.custom-padding-left {
+  padding: 0px 0.5rem 0px 1rem!important;
+}
+
+.custom-padding-right {
+  padding: 0px 1rem 0px 0.5rem!important;
+}
+
+/* MEDIA QUERY */
+@media only screen and (max-width: 767px) {
+  .custom-padding-left {
+    padding: 0px 1rem 0px 1rem!important;
+  }
+  
+  .custom-padding-right {
+    padding: 0px 1rem 0px 1rem!important;
+  }
 }
