@@ -1,5 +1,7 @@
 import React from "react";
+
 import Headerbar from "../components/homeAttendance/Navbar";
+import Check from "../components/homeAttendance/Check";
 import FeaturesCarousel from "../components/homeAttendance/FeaturesCarousel";
 import Footer from "../components/homeAttendance/Footer";
 
@@ -8,10 +10,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../styles/home-page.css";
 import "../styles/min-width.css";
-// import background from "../assets/images/BoulderBackgroundImage.jpeg";
+
 import appStatic from "../assets/images/homePage-app-static.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Check from "../components/homeAttendance/Check";
 
 export const Home = () => {
   return (
