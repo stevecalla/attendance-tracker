@@ -26,7 +26,32 @@ const resolvers = {
 
     //all users, sort by lastName
     users: async (parent, args, context) => {
-      return User.find().sort({ lastName: -1 }).populate("emailSend");
+      // return User.find().sort({ lastName: -1 }).populate("emailSend");
+
+      
+      const users = await User.find()
+      .sort({ lastName: -1 })
+      .populate("emailSend")
+      .populate("zoomUserList");
+      // .populate({ path: 'zoomUserList', select: 'zoomUserList' })
+      // console.log(users);
+      
+      // users.map(user => {
+      //   // console.log(user.setTest(user.zoomUserList));
+      //   // console.log(user.zoomUserList);
+      //   user.setTest(user.zoomUserList)
+      // });
+
+
+      const updatedUsers = users.map((user) => ({
+        ...user._doc,
+        zoomUserList: [...user.zoomUserList],
+      }));
+      // console.log(updatedUsers);
+      // console.log(updatedUsers[1].zoomUserList);
+
+      return updatedUsers; //this will return users with the zoomUserList virtual
+      // return users;
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -94,9 +119,13 @@ const resolvers = {
 
     //section userZoom
     //all users, sort by lastName
-    usersZoom: async (parent, args, context) => {
-      return UserZoom.find().sort({ lastName: -1 });
+    userZoom: async (parent, args, context) => {
+      return UserZoom.find().sort({ lastName: -1 }).populate("user");
     },
+
+    // zoomInfoByZoomId: async (parent, { zoomId }, context) => {
+    //   return Employee.findOne({ zoomId: zoomId })
+    // },
 
     //section hour queries
     hours: async (parent, args, context) => {
@@ -278,7 +307,7 @@ const resolvers = {
     forgotPassword: async (parent, { email, password }) => {
       // const employee = await Employee.findOne({ email });
       const user = await User.findOne({ email });
-      console.log('resolver forgot password=', user);
+      console.log("resolver forgot password=", user);
 
       if (!user) {
         throw new AuthenticationError("Email address not found.");
@@ -292,7 +321,7 @@ const resolvers = {
 
     updatePassword: async (parent, { _id, password }, context) => {
       // if (context.user) {
-      console.log('resolver update password', _id, password);
+      console.log("resolver update password", _id, password);
 
       return User.findOneAndUpdate(
         { _id },
@@ -318,7 +347,7 @@ const resolvers = {
 
       // create the record in the database with the mail maildetails and response
       const { createEmailRecord } = require("../api/email/");
-      let createAndSendEmail = await createEmailRecord(args, sendResponse)
+      let createAndSendEmail = await createEmailRecord(args, sendResponse);
 
       return createAndSendEmail;
     },

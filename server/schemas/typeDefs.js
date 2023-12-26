@@ -14,6 +14,7 @@ const typeDefs = gql`
     isDisplayable: Boolean
     emailSend: [EmailSend]
     userZoom: [UserZoom]
+    test: [UserZoom]
   }
 
   type EmailSend {
@@ -58,7 +59,7 @@ const typeDefs = gql`
     jobTitle: String
     location: String
     loginTypes: [Int]
-    phone: [PhoneNumber]
+    phoneNumbers: [PhoneNumber]
     zoomCreatedAt: String
     user: User
   }
@@ -138,7 +139,7 @@ const typeDefs = gql`
     userByEmail(email: String!): User
     #user(email: String!): User
 
-    usersZoom: [UserZoom]!
+    userZoom: [UserZoom]!
     #userZoneByEmail(email: String!): UserZoom
     #userZoneByEmail(zoomId: String!): UserZoom
 
