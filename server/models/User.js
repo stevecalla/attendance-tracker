@@ -48,7 +48,7 @@ const userSchema = new Schema(
     },
     userZoom: {
       type: Schema.Types.Array,
-      ref: "EmailSend",
+      ref: "UserZoom",
     },
   },
   {

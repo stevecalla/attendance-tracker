@@ -42,7 +42,7 @@ const userZoomSchema = new Schema(
     roleName: {
       type: String,
     },
-    timezone: {
+    timeZone: {
       type: String,
       trim: true,
     },

@@ -5,6 +5,7 @@ const {
   Employee,
   Hour,
   User,
+  UserZoom,
   EmailSend,
 } = require("../models");
 const { signToken } = require("../utils/auth");
@@ -89,6 +90,12 @@ const resolvers = {
       return User.findOne({ email: email });
       // }
       // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    //section userZoom
+    //all users, sort by lastName
+    usersZoom: async (parent, args, context) => {
+      return UserZoom.find().sort({ lastName: -1 });
     },
 
     //section hour queries
