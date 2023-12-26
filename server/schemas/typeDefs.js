@@ -32,6 +32,35 @@ const typeDefs = gql`
     user: User
   }
 
+  type PhoneNumber {
+    country: String!
+    code: String!
+    number: String!
+    verified: Boolean!
+    label: String
+  }
+
+  type UserZoom {
+    _id: ID
+    zoomId: String
+    firstName: String
+    lastName: String
+    displayName: String
+    email: String
+    roleName: String
+    timeZone: String
+    lastClientVersion: String
+    picUrl: String
+    language: String
+    zoomStatus: String
+    jobTitle: String
+    location: String
+    loginTypes: [Int]
+    phone: [PhoneNumber]
+    zoomCreatedAt: String
+    user: User
+  }
+
   type Employee {
     _id: ID
     email: String

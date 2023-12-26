@@ -33,7 +33,8 @@ export const Home = () => {
             type="button"
             className="btn btn-primary btn-lg my-3"
             // fix add install link
-            href="http://www.google.com"
+            // href="http://www.google.com"
+            href="https://koala-huge-goldfish.ngrok-free.app/api/zoomapp/install"
             target="_blank"
             rel="noreferrer"
           >

@@ -46,6 +46,10 @@ const userSchema = new Schema(
       type: Schema.Types.Array,
       ref: "EmailSend",
     },
+    userZoom: {
+      type: Schema.Types.Array,
+      ref: "EmailSend",
+    },
   },
   {
     timestamps: true,
