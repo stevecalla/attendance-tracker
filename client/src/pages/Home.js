@@ -12,6 +12,7 @@ import "../styles/home-page.css";
 import "../styles/min-width.css";
 
 import appStatic from "../assets/images/homePage-app-static.png";
+import appGif from "../assets/images/homePage-app.gif";
 
 export const Home = () => {
   return (
@@ -76,8 +77,10 @@ export const Home = () => {
             <div className="d-flex flex-column align-items-center border custom-border-fancy custom-background mt-2 mt-md-0 w-100">
               <img
                 className="static-image my-2"
+                // src={appGif}
                 src={appStatic}
-                alt="Attendance Tracker"
+                alt="Demo of Attendance Tracker"
+                fetchpriority="high"
               />
             </div>
           </Col>
