@@ -79,16 +79,9 @@ const userZoomSchema = new Schema(
   },
   {
     timestamps: true,
-    useCreateIndex: true,
   },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-  }
 );
 
 const UserZoom = model("UserZoom", userZoomSchema);
 
 module.exports = UserZoom;
-

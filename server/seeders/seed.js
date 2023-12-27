@@ -1,6 +1,4 @@
 const db = require("../config/connection");
-const { UserZoom } = require("../models");
-const userZoomSeeds = require("./userZoomSeeds.json");
 const { Schedule } = require("../models");
 const scheduleSeeds = require("./scheduleSeeds.json");
 const { Client } = require("../models");
@@ -11,21 +9,23 @@ const { Hour } = require("../models");
 const hourSeeds = require("./hourSeeds.json");
 const { User } = require("../models");
 const userSeeds = require("./userSeeds.json");
+const { UserZoom } = require("../models");
+const userZoomSeeds = require("./userZoomSeeds.json");
 const { EmailSend } = require("../models");
 const emailSendSeeds = require("./emailSendSeeds.json");
 
 db.once("open", async () => {
   try {
-    await UserZoom.deleteMany({});
     await User.deleteMany({});
+    await UserZoom.deleteMany({});
     await EmailSend.deleteMany({});
     await Schedule.deleteMany({});
     await Client.deleteMany({});
     await Employee.deleteMany({});
     await Hour.deleteMany({});
 
-    await UserZoom.create(userZoomSeeds);
     await User.create(userSeeds);
+    await UserZoom.create(userZoomSeeds);
     await EmailSend.create(emailSendSeeds);
     await Schedule.create(scheduleSeeds);
     await Client.create(clientSeeds);

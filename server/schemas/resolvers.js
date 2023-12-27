@@ -26,32 +26,10 @@ const resolvers = {
 
     //all users, sort by lastName
     users: async (parent, args, context) => {
-      // return User.find().sort({ lastName: -1 }).populate("emailSend");
-
-      
-      const users = await User.find()
-      .sort({ lastName: -1 })
-      .populate("emailSend")
-      .populate("zoomUserList");
-      // .populate({ path: 'zoomUserList', select: 'zoomUserList' })
-      // console.log(users);
-      
-      // users.map(user => {
-      //   // console.log(user.setTest(user.zoomUserList));
-      //   // console.log(user.zoomUserList);
-      //   user.setTest(user.zoomUserList)
-      // });
-
-
-      const updatedUsers = users.map((user) => ({
-        ...user._doc,
-        zoomUserList: [...user.zoomUserList],
-      }));
-      // console.log(updatedUsers);
-      // console.log(updatedUsers[1].zoomUserList);
-
-      return updatedUsers; //this will return users with the zoomUserList virtual
-      // return users;
+      return User.find()
+        .sort({ lastName: -1 })
+        .populate("emailSend")
+        .populate("userZoom");
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -119,13 +97,9 @@ const resolvers = {
 
     //section userZoom
     //all users, sort by lastName
-    userZoom: async (parent, args, context) => {
+    userZooms: async (parent, args, context) => {
       return UserZoom.find().sort({ lastName: -1 }).populate("user");
     },
-
-    // zoomInfoByZoomId: async (parent, { zoomId }, context) => {
-    //   return Employee.findOne({ zoomId: zoomId })
-    // },
 
     //section hour queries
     hours: async (parent, args, context) => {
