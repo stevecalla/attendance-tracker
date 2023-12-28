@@ -212,7 +212,7 @@ module.exports = {
 
       //fix start
       // create the userZoom record in the database
-      const { findOneAndUpsertNewUserMutation } = require("../api/userZoom/");
+      const { findOneAndUpsertNewUserMutation } = require("../userZoom/");
       let createUserZoomAccount = await findOneAndUpsertNewUserMutation(
         userResponse.data
       );
