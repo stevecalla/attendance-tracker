@@ -316,7 +316,7 @@ const resolvers = {
 
       // send the email; return the email details
       let dev = false;
-      // let dev = true;
+      // let dev = true; //fix set to dev = false in production
       let sendResponse = await sendMail(mailOptions, dev);
 
       // create the record in the database with the mail maildetails and response
