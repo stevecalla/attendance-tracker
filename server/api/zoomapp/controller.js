@@ -138,7 +138,7 @@ module.exports = {
     console.log("2. Redirect url to authenticate to Zoom:", redirectUrl, "\n");
 
     // 3. Redirect to url - the user can authenticate and authorize the app scopes securely on zoom.us
-    console.log("3. Redirecting to redirect url", "\n");
+    console.log("3. Redirecting to redirect url", "\n", redirectUrl);
     res.redirect(redirectUrl);
   },
 
@@ -212,8 +212,8 @@ module.exports = {
 
       //fix start
       // create the userZoom record in the database
-      const { findOneAndUpsertNewUserMutation } = require("../userZoom/");
-      let createUserZoomAccount = await findOneAndUpsertNewUserMutation(
+      const { findOneAndUpsertNewZoomUserMutation } = require("../userZoom/");
+      let createUserZoomAccount = await findOneAndUpsertNewZoomUserMutation(
         userResponse.data
       );
       console.log(
@@ -253,6 +253,15 @@ module.exports = {
     } catch (error) {
       return next(error);
     }
+  },
+
+  //FIX //ADD UNINSTALL
+  // SECTION //UNINSTALL
+  async uninstall(req, res, next) {
+    console.log("===============");
+    console.log("Request made to /email-server route");
+    res.json({ 'hello': 'hello' });
+    next();
   },
 
   // ZOOM APP HOME URL HANDLER ==================================================

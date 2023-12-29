@@ -1,21 +1,21 @@
 [
   {
     "_id": "658b5ea6b64d0454f3978319",
-    "zoomId": "9U4fVlbMRsKuQgOf1kpYBg",
-    "firstName": "Steve",
-    "lastName": "Calla",
-    "displayName": "Steve Calla",
+    "zoom_id": "9U4fVlbMRsKuQgOf1kpYBg",
+    "first_name": "Steve",
+    "last_name": "Calla",
+    "display_name": "Steve Calla",
     "email": "callasteven@gmail.com",
-    "roleName": "Owner",
-    "timeZone": "America/Denver",
-    "lastClientVersion": "5.16.10.25689(mac)",
-    "picUrl": "https://us04web.zoom.us/p/9U4fVlbMRsKuQgOf1kpYBg/f15b3e8c-9374-4f1e-9185-0b39a2e2c234-7189",
+    "role_name": "Owner",
+    "timezone": "America/Denver",
+    "last_client_version": "5.16.10.25689(mac)",
+    "pic_url": "https://us04web.zoom.us/p/9U4fVlbMRsKuQgOf1kpYBg/f15b3e8c-9374-4f1e-9185-0b39a2e2c234-7189",
     "language": "en-US",
-    "zoomStatus": "active",
-    "jobTitle": "",
+    "zoom_status": "active",
+    "job_title": "",
     "location": "Boulder, CO",
-    "loginTypes": [1, 100],
-    "phoneNumbers": [
+    "login_types": [1, 100],
+    "phone_numbers": [
       {
         "country": "US",
         "code": "+1",
@@ -24,7 +24,8 @@
         "label": ""
       }
     ],
-    "zoomCreatedAt": "2020-10-02T14:26:57Z",
+    "user_created_at": "2020-10-02T14:26:57Z",
+    "is_installed": true,
     "user": "6498fb54494aa98f85992da5"
   }
 ]

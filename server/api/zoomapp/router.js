@@ -5,6 +5,7 @@ router
   .use('/proxy', controller.proxy)
   // .use('/sockjs-node', controller.proxy)
   .get('/install', controller.install)
+  .get('/uninstall', controller.uninstall)
   .get('/auth', controller.auth)
   .get('/home', controller.home)
   .get('/authorize', controller.inClientAuthorize)

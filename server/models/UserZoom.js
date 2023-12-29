@@ -20,57 +20,61 @@ const phoneNumberSchema = new Schema({
 
 const userZoomSchema = new Schema(
   {
-    zoomId: {
+    zoom_id: {
       type: String,
     },
-    firstName: {
-      type: String,
-      trim: true,
-    },
-    lastName: {
+    first_name: {
       type: String,
       trim: true,
     },
-    displayName: {
+    last_name: {
+      type: String,
+      trim: true,
+    },
+    display_name: {
       type: String,
       trim: true,
     },
     email: {
       type: String,
     },
-    roleName: {
+    role_name: {
       type: String,
     },
-    timeZone: {
+    timezone: {
       type: String,
       trim: true,
     },
-    lastClientVersion: {
+    last_client_version: {
       type: String,
     },
-    picUrl: {
+    pic_url: {
       type: String,
     },
     language: {
       type: String,
     },
-    zoomStatus: {
+    zoom_status: {
       type: String,
     },
-    jobTitle: {
+    job_title: {
       type: String,
     },
     location: {
       type: String,
     },
-    loginTypes: {
+    login_types: {
       type: [Number],
     },
-    phoneNumbers: {
+    phone_numbers: {
       type: [phoneNumberSchema],
     },
-    zoomCreatedAt: {
+    user_created_at: {
       type: Date,
+    },
+    is_installed: {
+      type: Boolean,
+      default: true, //should auto populate true (not included in upsert)
     },
     user: {
       type: Schema.Types.String,
@@ -79,7 +83,7 @@ const userZoomSchema = new Schema(
   },
   {
     timestamps: true,
-    useCreateIndex: true,
+    // useCreateIndex: true,//not supported after mongoosev5
   },
   {
     toJSON: {

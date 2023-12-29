@@ -44,22 +44,23 @@ const typeDefs = gql`
 
   type UserZoom {
     _id: ID
-    zoomId: String
-    firstName: String
-    lastName: String
-    displayName: String
+    zoom_id: String
+    first_name: String
+    last_name: String
+    display_name: String
     email: String
-    roleName: String
-    timeZone: String
-    lastClientVersion: String
-    picUrl: String
+    role_name: String
+    timezone: String
+    last_client_version: String
+    pic_url: String
     language: String
-    zoomStatus: String
-    jobTitle: String
+    status: String
+    job_title: String
     location: String
-    loginTypes: [Int]
-    phoneNumbers: [PhoneNumber]
-    zoomCreatedAt: String
+    login_types: [Int]
+    phone_numbers: [PhoneNumber]
+    user_created_at: String
+    is_installed: Boolean
     user: User
   }
 

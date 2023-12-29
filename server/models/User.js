@@ -6,6 +6,7 @@ const userSchema = new Schema(
     username: {
       type: String,
       unique: true,
+      // default: "",
     },
     email: {
       type: String,
@@ -18,6 +19,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 5,
       maxlength: 150,
+      default: "",
     },
     firstName: {
       type: String,

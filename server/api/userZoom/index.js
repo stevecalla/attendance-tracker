@@ -15,78 +15,13 @@ const dbConnection = require("../../config/connection");
 //     {
 //       useNewUrlParser: true,
 //       useUnifiedTopology: true,
-//       useCreateIndex: true,
-//       useFindAndModify: false,
+//       useCreateIndex: true,//not supported after mongoosev5
+//       useFindAndModify: false,//not supported after mongoosev5
 //     }
 //   );
 // }
 
-const { UserZoom } = require("../../models");
-
-const createEmailRecord = async (
-  {
-    toEmail,
-    fromEmail,
-    subject,
-    firstName,
-    source,
-    token,
-    textContent,
-    htmlContent,
-    user,
-  },
-  sendResponse
-) => {
-  let wasSent;
-  let messageId = sendResponse.messageId;
-  let response = sendResponse.response;
-
-  try {
-    // console.log('create record 123', sendResponse);
-
-    if (sendResponse.accepted.length === 1) {
-      // set wasSent to true
-      // console.log('wasSent=', true);
-      wasSent = true;
-    } else if (sendResponse.rejected.length === 1) {
-      // set wasSent to false
-      // console.log('wasSent=', false);
-      wasSent = false;
-    } else {
-      // console.log('response from emal send was neither accepted or rejected')
-    }
-
-    EmailSend.create({
-      toEmail,
-      fromEmail,
-      subject,
-      firstName,
-      source,
-      token,
-      textContent,
-      htmlContent,
-      wasSent,
-      messageId,
-      response,
-      user,
-    });
-
-    return {
-      toEmail,
-      fromEmail,
-      subject,
-      firstName,
-      source,
-      token,
-      textContent,
-      htmlContent,
-      wasSent,
-      messageId,
-      response,
-      user,
-    };
-  } catch (error) {}
-};
+const { UserZoom, User } = require("../../models");
 
 // SECTION //GET ALL EMAIL SEND RECORDS
 const findAllQuery = () => {
@@ -147,9 +82,9 @@ const findOneQueryMostRecent = () => {
 
 //SECTION //FIND ONE BY ZOOMID
 // SECTION //GET THE USERZOOM BY ZOOMID
-const findOneQueryByZoomId = (zoomId) => {
+const findOneQueryByZoomId = (zoom_id) => {
   return new Promise((resolve, reject) => {
-    UserZoom.findOne({ zoomId })
+    UserZoom.findOne({ zoom_id })
       .sort({ createdAt: -1 })
       .exec((err, result) => {
         if (err) {
@@ -167,8 +102,8 @@ const findOneQueryByZoomId = (zoomId) => {
 };
 
 // Usage example:
-const targetZoomId = "9U4fVlbMRsKuQgOf1kpYBg";
-// findOneQueryByZoomId(targetZoomId)
+// const zoom_id = "9U4fVlbMRsKuQgOf1kpYBg";
+// findOneQueryByZoomId(zoom_id)
 //   .then((result) => {
 //     if (result) {
 //       console.log("Record found:", result);
@@ -181,36 +116,27 @@ const targetZoomId = "9U4fVlbMRsKuQgOf1kpYBg";
 //     console.error("Error:", err);
 //   });
 
-// SECTION //FIND AND UPDATE THE MOST RECENT RECORD (AND RETURN THE UPDATED RECORD)
-const findOneAndUpsertNewUserMutation = (incomingData) => {
-  let zoomId = incomingData.id;
+// SECTION //FIND &/OR UPSERT NEW ZOOM USER (AND RETURN THE UPDATED RECORD)
+const findOneAndUpsertNewZoomUserMutation = ({
+  id: zoom_id,
+  user_created_at,
+  ...incomingData
+}) => {
+  console.log("hello");
   let updateData = {
-    zoomId: incomingData.id,
-    firstName: incomingData.first_name,
-    lastName: incomingData.last_name,
-    displayName: incomingData.display_name,
-    email: incomingData.email,
-    roleName: incomingData.role_name,
-    timeZone: incomingData.timezone,
-    lastClientVersion: incomingData.last_client_version,
-    picUrl: incomingData.pic_url,
-    language: incomingData.language,
-    zoomStatus: incomingData.status,
-    jobTitle: incomingData.job_title,
-    location: incomingData.location,
-    loginTypes: incomingData.login_types,
-    phoneNumbers: incomingData.phone_numbers,
-    zoomCreatedAt: new Date(incomingData.created_at),
-    user: "6498fb54494aa98f85992da5",
+    zoom_id: zoom_id,
+    user_created_at: new Date(user_created_at),
+    user: "",
+    ...incomingData,
   };
   return new Promise((resolve, reject) => {
     UserZoom.findOneAndUpdate(
-      { zoomId }, // Search for a document with the specified zoomId
+      { zoom_id }, // Search for a document with the specified zoomId
       { $set: { ...updateData } }, // Set all fields
       {
         upsert: true, // Create a new document if no matching document is found
         new: true, // Return the updated document
-        useFindAndModify: false, // Don't use depreciated findAndModify method
+        // useFindAndModify: false, // Don't use depreciated findAndModify method
         rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
       }
     )
@@ -221,6 +147,16 @@ const findOneAndUpsertNewUserMutation = (incomingData) => {
           );
         }
         resolve(updatedRecord);
+        return(updatedRecord);
+      })
+      //add or update user account with related _id for zoom account
+      .then((data) => {
+        console.log("zoom data = ", data);
+        return findOneAndUpsertNewUserMutation(data);
+      })
+      //add or update zoom user account with related user id
+      .then((data) => {
+        findOneAndUpsertUserIdMutation(data);
       })
       .catch((err) => {
         console.error("Error updating or creating the record:", err);
@@ -230,13 +166,15 @@ const findOneAndUpsertNewUserMutation = (incomingData) => {
 };
 
 // Usage example:
-// const targetZoomId = "9U4fVlbMRsKuQgOf1kpY"; //use zoomId from incoming data
 // const incomingData = {
 //   id: "5",
+//   // id: "9U4fVlbMRsKuQgOf1kpYBg",
 //   first_name: "6",
 //   last_name: "C8",
 //   display_name: "Steve Calla",
-//   email: "callasteven@gmail.com",
+//   // email: "callasteven@gmail.com",
+//   email: "test@gmail.com",
+//   // email: "test2@gmail.com",
 //   type: 1,
 //   role_name: "Owner",
 //   pmi: 2514017048,
@@ -283,19 +221,107 @@ const findOneAndUpsertNewUserMutation = (incomingData) => {
 //   ],
 //   user_created_at: "2020-10-02T14:26:57Z",
 // };
-// findOneAndUpsertNewUserMutation(incomingData)
+// findOneAndUpsertNewZoomUserMutation(incomingData)
 //   .then((updatedRecord) => {
 //     if (updatedRecord) {
 //       console.log("Record updated/created:", updatedRecord);
 //     } else {
 //       console.log("Failed to update or create a record.");
 //     }
+//     return updatedRecord;
 //   })
-//   // fix //.then update user account
-//   // fix //.then update record with user _id
+//   //add or update user account with related _id for zoom account
+//   .then((data) => {
+//     console.log("zoom data = ", data);
+//     return findOneAndUpsertNewUserMutation(data);
+//   })
+//   //add or update zoom user account with related user id
+//   .then((data) => {
+//     findOneAndUpsertUserIdMutation(data);
+//   })
 //   .catch((err) => {
 //     console.error("Error:", err);
 //   });
+
+// SECTION //FIND &/OR UPSERT NEW USER (AND RETURN THE UPDATED RECORD)
+const findOneAndUpsertNewUserMutation = ({
+  _id: userZoom,
+  email,
+  phone_numbers,
+  first_name,
+  last_name,
+}) => {
+  let updateData = {
+    email,
+    firstName: first_name,
+    lastName: last_name,
+    phone: phone_numbers[0].number,
+  };
+  return new Promise((resolve, reject) => {
+    User.findOneAndUpdate(
+      { email }, // Search for a document with the specified zoomId
+      // { $set: { ...updateData } },
+      {
+        $set: {
+          ...updateData, // Set all fields
+        },
+        // $push: {
+        $addToSet: {
+          //use the $addToSet operator instead of $push to add the newUserZoom only if it doesn't already exist in the userZoom array.
+          userZoom: userZoom,
+        },
+      },
+      {
+        upsert: true, // Create a new document if no matching document is found
+        new: true, // Return the updated document
+        // useFindAndModify: false, // Don't use depreciated findAndModify method
+        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      }
+    )
+      .then((updatedRecord) => {
+        if (!updatedRecord) {
+          console.log(
+            "No matching record found to update, a new one was created."
+          );
+        }
+        resolve(updatedRecord);
+      })
+      .catch((err) => {
+        console.error("Error updating or creating the record:", err);
+        reject(err);
+      });
+  });
+};
+
+// SECTION //FIND ZOOM ACCOUNT / UPDATE USER ID (AND RETURN THE UPDATED RECORD)
+const findOneAndUpsertUserIdMutation = ({ _id: id, email }) => {
+  console.log(id, email);
+  let user = id;
+  return new Promise((resolve, reject) => {
+    UserZoom.findOneAndUpdate(
+      { email }, // Search for a document with the specified zoomId
+      { $set: { user } }, // Set all fields
+      {
+        upsert: true, // Create a new document if no matching document is found
+        new: true, // Return the updated document
+        // useFindAndModify: false, // Don't use depreciated findAndModify method
+        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      }
+    )
+      .then((updatedRecord) => {
+        if (!updatedRecord) {
+          console.log(
+            "No matching record found to update, a new one was created."
+          );
+        }
+        resolve(updatedRecord);
+      })
+      .catch((err) => {
+        console.error("Error updating or creating the record:", err);
+        reject(err);
+      });
+  });
+};
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
@@ -326,12 +352,12 @@ function convertDateToMST(date) {
   }
 }
 
-console.log('NO FUNCTION CALLED');
+// console.log('NO FUNCTION CALLED');
 
 module.exports = {
   // createEmailRecord,
   // findAllQuery,
   // findOneQuery,
   // findOneAndUpdateMutation,
-  findOneAndUpsertNewUserMutation,
+  findOneAndUpsertNewZoomUserMutation,
 };
