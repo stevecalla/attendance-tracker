@@ -295,8 +295,6 @@ module.exports = {
       );
 
       //fix //= save secret toke to .env
-      //fix //ensure is_installed is true when installed (given a user could install/uninstall/install
-
       //SECTION = didn't worry about saving deauthorized object
       //fix //add the deauthorized object to the userZoom
       //fix //ensure deauthorized object is soft deleted isDeleted = false / true blank when install occurs
