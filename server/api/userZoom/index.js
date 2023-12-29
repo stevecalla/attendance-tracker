@@ -136,7 +136,7 @@ const findOneAndUpsertNewZoomUserMutation = ({
       {
         upsert: true, // Create a new document if no matching document is found
         new: true, // Return the updated document
-        // useFindAndModify: false, // Don't use depreciated findAndModify method
+        // useFindAndModify: false, // Don"t use depreciated findAndModify method
         rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
       }
     )
@@ -147,7 +147,7 @@ const findOneAndUpsertNewZoomUserMutation = ({
           );
         }
         resolve(updatedRecord);
-        return(updatedRecord);
+        return updatedRecord;
       })
       //add or update user account with related _id for zoom account
       .then((data) => {
@@ -323,6 +323,53 @@ const findOneAndUpsertUserIdMutation = ({ _id: id, email }) => {
   });
 };
 
+//SECTION //UNINSTALL EVENT, SET IS_INSTALLED TO FALSE
+const findOneAndUpsertIsInstalledFalse = ({ payload }) => {
+  // console.log(payload.user_id);
+  let zoom_id = payload.user_id;
+  let is_installed = false;
+  // let is_installed = true;
+  return new Promise((resolve, reject) => {
+    UserZoom.findOneAndUpdate(
+      { zoom_id }, // Search for a document with the specified zoom_id
+      { $set: { is_installed } },
+      {
+        new: true, // Return the updated document
+        // useFindAndModify: false, // Don't use depreciated findAndModify method
+        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      }
+    )
+      .then((updatedRecord) => {
+        if (!updatedRecord) {
+          console.log(
+            "No matching record found to update, a new one was created."
+          );
+        }
+        console.log(updatedRecord);
+        resolve(updatedRecord);
+      })
+      .catch((err) => {
+        console.error("Error updating or creating the record:", err);
+        reject(err);
+      });
+  });
+};
+
+//usage example
+let uninstall = {
+  event: "app_deauthorized",
+  event_ts: 1703826963091,
+  payload: {
+    account_id: "Yspgm0J0TOWlbEj3Qk3brA",
+    user_id: "9U4fVlbMRsKuQgOf1kpYBg",
+    signature:
+      "986d0c40e823e820d7c5772dbf61b8b163540ac6187fb266b5ce4eec04ebcc95",
+    deauthorization_time: "2023-12-29T05:16:03.091Z",
+    client_id: "dwfUWKNzTAy6WKNlymqEig",
+  },
+};
+findOneAndUpsertIsInstalledFalse(uninstall);
+
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
 function convertDateToMST(date) {
@@ -352,7 +399,7 @@ function convertDateToMST(date) {
   }
 }
 
-// console.log('NO FUNCTION CALLED');
+// console.log("NO FUNCTION CALLED");
 
 module.exports = {
   // createEmailRecord,

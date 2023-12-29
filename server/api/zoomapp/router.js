@@ -5,10 +5,10 @@ router
   .use('/proxy', controller.proxy)
   // .use('/sockjs-node', controller.proxy)
   .get('/install', controller.install)
-  .get('/uninstall', controller.uninstall)
   .get('/auth', controller.auth)
   .get('/home', controller.home)
   .get('/authorize', controller.inClientAuthorize)
   .post('/onauthorized', controller.inClientOnAuthorized)
+  .post('/uninstall', controller.uninstall) //fix added by Calla
 
 module.exports = router

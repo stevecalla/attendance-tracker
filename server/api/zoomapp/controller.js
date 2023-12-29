@@ -257,10 +257,42 @@ module.exports = {
 
   //FIX //ADD UNINSTALL
   // SECTION //UNINSTALL
-  async uninstall(req, res, next) {
+  // https://developers.zoom.us/docs/platform/auth/deauthorization/
+  // secret token: qp1k_pY0SV6tOmxHngC4gg
+  async uninstall(request, res, next) {
+    const ZOOM_WEBHOOK_SECRET_TOKEN = "qp1k_pY0SV6tOmxHngC4gg";
     console.log("===============");
-    console.log("Request made to /email-server route");
-    res.json({ 'hello': 'hello' });
+    console.log("Request made to /uninstall route");
+    console.log(request.body);
+    console.log(request.headers);
+    console.log(request.headers["x-zm-signature"]);
+
+    const crypto = require("crypto");
+
+    const message = `v0:${
+      request.headers["x-zm-request-timestamp"]
+    }:${JSON.stringify(request.body)}`;
+
+    const hashForVerify = crypto
+      .createHmac("sha256", ZOOM_WEBHOOK_SECRET_TOKEN)
+      .update(message)
+      .digest("hex");
+
+    const signature = `v0=${hashForVerify}`;
+
+    if (request.headers["x-zm-signature"] === signature) {
+      // Webhook request came from Zoom
+      console.log("Webhook request came from Zoom");
+      //fix //change is_installed to false using the zoom_id
+      //fix //add the deauthorized object to the userZoom
+      //fix //ensure is_installed is true when installed (given a user could install/uninstall/install
+      //fix //ensure deauthorized object is soft deleted isDeleted = false / true blank when install occurs
+    } else {
+      // Webhook request did not come from Zoom
+      console.log("Webhook request did not come from Zoom");
+    }
+
+    res.json({ hello: "uninstall route" });
     next();
   },
 
