@@ -324,7 +324,7 @@ const findOneAndUpsertUserIdMutation = ({ _id: id, email }) => {
 };
 
 //SECTION //UNINSTALL EVENT, SET IS_INSTALLED TO FALSE
-const findOneAndUpsertIsInstalledFalse = ({ payload }) => {
+const findOneAndUpdateIsInstalledFalse = ({ payload }) => {
   // console.log(payload.user_id);
   let zoom_id = payload.user_id;
   let is_installed = false;
@@ -356,19 +356,19 @@ const findOneAndUpsertIsInstalledFalse = ({ payload }) => {
 };
 
 //usage example
-let uninstall = {
-  event: "app_deauthorized",
-  event_ts: 1703826963091,
-  payload: {
-    account_id: "Yspgm0J0TOWlbEj3Qk3brA",
-    user_id: "9U4fVlbMRsKuQgOf1kpYBg",
-    signature:
-      "986d0c40e823e820d7c5772dbf61b8b163540ac6187fb266b5ce4eec04ebcc95",
-    deauthorization_time: "2023-12-29T05:16:03.091Z",
-    client_id: "dwfUWKNzTAy6WKNlymqEig",
-  },
-};
-findOneAndUpsertIsInstalledFalse(uninstall);
+// let uninstallBody = {
+//   event: "app_deauthorized",
+//   event_ts: 1703826963091,
+//   payload: {
+//     account_id: "Yspgm0J0TOWlbEj3Qk3brA",
+//     user_id: "9U4fVlbMRsKuQgOf1kpYBg",
+//     signature:
+//       "986d0c40e823e820d7c5772dbf61b8b163540ac6187fb266b5ce4eec04ebcc95",
+//     deauthorization_time: "2023-12-29T05:16:03.091Z",
+//     client_id: "dwfUWKNzTAy6WKNlymqEig",
+//   },
+// };
+// findOneAndUpdateIsInstalledFalse(uninstallBody);
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
@@ -407,4 +407,5 @@ module.exports = {
   // findOneQuery,
   // findOneAndUpdateMutation,
   findOneAndUpsertNewZoomUserMutation,
+  findOneAndUpdateIsInstalledFalse,
 };

@@ -256,7 +256,6 @@ module.exports = {
   },
 
   //FIX //ADD UNINSTALL
-  // SECTION //UNINSTALL
   // https://developers.zoom.us/docs/platform/auth/deauthorization/
   // secret token: qp1k_pY0SV6tOmxHngC4gg
   async uninstall(request, res, next) {
@@ -283,9 +282,23 @@ module.exports = {
     if (request.headers["x-zm-signature"] === signature) {
       // Webhook request came from Zoom
       console.log("Webhook request came from Zoom");
-      //fix //change is_installed to false using the zoom_id
-      //fix //add the deauthorized object to the userZoom
+      //SECTION //change is_installed to false using the zoom_id
+      // create the userZoom record in the database
+      const { findOneAndUpdateIsInstalledFalse } = require("../userZoom/");
+      let modifyUninstallFalse = await findOneAndUpdateIsInstalledFalse(
+        request.body
+      );
+      console.log(
+        "2b-1. Uninstall response to change is_installed to false: ",
+        modifyUninstallFalse,
+        "\n"
+      );
+
+      //fix //= save secret toke to .env
       //fix //ensure is_installed is true when installed (given a user could install/uninstall/install
+
+      //SECTION = didn't worry about saving deauthorized object
+      //fix //add the deauthorized object to the userZoom
       //fix //ensure deauthorized object is soft deleted isDeleted = false / true blank when install occurs
     } else {
       // Webhook request did not come from Zoom
