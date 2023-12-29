@@ -127,6 +127,7 @@ const findOneAndUpsertNewZoomUserMutation = ({
     zoom_id: zoom_id,
     user_created_at: new Date(user_created_at),
     user: "",
+    is_installed: true,
     ...incomingData,
   };
   return new Promise((resolve, reject) => {
