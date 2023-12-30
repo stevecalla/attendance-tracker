@@ -2,6 +2,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const zoomApi = require("../../util/zoom-api");
 const zoomHelpers = require("../../util/zoom-helpers");
 const store = require("../../util/store");
+require("dotenv").config({ path: "../../../server/.env" });
 
 module.exports = {
   // In-client OAuth 1/2
@@ -259,12 +260,14 @@ module.exports = {
   // https://developers.zoom.us/docs/platform/auth/deauthorization/
   // secret token: qp1k_pY0SV6tOmxHngC4gg
   async uninstall(request, res, next) {
-    const ZOOM_WEBHOOK_SECRET_TOKEN = "qp1k_pY0SV6tOmxHngC4gg";
+    // const ZOOM_WEBHOOK_SECRET_TOKEN = "qp1k_pY0SV6tOmxHngC4gg";
     console.log("===============");
     console.log("Request made to /uninstall route");
     console.log(request.body);
     console.log(request.headers);
     console.log(request.headers["x-zm-signature"]);
+    console.log(process.env);
+    console.log(process.env.NODE_ENV);
 
     const crypto = require("crypto");
 
@@ -273,7 +276,7 @@ module.exports = {
     }:${JSON.stringify(request.body)}`;
 
     const hashForVerify = crypto
-      .createHmac("sha256", ZOOM_WEBHOOK_SECRET_TOKEN)
+      .createHmac("sha256", process.env.ZOOM_WEBHOOK_SECRET_TOKEN)
       .update(message)
       .digest("hex");
 
