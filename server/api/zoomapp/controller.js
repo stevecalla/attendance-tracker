@@ -260,14 +260,11 @@ module.exports = {
   // https://developers.zoom.us/docs/platform/auth/deauthorization/
   // secret token: qp1k_pY0SV6tOmxHngC4gg
   async uninstall(request, res, next) {
-    // const ZOOM_WEBHOOK_SECRET_TOKEN = "qp1k_pY0SV6tOmxHngC4gg";
     console.log("===============");
     console.log("Request made to /uninstall route");
     console.log(request.body);
     console.log(request.headers);
     console.log(request.headers["x-zm-signature"]);
-    console.log(process.env);
-    console.log(process.env.NODE_ENV);
 
     const crypto = require("crypto");
 
