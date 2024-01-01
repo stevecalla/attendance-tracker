@@ -13,11 +13,14 @@ const { UserZoom } = require("../models");
 const userZoomSeeds = require("./userZoomSeeds.json");
 const { EmailSend } = require("../models");
 const emailSendSeeds = require("./emailSendSeeds.json");
+const { ZoomMeeting } = require("../models");
+const zoomMeetingSeeds = require("./zoomMeetingSeeds.json");
 
 db.once("open", async () => {
   try {
     await User.deleteMany({});
     await UserZoom.deleteMany({});
+    await ZoomMeeting.deleteMany({});
     await EmailSend.deleteMany({});
     await Schedule.deleteMany({});
     await Client.deleteMany({});
@@ -26,6 +29,7 @@ db.once("open", async () => {
 
     await User.create(userSeeds);
     await UserZoom.create(userZoomSeeds);
+    await ZoomMeeting.create(zoomMeetingSeeds);
     await EmailSend.create(emailSendSeeds);
     await Schedule.create(scheduleSeeds);
     await Client.create(clientSeeds);

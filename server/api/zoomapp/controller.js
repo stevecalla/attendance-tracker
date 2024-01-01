@@ -313,16 +313,18 @@ module.exports = {
     console.log("------5-------");
     // console.log('-------6------');
 
-    console.log(req.body);
-    console.log(req.sessionID);
-    console.log(req.sessionStore);
-    console.log(req.session);
-    console.log(req.headers);
+    console.log('a)', req.body);
+    console.log('b)', req.sessionID);
+    // console.log(req.sessionStore);
+    console.log('c)', req.session);
+    console.log('d)', req.session.user);
+    console.log('e)', req.session.meetingUUID);
+    // console.log(req.headers);
 
     // console.log('-------7------');
     // console.log('-------8------');
 
-    console.log(req.session);
+    // console.log(req.session);
 
     // console.log('-------9------');
     // console.log('-------10------');
@@ -348,10 +350,17 @@ module.exports = {
       // 2. Persist user id and meetingUUID
       console.log("-------------decryptedAppContext.uid----");
       console.log({ decryptedAppContext });
-      console.log(decryptedAppContext.uid);
+      // console.log(decryptedAppContext.uid);
 
-      if (!req.session.meetingUUID) {
+      console.log('10)', req.session.user);
+      console.log('11)', decryptedAppContext.uid);
+      console.log('12)', req.session.meetingUUID);
+      console.log('13)', decryptedAppContext?.mid);
+
+      if ((!req.session.meetingUUID) || (!req.session.meetingUUID !== decryptedAppContext?.mid)) {
+        console.log('reset meetingUUID?')
         req.session.user = decryptedAppContext.uid;
+        req.session.meetingUUID = decryptedAppContext?.mid;
       }
 
       //fix //test if i can get user from store
@@ -364,12 +373,12 @@ module.exports = {
       // console.log('==============');
       //fix //end
 
-      if (
-        !req.session.meetingUUID ||
-        !req.session.meetingUUID !== decryptedAppContext?.mid
-      ) {
-        req.session.meetingUUID = decryptedAppContext?.mid;
-      }
+      // if (
+      //   !req.session.meetingUUID ||
+      //   !req.session.meetingUUID !== decryptedAppContext?.mid
+      // ) {
+        // req.session.meetingUUID = decryptedAppContext?.mid;
+      // }
     } catch (error) {
       return next(error);
     }
