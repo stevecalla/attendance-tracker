@@ -33,6 +33,10 @@ const zoomMeetingSchema = new Schema(
     raw_data: {
       type: [Object],
     },
+    loadAppCount: {
+      type: Number,
+      default: 0,
+    }
   },
   {
     timestamps: true,

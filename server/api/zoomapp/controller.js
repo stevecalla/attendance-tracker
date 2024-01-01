@@ -294,7 +294,6 @@ module.exports = {
         "\n"
       );
 
-      //fix //= save secret toke to .env
       //SECTION = didn't worry about saving deauthorized object
       //fix //add the deauthorized object to the userZoom
       //fix //ensure deauthorized object is soft deleted isDeleted = false / true blank when install occurs
@@ -377,16 +376,30 @@ module.exports = {
       // console.log('==============');
       //fix //end
 
-      //fix //start = store meeting information
+      //fix //start = save meeting information to mongodb
       //create findOne&Update/Upsert to add meeting record
       //add userZoom id to the zoomMeeting record to populate userZoom with meeting info... $addToSet... then query userZoom to see meetings
-      //if record exists already increment count of signon to app from meeting
-      //handle panels/webinars?
+
+      // Meeting user loaded app
+      console.log("Meeting user loaded app");
+
+      // Add mid to the "panel" object to ensure "panel" object is appended to meeting object in the zoomMeetings DB rather than creating two entries
+      if (decryptedAppContext?.typ !== "meeting") {
+        decryptedAppContext.mid = req?.session?.meetingUUID;
+        console.log('if statement to update decrpytedAppContext mid')
+        console.log(decryptedAppContext);
+      }
+
+      const { findOneAndUpsertMeetingRecordMutation } = require("../userZoom/");
+      let storeMeetingRecord = await findOneAndUpsertMeetingRecordMutation(
+        decryptedAppContext
+      );
+      console.log(storeMeetingRecord);
+
       //link meeting information to userZoom?
       //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
 
       //fix //end
-
     } catch (error) {
       return next(error);
     }

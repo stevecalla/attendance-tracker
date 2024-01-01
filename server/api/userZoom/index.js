@@ -380,16 +380,33 @@ const findOneAndUpsertMeetingRecordMutation = (meetingInfo) => {
   // console.log({meetingInfo});
 
   return new Promise((resolve, reject) => {
-    ZoomMeeting.findOneAndUpdate(
-      { uid, typ, mid }, // Search for a document with the specified uid
-      {
-        $set: {
-          ...meetingInfo, // Set all fields
-        },
-        $push: {
-          raw_data: meetingInfo,
-        },
+    const updateData = {
+      ...meetingInfo, // Set all fields
+      $push: {
+        raw_data: meetingInfo, // Push raw meeting object into array
       },
+    };
+
+    // If typ is 'meeting', increment updateCount by 1
+    if (typ === 'meeting') {
+      updateData.$inc = { loadAppCount: 1 };
+    }
+
+    ZoomMeeting.findOneAndUpdate(
+      // { uid, typ, mid }, // Search for a document by uid, type, mid
+      { uid, mid }, // Search for a document by uid, mid; removed typ to consolidate meeting and panel duplicates
+      updateData,
+      // {
+      //   $set: {
+      //     ...meetingInfo, // Set all fields
+      //   },
+      //   $push: {
+      //     raw_data: meetingInfo, // Push raw meeting object into array
+      //   },
+      //   $inc: {
+      //     loadAppCount: 1, // Increment the loadAppCount field by 1
+      //   },
+      // },
       {
         upsert: true, // Create a new document if no matching document is found
         new: true, // Return the updated document
@@ -464,4 +481,5 @@ module.exports = {
   // findOneAndUpdateMutation,
   findOneAndUpsertNewZoomUserMutation,
   findOneAndUpdateIsInstalledFalse,
+  findOneAndUpsertMeetingRecordMutation,
 };
