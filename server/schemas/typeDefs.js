@@ -64,6 +64,19 @@ const typeDefs = gql`
     user: User
   }
 
+  type ZoomMeeting {
+    type: String
+    uid: String
+    aud: String
+    iss: String
+    ts: String
+    exp: String
+    entitlements: [String]
+    mid: String
+    attendrole: String
+    raw_data: [String]
+  }
+
   type Employee {
     _id: ID
     email: String

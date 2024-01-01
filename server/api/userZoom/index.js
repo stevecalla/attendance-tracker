@@ -21,7 +21,7 @@ const dbConnection = require("../../config/connection");
 //   );
 // }
 
-const { UserZoom, User } = require("../../models");
+const { UserZoom, User, ZoomMeeting } = require("../../models");
 
 // SECTION //GET ALL EMAIL SEND RECORDS
 const findAllQuery = () => {
@@ -370,6 +370,61 @@ const findOneAndUpdateIsInstalledFalse = ({ payload }) => {
 //   },
 // };
 // findOneAndUpdateIsInstalledFalse(uninstallBody);
+
+//SECTION //CREATE MEETING RECORD
+const findOneAndUpsertMeetingRecordMutation = (meetingInfo) => {
+  let uid = meetingInfo.uid;
+  let mid = meetingInfo.mid;
+  let typ = meetingInfo.typ;
+  console.log(uid, mid, typ, meetingInfo);
+  // console.log({meetingInfo});
+
+  return new Promise((resolve, reject) => {
+    ZoomMeeting.findOneAndUpdate(
+      { uid, typ, mid }, // Search for a document with the specified uid
+      {
+        $set: {
+          ...meetingInfo, // Set all fields
+        },
+        $push: {
+          raw_data: meetingInfo,
+        },
+      },
+      {
+        upsert: true, // Create a new document if no matching document is found
+        new: true, // Return the updated document
+        // useFindAndModify: false, // Don't use depreciated findAndModify method
+        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      }
+    )
+      .then((updatedRecord) => {
+        if (!updatedRecord) {
+          console.log(
+            "No matching record found to update, a new one was created."
+          );
+        }
+        resolve(updatedRecord);
+      })
+      .catch((err) => {
+        console.error("Error updating or creating the record:", err);
+        reject(err);
+      });
+  });
+};
+
+//usage example
+const meetingInfo = {
+  typ: "meeting",
+  uid: "9U4fVlbMRsKuQgOf1kpYBg",
+  aud: "gs1tX1AqQkCDXu7qzgFhA",
+  iss: "marketplace.zoom.us",
+  ts: 1704084296567,
+  exp: 1704084416567,
+  entitlements: [],
+  mid: "YYH1D5AUSIqyTFRvraYVxw==",
+  attendrole: "host",
+};
+findOneAndUpsertMeetingRecordMutation(meetingInfo);
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION

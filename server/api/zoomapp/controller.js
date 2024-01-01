@@ -377,6 +377,16 @@ module.exports = {
       // console.log('==============');
       //fix //end
 
+      //fix //start = store meeting information
+      //create findOne&Update/Upsert to add meeting record
+      //add userZoom id to the zoomMeeting record to populate userZoom with meeting info... $addToSet... then query userZoom to see meetings
+      //if record exists already increment count of signon to app from meeting
+      //handle panels/webinars?
+      //link meeting information to userZoom?
+      //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
+
+      //fix //end
+
     } catch (error) {
       return next(error);
     }
