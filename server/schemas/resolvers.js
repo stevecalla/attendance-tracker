@@ -97,7 +97,7 @@ const resolvers = {
 
     //section userZoom
     //all users, sort by lastName
-    userZooms: async (parent, args, context) => {
+    zoomUsers: async (parent, args, context) => {
       return UserZoom.find().sort({ lastName: -1 }).populate("user");
     },
 

@@ -152,7 +152,7 @@ const typeDefs = gql`
     userByEmail(email: String!): User
     #user(email: String!): User
 
-    userZooms: [UserZoom]!
+    zoomUsers: [UserZoom]!
     #userZoneByEmail(email: String!): UserZoom
     #userZoneByEmail(zoomId: String!): UserZoom
 
