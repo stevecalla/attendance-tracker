@@ -80,6 +80,9 @@ const zoomUserSchema = new Schema(
       type: Schema.Types.String,
       ref: "User",
     },
+    zoom_meetings: {
+      type: [Schema.Types.ObjectId]
+    }
   },
   {
     timestamps: true,

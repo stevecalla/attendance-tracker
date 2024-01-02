@@ -379,7 +379,7 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let typ = meetingInfo.typ;
   console.log(uid, mid, typ, meetingInfo);
 
-  let findIt = await findOneQueryByZoomId(uid);
+  let findIt = await findOneQueryByZoomId(uid); //get user_id to add to zoomMeeting record
   console.log(findIt);
   console.log(findIt?._id);
 
@@ -415,7 +415,9 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
           );
         }
         resolve(updatedRecord);
+        return(updatedRecord)
       })
+      .then((updatedRecord) => console.log('add zoom meeting id to zoomuser record', updatedRecord))
       .catch((err) => {
         console.error("Error updating or creating the record:", err);
         reject(err);
