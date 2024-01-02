@@ -395,8 +395,11 @@ module.exports = {
         decryptedAppContext
       );
       console.log(storeMeetingRecord);
-
-      //link meeting information to zoomUser?
+      
+      //link user_id to zoommeeting (done)
+      //link meeting information to zoomUser (in progress)
+      //setup query for zoomuser to populate with zoom meeting info
+      //setup query for user to populate zoom user then zoom meeting?
       //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
 
       //fix //end
