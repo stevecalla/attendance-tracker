@@ -18,7 +18,7 @@ const phoneNumberSchema = new Schema({
   },
 });
 
-const userZoomSchema = new Schema(
+const zoomUserSchema = new Schema(
   {
     zoom_id: {
       type: String,
@@ -92,7 +92,7 @@ const userZoomSchema = new Schema(
   }
 );
 
-const UserZoom = model("UserZoom", userZoomSchema);
+const UserZoom = model("UserZoom", zoomUserSchema);
 
 module.exports = UserZoom;
 
