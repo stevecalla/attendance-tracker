@@ -84,22 +84,22 @@ const findOneQueryMostRecent = () => {
 // SECTION //GET THE USERZOOM BY ZOOMID
 const findOneQueryByZoomId = (zoom_id) => {
   console.log(zoom_id, "test");
-  return new Promise((resolve, reject) => {
-    ZoomUser.findOne({ zoom_id })
+  // return new Promise((resolve, reject) => {
+    return ZoomUser.findOne({ zoom_id })
       .sort({ createdAt: -1 })
       .exec()
       .then((result) => {
         if (!result) {
           console.log("No record found for zoomId:", zoom_id);
         }
-        console.log(result);
+        // console.log(result);
         return result;
       })
       .catch((err) => {
         console.error("Error retrieving the last inserted record:", err);
         throw err; // Re-throw the error to propagate it to the next catch block
       });
-  });
+  // });
 };
 
 // Usage example:
@@ -378,14 +378,15 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let mid = meetingInfo.mid;
   let typ = meetingInfo.typ;
   console.log(uid, mid, typ, meetingInfo);
-  // console.log({meetingInfo});
 
   let findIt = await findOneQueryByZoomId(uid);
-  // console.log(findIt);
+  console.log(findIt);
+  console.log(findIt?._id);
 
   return new Promise((resolve, reject) => {
     const updateData = {
       ...meetingInfo, // Set all fields
+      user_id: findIt._id,
       $push: {
         raw_data: meetingInfo, // Push raw meeting object into array
       },
@@ -423,18 +424,18 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
 };
 
 //usage example
-// const meetingInfo = {
-//   typ: "meeting",
-//   uid: "9U4fVlbMRsKuQgOf1kpYBg",
-//   aud: "gs1tX1AqQkCDXu7qzgFhA",
-//   iss: "marketplace.zoom.us",
-//   ts: 1704084296567,
-//   exp: 1704084416567,
-//   entitlements: [],
-//   mid: "YYH1D5AUSIqyTFRvraYVxw==",
-//   attendrole: "host",
-// };
-// findOneAndUpsertMeetingRecordMutation(meetingInfo);
+const meetingInfo = {
+  typ: "meeting",
+  uid: "9U4fVlbMRsKuQgOf1kpYBg",
+  aud: "gs1tX1AqQkCDXu7qzgFhA",
+  iss: "marketplace.zoom.us",
+  ts: 1704084296567,
+  exp: 1704084416567,
+  entitlements: [],
+  mid: "YYH1D5AUSIqyTFRvraYVxw==",
+  attendrole: "host",
+};
+findOneAndUpsertMeetingRecordMutation(meetingInfo);
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
