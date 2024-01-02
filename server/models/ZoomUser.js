@@ -92,7 +92,7 @@ const zoomUserSchema = new Schema(
   }
 );
 
-const UserZoom = model("UserZoom", zoomUserSchema);
+const ZoomUser = model("ZoomUser", zoomUserSchema);
 
-module.exports = UserZoom;
+module.exports = ZoomUser;
 

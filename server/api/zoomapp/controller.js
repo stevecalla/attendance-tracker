@@ -212,13 +212,13 @@ module.exports = {
       );
 
       //fix start
-      // create the userZoom record in the database
-      const { findOneAndUpsertNewZoomUserMutation } = require("../userZoom/");
+      // create the zoomUser record in the database
+      const { findOneAndUpsertNewZoomUserMutation } = require("../zoomUser/");
       let createUserZoomAccount = await findOneAndUpsertNewZoomUserMutation(
         userResponse.data
       );
       console.log(
-        "2b-1. Use install response data to create userZoom account: ",
+        "2b-1. Use install response data to create zoomUser account: ",
         createUserZoomAccount,
         "\n"
       );
@@ -283,8 +283,8 @@ module.exports = {
       // Webhook request came from Zoom
       console.log("Webhook request came from Zoom");
       //SECTION //change is_installed to false using the zoom_id
-      // create the userZoom record in the database
-      const { findOneAndUpdateIsInstalledFalse } = require("../userZoom/");
+      // create the zoomUser record in the database
+      const { findOneAndUpdateIsInstalledFalse } = require("../zoomUser/");
       let modifyUninstallFalse = await findOneAndUpdateIsInstalledFalse(
         request.body
       );
@@ -295,7 +295,7 @@ module.exports = {
       );
 
       //SECTION = didn't worry about saving deauthorized object
-      //fix //add the deauthorized object to the userZoom
+      //fix //add the deauthorized object to the zoomUser
       //fix //ensure deauthorized object is soft deleted isDeleted = false / true blank when install occurs
     } else {
       // Webhook request did not come from Zoom
@@ -378,7 +378,7 @@ module.exports = {
 
       //fix //start = save meeting information to mongodb
       //create findOne&Update/Upsert to add meeting record
-      //add userZoom id to the zoomMeeting record to populate userZoom with meeting info... $addToSet... then query userZoom to see meetings
+      //add zoomUser id to the zoomMeeting record to populate zoomUser with meeting info... $addToSet... then query zoomUser to see meetings
 
       // Meeting user loaded app
       console.log("Meeting user loaded app");
@@ -390,13 +390,13 @@ module.exports = {
         console.log(decryptedAppContext);
       }
 
-      const { findOneAndUpsertMeetingRecordMutation } = require("../userZoom/");
+      const { findOneAndUpsertMeetingRecordMutation } = require("../zoomUser/");
       let storeMeetingRecord = await findOneAndUpsertMeetingRecordMutation(
         decryptedAppContext
       );
       console.log(storeMeetingRecord);
 
-      //link meeting information to userZoom?
+      //link meeting information to zoomUser?
       //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
 
       //fix //end

@@ -13,7 +13,7 @@ const typeDefs = gql`
     isLocked: Boolean
     isDisplayable: Boolean
     emailSend: [EmailSend]
-    userZoom: [UserZoom]
+    zoomUser: [ZoomUser]
   }
 
   type EmailSend {
@@ -33,7 +33,7 @@ const typeDefs = gql`
     user: User
   }
 
-  # For the UserZoom model
+  # For the ZoomUser model
   type PhoneNumber {
     country: String!
     code: String!
@@ -42,7 +42,7 @@ const typeDefs = gql`
     label: String
   }
 
-  type UserZoom {
+  type ZoomUser {
     _id: ID
     zoom_id: String
     first_name: String
@@ -152,9 +152,9 @@ const typeDefs = gql`
     userByEmail(email: String!): User
     #user(email: String!): User
 
-    zoomUsers: [UserZoom]!
-    #userZoneByEmail(email: String!): UserZoom
-    #userZoneByEmail(zoomId: String!): UserZoom
+    zoomUsers: [ZoomUser]!
+    #userZoneByEmail(email: String!): ZoomUser
+    #userZoneByEmail(zoomId: String!): ZoomUser
 
     #clients: [Client]!
     clients(isDisplayable: Boolean): [Client]!

@@ -21,12 +21,12 @@ const dbConnection = require("../../config/connection");
 //   );
 // }
 
-const { UserZoom, User, ZoomMeeting } = require("../../models");
+const { ZoomUser, User, ZoomMeeting } = require("../../models");
 
 // SECTION //GET ALL EMAIL SEND RECORDS
 const findAllQuery = () => {
   return new Promise((resolve, reject) => {
-    UserZoom.find({}, (err, results) => {
+    ZoomUser.find({}, (err, results) => {
       if (err) {
         console.error("Error executing query:", err);
         reject(err);
@@ -53,7 +53,7 @@ const findAllQuery = () => {
 // SECTION //GET THE MOST RECENTLY CREATED RECORD ( -1 most recent, 1 oldest)
 const findOneQueryMostRecent = () => {
   return new Promise((resolve, reject) => {
-    UserZoom.findOne()
+    ZoomUser.findOne()
       .sort({ createdAt: -1 })
       .exec((err, result) => {
         if (err) {
@@ -84,7 +84,7 @@ const findOneQueryMostRecent = () => {
 // SECTION //GET THE USERZOOM BY ZOOMID
 const findOneQueryByZoomId = (zoom_id) => {
   return new Promise((resolve, reject) => {
-    UserZoom.findOne({ zoom_id })
+    ZoomUser.findOne({ zoom_id })
       .sort({ createdAt: -1 })
       .exec((err, result) => {
         if (err) {
@@ -131,7 +131,7 @@ const findOneAndUpsertNewZoomUserMutation = ({
     ...incomingData,
   };
   return new Promise((resolve, reject) => {
-    UserZoom.findOneAndUpdate(
+    ZoomUser.findOneAndUpdate(
       { zoom_id }, // Search for a document with the specified zoomId
       { $set: { ...updateData } }, // Set all fields
       {
@@ -246,7 +246,7 @@ const findOneAndUpsertNewZoomUserMutation = ({
 
 // SECTION //FIND &/OR UPSERT NEW USER (AND RETURN THE UPDATED RECORD)
 const findOneAndUpsertNewUserMutation = ({
-  _id: userZoom,
+  _id: zoomUser,
   email,
   phone_numbers,
   first_name,
@@ -268,8 +268,8 @@ const findOneAndUpsertNewUserMutation = ({
         },
         // $push: {
         $addToSet: {
-          //use the $addToSet operator instead of $push to add the newUserZoom only if it doesn't already exist in the userZoom array.
-          userZoom: userZoom,
+          //use the $addToSet operator instead of $push to add the newUserZoom only if it doesn't already exist in the zoomUser array.
+          zoomUser: zoomUser,
         },
       },
       {
@@ -299,7 +299,7 @@ const findOneAndUpsertUserIdMutation = ({ _id: id, email }) => {
   console.log(id, email);
   let user = id;
   return new Promise((resolve, reject) => {
-    UserZoom.findOneAndUpdate(
+    ZoomUser.findOneAndUpdate(
       { email }, // Search for a document with the specified zoomId
       { $set: { user } }, // Set all fields
       {
@@ -331,7 +331,7 @@ const findOneAndUpdateIsInstalledFalse = ({ payload }) => {
   let is_installed = false;
   // let is_installed = true;
   return new Promise((resolve, reject) => {
-    UserZoom.findOneAndUpdate(
+    ZoomUser.findOneAndUpdate(
       { zoom_id }, // Search for a document with the specified zoom_id
       { $set: { is_installed } },
       {

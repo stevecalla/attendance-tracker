@@ -3,8 +3,8 @@ const Client = require("./Client");
 const Employee = require("./Employee");
 const Hour = require("./Hour");
 const User = require("./User");
-const UserZoom = require("./ZoomUser");
+const ZoomUser = require("./ZoomUser");
 const EmailSend = require("./EmailSend");
 const ZoomMeeting = require("./ZoomMeeting");
 
-module.exports = { Schedule, Client, Employee, Hour, User, UserZoom, EmailSend, ZoomMeeting };
+module.exports = { Schedule, Client, Employee, Hour, User, ZoomUser, EmailSend, ZoomMeeting };

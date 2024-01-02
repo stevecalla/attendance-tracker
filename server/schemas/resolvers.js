@@ -5,7 +5,7 @@ const {
   Employee,
   Hour,
   User,
-  UserZoom,
+  ZoomUser,
   EmailSend,
 } = require("../models");
 const { signToken } = require("../utils/auth");
@@ -29,7 +29,7 @@ const resolvers = {
       return User.find()
         .sort({ lastName: -1 })
         .populate("emailSend")
-        .populate("userZoom");
+        .populate("zoomUser");
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -95,10 +95,10 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
 
-    //section userZoom
+    //section zoomUser
     //all users, sort by lastName
     zoomUsers: async (parent, args, context) => {
-      return UserZoom.find().sort({ lastName: -1 }).populate("user");
+      return ZoomUser.find().sort({ lastName: -1 }).populate("user");
     },
 
     //section hour queries

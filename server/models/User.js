@@ -48,9 +48,9 @@ const userSchema = new Schema(
       type: Schema.Types.Array,
       ref: "EmailSend",
     },
-    userZoom: {
+    zoomUser: {
       type: Schema.Types.Array,
-      ref: "UserZoom",
+      ref: "ZoomUser",
     },
   },
   {
