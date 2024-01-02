@@ -83,20 +83,21 @@ const findOneQueryMostRecent = () => {
 //SECTION //FIND ONE BY ZOOMID
 // SECTION //GET THE USERZOOM BY ZOOMID
 const findOneQueryByZoomId = (zoom_id) => {
+  console.log(zoom_id, "test");
   return new Promise((resolve, reject) => {
     ZoomUser.findOne({ zoom_id })
       .sort({ createdAt: -1 })
-      .exec((err, result) => {
-        if (err) {
-          console.error("Error retrieving the last inserted record:", err);
-          reject(err);
-          return;
+      .exec()
+      .then((result) => {
+        if (!result) {
+          console.log("No record found for zoomId:", zoom_id);
         }
-
-        // Close the connection if needed
-        mongoose.connection.close();
-
-        resolve(result);
+        console.log(result);
+        return result;
+      })
+      .catch((err) => {
+        console.error("Error retrieving the last inserted record:", err);
+        throw err; // Re-throw the error to propagate it to the next catch block
       });
   });
 };
@@ -372,12 +373,15 @@ const findOneAndUpdateIsInstalledFalse = ({ payload }) => {
 // findOneAndUpdateIsInstalledFalse(uninstallBody);
 
 //SECTION //CREATE MEETING RECORD
-const findOneAndUpsertMeetingRecordMutation = (meetingInfo) => {
+const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let uid = meetingInfo.uid;
   let mid = meetingInfo.mid;
   let typ = meetingInfo.typ;
   console.log(uid, mid, typ, meetingInfo);
   // console.log({meetingInfo});
+
+  let findIt = await findOneQueryByZoomId(uid);
+  // console.log(findIt);
 
   return new Promise((resolve, reject) => {
     const updateData = {
@@ -396,17 +400,6 @@ const findOneAndUpsertMeetingRecordMutation = (meetingInfo) => {
       // { uid, typ, mid }, // Search for a document by uid, type, mid
       { uid, mid }, // Search for a document by uid, mid; removed typ to consolidate meeting and panel duplicates
       updateData,
-      // {
-      //   $set: {
-      //     ...meetingInfo, // Set all fields
-      //   },
-      //   $push: {
-      //     raw_data: meetingInfo, // Push raw meeting object into array
-      //   },
-      //   $inc: {
-      //     loadAppCount: 1, // Increment the loadAppCount field by 1
-      //   },
-      // },
       {
         upsert: true, // Create a new document if no matching document is found
         new: true, // Return the updated document
@@ -430,18 +423,18 @@ const findOneAndUpsertMeetingRecordMutation = (meetingInfo) => {
 };
 
 //usage example
-const meetingInfo = {
-  typ: "meeting",
-  uid: "9U4fVlbMRsKuQgOf1kpYBg",
-  aud: "gs1tX1AqQkCDXu7qzgFhA",
-  iss: "marketplace.zoom.us",
-  ts: 1704084296567,
-  exp: 1704084416567,
-  entitlements: [],
-  mid: "YYH1D5AUSIqyTFRvraYVxw==",
-  attendrole: "host",
-};
-findOneAndUpsertMeetingRecordMutation(meetingInfo);
+// const meetingInfo = {
+//   typ: "meeting",
+//   uid: "9U4fVlbMRsKuQgOf1kpYBg",
+//   aud: "gs1tX1AqQkCDXu7qzgFhA",
+//   iss: "marketplace.zoom.us",
+//   ts: 1704084296567,
+//   exp: 1704084416567,
+//   entitlements: [],
+//   mid: "YYH1D5AUSIqyTFRvraYVxw==",
+//   attendrole: "host",
+// };
+// findOneAndUpsertMeetingRecordMutation(meetingInfo);
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
