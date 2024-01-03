@@ -379,14 +379,14 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let typ = meetingInfo.typ;
   console.log(uid, mid, typ, meetingInfo);
 
-  let findIt = await findOneQueryByZoomId(uid); //get user_id to add to zoomMeeting record
-  console.log(findIt);
-  console.log(findIt?._id);
+  let getUserId = await findOneQueryByZoomId(uid); //get user_id to add to zoomMeeting record
+  console.log(getUserId);
+  console.log(getUserId?._id);
 
   return new Promise((resolve, reject) => {
     const updateData = {
       ...meetingInfo, // Set all fields
-      user_id: findIt._id,
+      user_id: getUserId._id,
       $push: {
         raw_data: meetingInfo, // Push raw meeting object into array
       },
