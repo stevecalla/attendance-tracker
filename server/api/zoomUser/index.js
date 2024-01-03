@@ -50,55 +50,23 @@ const findAllQuery = () => {
 //   })
 //   .catch((err) => console.error(err));
 
-// SECTION //GET THE MOST RECENTLY CREATED RECORD ( -1 most recent, 1 oldest)
-const findOneQueryMostRecent = () => {
-  return new Promise((resolve, reject) => {
-    ZoomUser.findOne()
-      .sort({ createdAt: -1 })
-      .exec((err, result) => {
-        if (err) {
-          console.error("Error retrieving the last inserted record:", err);
-          reject(err);
-          return;
-        }
-
-        // Close the connection if needed
-        mongoose.connection.close();
-
-        resolve(result);
-      });
-  });
-};
-
-// Usage example:
-// findOneQueryMostRecent()
-//   .then((result) => {
-//     console.log("Promise resolved with result:", result);
-//     // convertDateToMST(result.createdAt);
-//   })
-//   .catch((err) => {
-//     console.error("Promise rejected with error:", err);
-//   });
-
 //SECTION //FIND ONE BY ZOOMID
 // SECTION //GET THE USERZOOM BY ZOOMID
-const findOneZoomUserQueryByZoomId = (zoom_id) => {
+const findOneZoomUserQueryByZoomId = async (zoom_id) => {
   console.log(zoom_id, "test");
   // return new Promise((resolve, reject) => {
-    return ZoomUser.findOne({ zoom_id })
+  try {
+    const result = await ZoomUser.findOne({ zoom_id })
       .sort({ createdAt: -1 })
-      .exec()
-      .then((result) => {
-        if (!result) {
-          console.log("No record found for zoomId:", zoom_id);
-        }
-        // console.log(result);
-        return result;
-      })
-      .catch((err) => {
-        console.error("Error retrieving the last inserted record:", err);
-        throw err; // Re-throw the error to propagate it to the next catch block
-      });
+      .exec();
+    if (!result) {
+      console.log("No record found for zoomId:", zoom_id);
+    }
+    return result;
+  } catch (err) {
+    console.error("Error retrieving the last inserted record:", err);
+    throw err; // Re-throw the error to propagate it to the next catch block
+  }
   // });
 };
 
@@ -117,7 +85,39 @@ const findOneZoomUserQueryByZoomId = (zoom_id) => {
 //     console.error("Error:", err);
 //   });
 
-// SECTION //FIND &/OR UPSERT NEW ZOOM USER (AND RETURN THE UPDATED RECORD)
+//SECTION //FIND ONE BY ZOOMID
+const findOneZoomUserAndUpdateByZoomId = ( user_id , zoomMeetingId ) => {
+  console.log("find and update zoom meeting array");
+  console.log(user_id, zoomMeetingId);
+  let _id = user_id;
+  return new Promise((resolve, reject) => {
+    ZoomUser.findOneAndUpdate(
+      { _id }, // Search for a document with the specified zoomId
+      { $addToSet: { zoom_meetings: zoomMeetingId } }, // Set all fields
+      {
+        upsert: true, // Create a new document if no matching document is found
+        new: true, // Return the updated document
+        // useFindAndModify: false, // Don"t use depreciated findAndModify method
+        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      }
+    )
+      .then((updatedRecord) => {
+        if (!updatedRecord) {
+          console.log(
+            "No matching record found to update, a new one was created."
+          );
+        }
+        resolve(updatedRecord);
+        return updatedRecord;
+      })
+      .catch((err) => {
+        console.error("Error updating or creating the record:", err);
+        reject(err);
+      });
+  });
+};
+
+// SECTION //ON INSTALL = FIND &/OR UPSERT NEW ZOOM USER AND RETURN THE UPDATED RECORD
 const findOneAndUpsertNewZoomUserMutation = ({
   id: zoom_id,
   user_created_at,
@@ -372,7 +372,7 @@ const findOneAndUpdateIsInstalledFalse = ({ payload }) => {
 // };
 // findOneAndUpdateIsInstalledFalse(uninstallBody);
 
-//SECTION //CREATE MEETING RECORD
+//SECTION //ON HOMEPAGE HIT (api/zoomapp/home) = CREATE MEETING RECORD
 const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let uid = meetingInfo.uid;
   let mid = meetingInfo.mid;
@@ -387,13 +387,15 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
     const updateData = {
       ...meetingInfo, // Set all fields
       user_id: getUserId._id,
+      typ: typ === "panel" && "meeting",
+      // updateData: typ === "meeting" && (updateData.$inc = { load_app_count: 1 }),
       $push: {
         raw_data: meetingInfo, // Push raw meeting object into array
       },
     };
 
     // If typ is 'meeting', increment updateCount by 1
-    if (typ === 'meeting') {
+    if (typ === "meeting") {
       updateData.$inc = { load_app_count: 1 };
     }
 
@@ -415,9 +417,16 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
           );
         }
         resolve(updatedRecord);
-        return(updatedRecord)
+        return updatedRecord;
       })
-      .then((updatedRecord) => console.log('add zoom meeting id to zoomuser record', updatedRecord))
+      //add zoom meeting id to the zoomuser array
+      .then((updatedRecord) => {
+        console.log("add zoom meeting id to zoomuser record", updatedRecord);
+        let user_id = updatedRecord.user_id;
+        let zoomMeetingId = updatedRecord._id;
+        console.log(user_id, zoomMeetingId);
+        findOneZoomUserAndUpdateByZoomId(user_id, zoomMeetingId);
+      })
       .catch((err) => {
         console.error("Error updating or creating the record:", err);
         reject(err);
@@ -426,18 +435,18 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
 };
 
 //usage example
-const meetingInfo = {
-  typ: "meeting",
-  uid: "9U4fVlbMRsKuQgOf1kpYBg",
-  aud: "gs1tX1AqQkCDXu7qzgFhA",
-  iss: "marketplace.zoom.us",
-  ts: 1704084296567,
-  exp: 1704084416567,
-  entitlements: [],
-  mid: "YYH1D5AUSIqyTFRvraYVxw==",
-  attendrole: "host",
-};
-findOneAndUpsertMeetingRecordMutation(meetingInfo);
+// const meetingInfo = {
+//   typ: "meeting",
+//   uid: "9U4fVlbMRsKuQgOf1kpYBg",
+//   aud: "gs1tX1AqQkCDXu7qzgFhA",
+//   iss: "marketplace.zoom.us",
+//   ts: 1704084296567,
+//   exp: 1704084416567,
+//   entitlements: [],
+//   mid: "YYH1D5AUSIqyTFRvraYVxw==",
+//   attendrole: "host",
+// };
+// findOneAndUpsertMeetingRecordMutation(meetingInfo);
 
 // CONVERT GMT TO MST
 // SECTION //DATE TIME ZONE CONVERSION
