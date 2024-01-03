@@ -33,7 +33,7 @@ const zoomMeetingSchema = new Schema(
     raw_data: {
       type: [Object],
     },
-    loadAppCount: {
+    load_app_count: {
       type: Number,
       default: 0,
     },

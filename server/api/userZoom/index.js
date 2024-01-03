@@ -82,7 +82,7 @@ const findOneQueryMostRecent = () => {
 
 //SECTION //FIND ONE BY ZOOMID
 // SECTION //GET THE USERZOOM BY ZOOMID
-const findOneQueryByZoomId = (zoom_id) => {
+const findOneZoomUserQueryByZoomId = (zoom_id) => {
   console.log(zoom_id, "test");
   // return new Promise((resolve, reject) => {
     return ZoomUser.findOne({ zoom_id })
@@ -379,7 +379,7 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let typ = meetingInfo.typ;
   console.log(uid, mid, typ, meetingInfo);
 
-  let getUserId = await findOneQueryByZoomId(uid); //get user_id to add to zoomMeeting record
+  let getUserId = await findOneZoomUserQueryByZoomId(uid); //get user_id to add to zoomMeeting record
   console.log(getUserId);
   console.log(getUserId?._id);
 
@@ -394,7 +394,7 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
 
     // If typ is 'meeting', increment updateCount by 1
     if (typ === 'meeting') {
-      updateData.$inc = { loadAppCount: 1 };
+      updateData.$inc = { load_app_count: 1 };
     }
 
     ZoomMeeting.findOneAndUpdate(
