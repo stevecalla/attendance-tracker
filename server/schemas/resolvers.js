@@ -7,6 +7,7 @@ const {
   User,
   ZoomUser,
   EmailSend,
+  ZoomMeeting,
 } = require("../models");
 const { signToken } = require("../utils/auth");
 const { mailDetails, sendMail } = require("../utils/nodeMailer");
@@ -29,7 +30,8 @@ const resolvers = {
       return User.find()
         .sort({ lastName: -1 })
         .populate("emailSend")
-        .populate("zoomUser");
+        // .populate("zoomUser")
+        .populate({ path: "zoomUser", populate: { path: "zoom_meetings" } });
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -98,7 +100,18 @@ const resolvers = {
     //section zoomUser
     //all users, sort by lastName
     zoomUsers: async (parent, args, context) => {
-      return ZoomUser.find().sort({ lastName: -1 }).populate("user");
+      return ZoomUser.find()
+        .sort({ lastName: -1 })
+        .populate("user")
+        .populate("zoom_meetings");
+    },
+
+    //section zoomMeetings
+    zoomMeetings: async (parent, args, context) => {
+      return ZoomMeeting.find()
+        .sort({ createdAt: -1 })
+        // .populate("zoomUser")
+        .populate({ path: "zoomUser", populate: { path: "user" } });
     },
 
     //section hour queries

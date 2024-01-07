@@ -386,7 +386,7 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   return new Promise((resolve, reject) => {
     const updateData = {
       ...meetingInfo, // Set all fields
-      user_id: getUserId._id,
+      zoomUser: getUserId._id,
       typ: typ === "panel" && "meeting",
       // updateData: typ === "meeting" && (updateData.$inc = { load_app_count: 1 }),
       $push: {
@@ -422,10 +422,10 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
       //add zoom meeting id to the zoomuser array
       .then((updatedRecord) => {
         console.log("add zoom meeting id to zoomuser record", updatedRecord);
-        let user_id = updatedRecord.user_id;
+        let zoomUser = updatedRecord.zoomUser;
         let zoomMeetingId = updatedRecord._id;
-        console.log(user_id, zoomMeetingId);
-        findOneZoomUserAndUpdateByZoomId(user_id, zoomMeetingId);
+        console.log(zoomUser, zoomMeetingId);
+        findOneZoomUserAndUpdateByZoomId(zoomUser, zoomMeetingId);
       })
       .catch((err) => {
         console.error("Error updating or creating the record:", err);

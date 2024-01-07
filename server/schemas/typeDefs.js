@@ -62,9 +62,11 @@ const typeDefs = gql`
     user_created_at: String
     is_installed: Boolean
     user: User
+    zoom_meetings: [ZoomMeeting]
   }
 
   type ZoomMeeting {
+    _id: ID
     type: String
     uid: String
     aud: String
@@ -75,6 +77,7 @@ const typeDefs = gql`
     mid: String
     attendrole: String
     raw_data: [String]
+    zoomUser: ZoomUser
   }
 
   type Employee {
@@ -153,6 +156,7 @@ const typeDefs = gql`
     #user(email: String!): User
 
     zoomUsers: [ZoomUser]!
+    zoomMeetings: [ZoomMeeting]!
     #userZoneByEmail(email: String!): ZoomUser
     #userZoneByEmail(zoomId: String!): ZoomUser
 

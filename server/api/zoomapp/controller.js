@@ -396,10 +396,12 @@ module.exports = {
       );
       console.log(storeMeetingRecord);
       
-      //link user_id to zoommeeting (DONE)
-      //link meeting information to zoomUser (DONE)
-      //setup query for zoomuser to populate with zoom meeting info
-      //setup query for user to populate zoom user then zoom meeting?
+      //DONE link user_id to zoommeeting (DONE)
+      //DONE link meeting information to zoomUser (DONE)
+      //DONE setup query for zoomuser to populate with zoom meeting info DONE
+      //DONE setup query for zoomMeeting to populate with zoomUser
+      //DONE setup query for user to populate zoom user then zoom meeting?
+      
       //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
 
       //fix //end
