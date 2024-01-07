@@ -63,6 +63,7 @@ const typeDefs = gql`
     is_installed: Boolean
     user: User
     zoom_meetings: [ZoomMeeting]
+    zoom_meetings_count: String
   }
 
   type ZoomMeeting {
@@ -77,6 +78,7 @@ const typeDefs = gql`
     mid: String
     attendrole: String
     raw_data: [String]
+    load_app_count: String
     zoomUser: ZoomUser
   }
 

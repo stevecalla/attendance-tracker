@@ -84,7 +84,10 @@ const zoomUserSchema = new Schema(
       type: Schema.Types.Array,
       ref: 'ZoomMeeting',
     },
-  
+    zoom_meetings_count: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

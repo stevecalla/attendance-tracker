@@ -86,14 +86,17 @@ const findOneZoomUserQueryByZoomId = async (zoom_id) => {
 //   });
 
 //SECTION //FIND ONE BY ZOOMID
-const findOneZoomUserAndUpdateByZoomId = ( user_id , zoomMeetingId ) => {
+const findOneZoomUserAndUpdateByZoomId = (zoomUser, zoomMeetingId) => {
   console.log("find and update zoom meeting array");
-  console.log(user_id, zoomMeetingId);
-  let _id = user_id;
+  console.log(zoomUser, zoomMeetingId);
+  let _id = zoomUser;
   return new Promise((resolve, reject) => {
     ZoomUser.findOneAndUpdate(
       { _id }, // Search for a document with the specified zoomId
-      { $addToSet: { zoom_meetings: zoomMeetingId } }, // Set all fields
+      {
+        $addToSet: { zoom_meetings: zoomMeetingId },
+        $inc: { zoom_meetings_count: 1 }, //increment meeting count
+      }, // Set all fields
       {
         upsert: true, // Create a new document if no matching document is found
         new: true, // Return the updated document
@@ -377,6 +380,7 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   let uid = meetingInfo.uid;
   let mid = meetingInfo.mid;
   let typ = meetingInfo.typ;
+  console.log("CREATE MEETING RECORD");
   console.log(uid, mid, typ, meetingInfo);
 
   let getUserId = await findOneZoomUserQueryByZoomId(uid); //get user_id to add to zoomMeeting record
