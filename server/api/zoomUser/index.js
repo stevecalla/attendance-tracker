@@ -111,6 +111,9 @@ const findOneZoomUserAndUpdateByZoomId = (zoomUser, zoomMeetingId) => {
           );
         }
         resolve(updatedRecord);
+        console.log("=======================");
+        console.log(updatedRecord);
+        console.log("=======================");
         return updatedRecord;
       })
       .catch((err) => {
@@ -271,10 +274,10 @@ const findOneAndUpsertNewUserMutation = ({
           ...updateData, // Set all fields
         },
         // $push: {
-        $addToSet: {
-          //use the $addToSet operator instead of $push to add the newUserZoom only if it doesn't already exist in the zoomUser array.
-          zoomUser: zoomUser,
-        },
+        // $addToSet: {
+        //   //use the $addToSet operator instead of $push to add the newUserZoom only if it doesn't already exist in the zoomUser array.
+        //   zoomUser: zoomUser,
+        // },
       },
       {
         upsert: true, // Create a new document if no matching document is found
@@ -388,53 +391,55 @@ const findOneAndUpsertMeetingRecordMutation = async (meetingInfo) => {
   console.log(getUserId?._id);
 
   return new Promise((resolve, reject) => {
-    const updateData = {
-      ...meetingInfo, // Set all fields
-      zoomUser: getUserId._id,
-      typ: typ === "panel" && "meeting",
-      // updateData: typ === "meeting" && (updateData.$inc = { load_app_count: 1 }),
-      $push: {
-        raw_data: meetingInfo, // Push raw meeting object into array
-      },
-    };
-
-    // If typ is 'meeting', increment updateCount by 1
     if (typ === "meeting") {
-      updateData.$inc = { load_app_count: 1 };
-    }
+      const updateData = {
+        ...meetingInfo, // Set all fields
+        zoomUser: getUserId._id,
+        typ: typ === "panel" && "meeting",
+        // updateData: typ === "meeting" && (updateData.$inc = { load_app_count: 1 }),
+        $push: {
+          raw_data: meetingInfo, // Push raw meeting object into array
+        },
+      };
 
-    ZoomMeeting.findOneAndUpdate(
-      // { uid, typ, mid }, // Search for a document by uid, type, mid
-      { uid, mid }, // Search for a document by uid, mid; removed typ to consolidate meeting and panel duplicates
-      updateData,
-      {
-        upsert: true, // Create a new document if no matching document is found
-        new: true, // Return the updated document
-        // useFindAndModify: false, // Don't use depreciated findAndModify method
-        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+      // If typ is 'meeting', increment updateCount by 1
+      if (typ === "meeting") {
+        updateData.$inc = { load_app_count: 1 };
       }
-    )
-      .then((updatedRecord) => {
-        if (!updatedRecord) {
-          console.log(
-            "No matching record found to update, a new one was created."
-          );
+
+      ZoomMeeting.findOneAndUpdate(
+        // { uid, typ, mid }, // Search for a document by uid, type, mid
+        { uid, mid }, // Search for a document by uid, mid; removed typ to consolidate meeting and panel duplicates
+        updateData,
+        {
+          upsert: true, // Create a new document if no matching document is found
+          new: true, // Return the updated document
+          // useFindAndModify: false, // Don't use depreciated findAndModify method
+          rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
         }
-        resolve(updatedRecord);
-        return updatedRecord;
-      })
-      //add zoom meeting id to the zoomuser array
-      .then((updatedRecord) => {
-        console.log("add zoom meeting id to zoomuser record", updatedRecord);
-        let zoomUser = updatedRecord.zoomUser;
-        let zoomMeetingId = updatedRecord._id;
-        console.log(zoomUser, zoomMeetingId);
-        findOneZoomUserAndUpdateByZoomId(zoomUser, zoomMeetingId);
-      })
-      .catch((err) => {
-        console.error("Error updating or creating the record:", err);
-        reject(err);
-      });
+      )
+        .then((updatedRecord) => {
+          if (!updatedRecord) {
+            console.log(
+              "No matching record found to update, a new one was created."
+            );
+          }
+          resolve(updatedRecord);
+          return updatedRecord;
+        })
+        //add zoom meeting id to the zoomuser array
+        .then((updatedRecord) => {
+          console.log("add zoom meeting id to zoomuser record", updatedRecord);
+          let zoomUser = updatedRecord.zoomUser;
+          let zoomMeetingId = updatedRecord._id;
+          console.log(zoomUser, zoomMeetingId);
+          findOneZoomUserAndUpdateByZoomId(zoomUser, zoomMeetingId);
+        })
+        .catch((err) => {
+          console.error("Error updating or creating the record:", err);
+          reject(err);
+        });
+    }
   });
 };
 

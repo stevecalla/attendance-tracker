@@ -169,7 +169,11 @@ module.exports = {
       return next(error);
     }
 
-    console.log("1a. code param exists:", req.query.code, "\n");
+    console.log("1a. code param exists:", req?.query?.code, "\n");
+    console.log("1a2. state param exists:", req?.query?.state, "\n");
+    console.log("1a3. session state exists:", req?.session?.state, "\n");
+    console.log("1a4. session state exists:", zoomAuthorizationState, "\n");
+    console.log("1a5. session state exists:", zoomState, "\n");
 
     // 1b. Validate the state parameter is the same as the one we sent
     if (!zoomAuthorizationState || zoomAuthorizationState !== zoomState) {
@@ -401,8 +405,7 @@ module.exports = {
       //DONE setup query for zoomuser to populate with zoom meeting info DONE
       //DONE setup query for zoomMeeting to populate with zoomUser
       //DONE setup query for user to populate zoom user then zoom meeting?
-      
-      //count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
+      //DONE count number of meetings app has been used in based on the length of the zoomMeeting meeting id array?
 
       //fix //end
     } catch (error) {
