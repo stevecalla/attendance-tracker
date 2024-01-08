@@ -91,19 +91,41 @@ const findOneZoomUserAndUpdateByZoomId = (zoomUser, zoomMeetingId) => {
   console.log(zoomUser, zoomMeetingId);
   let _id = zoomUser;
   return new Promise((resolve, reject) => {
-    ZoomUser.findOneAndUpdate(
-      { _id }, // Search for a document with the specified zoomId
-      {
-        $addToSet: { zoom_meetings: zoomMeetingId },
-        $inc: { zoom_meetings_count: 1 }, //increment meeting count
-      }, // Set all fields
-      {
-        upsert: true, // Create a new document if no matching document is found
-        new: true, // Return the updated document
-        // useFindAndModify: false, // Don"t use depreciated findAndModify method
-        rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
-      }
-    )
+    ZoomUser.findOne({ _id })
+      .then((data) => {
+        console.log(data);
+        console.log(data.zoom_meetings);
+        console.log(data.zoom_meetings.includes(zoomMeetingId));
+
+        if (!data.zoom_meetings.includes(zoomMeetingId)) {
+          return ZoomUser.findOneAndUpdate(
+            { _id }, // Search for a document with the specified zoomId
+            {
+              $inc: { zoom_meetings_count: 1 }, //increment meeting count
+            }, // Set all fields
+            {
+              upsert: false, // Create a new document if no matching document is found
+              new: true, // Return the updated document
+              rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+            }
+          );
+        }
+      })
+      .then((data) => {
+        return ZoomUser.findOneAndUpdate(
+          { _id }, // Search for a document with the specified zoomId
+          {
+            $addToSet: { zoom_meetings: zoomMeetingId },
+            // $inc: { zoom_meetings_count: 1 }, //increment meeting count
+          }, // Set all fields
+          {
+            upsert: true, // Create a new document if no matching document is found
+            new: true, // Return the updated document
+            // useFindAndModify: false, // Don"t use depreciated findAndModify method
+            rawResult: true, // Set the rawResult option to true to show if updatedExisting = true or updatedExisting = false, upserted id
+          }
+        );
+      })
       .then((updatedRecord) => {
         if (!updatedRecord) {
           console.log(
