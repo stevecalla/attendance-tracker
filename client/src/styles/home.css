@@ -1,4 +1,5 @@
-.background-img {
+/* HERO BACKGROUND IMAGE */
+.background-image {
   background-image: url("../assets/images-avif/zoom-background-v3.avif");
   background-position: 0% 25%;
   background-size: cover;
@@ -7,8 +8,11 @@
   min-width: 280px;
 }
 
-.overlay-container {
+/* HERO OVERLAY */
+.overlay-container,
+.custom-fancy-border  {
   width: 500px;
+  height: 450px;
   margin: 8px 8px 50px 35px;
   padding-top: 8px;
   padding-bottom: 12px;
@@ -44,7 +48,19 @@
   border-radius: 4px;
 }
 
-.service-title {
+/* HERO OVERLAY BACKFACE OF IMAGE */
+.custom-fancy-border {
+  color: #0d2e4f;
+  background: white;
+  border-radius: 30% 10%;
+}
+
+.static-image {
+  height: 400px;
+}
+
+/* FEATURE SECTION */
+.feature-title {
   padding: 10px 0 10px 0;
   font-size: 35px;
   color: white;
@@ -54,34 +70,44 @@
   border-bottom: 1px solid black;
 }
 
-.card-body {
-  padding: 15px 0 5px 0;
-  text-align: center;
+/* CARDS FOR FEATURES */
+.custom-card {
+  width: 15rem;
 }
 
-logo-container {
-  display: flex;
-  justify-content: flex-start;
+.custom-card-image {
+  height: 165px;
+}
+
+.custom-card-title {
+  margin-Top: -15px;
+}
+
+.custom-card-text {
+  font-size: 16px; 
 }
 
 @media only screen and (max-width: 992px) and (min-width: 598px) {
-  .overlay-container {
+  .overlay-container,
+  .custom-fancy-border {
     margin-top: 120px;
   }
 }
 
 @media only screen and (max-width: 598px) and (min-width: 340px) {
-  .background-img {
+  .background-image {
     background-position: 50% 90%;
   }
 
-  .overlay-container {
+  .overlay-container,
+  .custom-fancy-border {
     margin-top: 30px;
   }
 }
 
 @media only screen and (max-width: 576px) {
-  .overlay-container {
+  .overlay-container,
+  .custom-fancy-border {
     max-width: 75%;
     margin-right: auto;
     margin-left: auto;
