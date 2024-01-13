@@ -1,8 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import Footer from "../components/Home/Footer";
 
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Button, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import "../styles/home.css";
 
@@ -12,51 +13,52 @@ import cleaning from "../assets/images-avif/cleaning.avif";
 import moving from "../assets/images-avif/moving.avif";
 import optimize from "../assets/images-avif/optimize.avif";
 import reconfig from "../assets/images-avif/reconfig.avif";
-import zoomBackground from "../assets/images-avif/zoom-background.avif";
+import office from "../assets/images-avif/office.avif";
 
 const Home = () => {
+  let navigate = useNavigate();
   return (
     <>
       {/* preload image to improve largest contentful paint in lighthouse */}
-      <link rel="preload" href={zoomBackground} as="image"></link> 
-      <main className="background-img">
+      <link rel="preload" href={office} as="image"></link> 
+      <main className="bk-img">
         <br></br>
-        <div className="overlay-container">
-          <p className="overlay-header">
-           Attendance Tracking
+        <div className="overlay-box">
+          <p className="overlay-header" style={{ fontStyle: "italic" }}>
+            Colorado's Premier Choice for Office Installation, Configuration &
+            Moving
           </p>
-          <p className="overlay-header">
-           Made Easier
+          <p className="overlay-sub-header">
+            Integral Solutions offers the delivery and setting up of office
+            furniture and floor space design for your business. Whether you’re
+            setting up your own office for the first time or changing locations,
+            Integral Solutions can help you implement and maintain an ideal
+            environment for the growth of your companies. <br />
+            <br /> Our family-owned business has more than 15 years of
+            experience setting up all kinds of commercial floor plans ranging
+            from offices to schools. At Integral Solutions, our goal is to
+            provide the office furniture solutions our clients need to achieve
+            their entrepreneurial goals.
           </p>
-          <p className="overlay-text">
-            Attendance tracking is time consuming. On Zoom, participants 
-            names don't match the roster, participant lists shift based 
-            on the active speaker, participant names don't sort 
-            alphabetically, no functionality exist to mark attendance, and
-            participant lists are not extractable during the meeting. <br />
-            <br />
-            The Attendance Track aims to solve these pain points. This 
-            feature rich applications includes the ability market participants
-            present or absent, use fuzzy logic to match participants againsts
-            the roster, search, filter & delete participants, copy to the 
-            clipboard and save a roster.
-          </p>  
-          <a
-            type="button"
-            className="install-button"
-            // fix add install link
-            href="https://koala-huge-goldfish.ngrok-free.app/api/zoomapp/install"
-            target="_blank"
-            rel="noreferrer"
+          <Button
+            style={{
+              backgroundColor: "white",
+              color: "#0D2E4F",
+              fontStyle: "italic",
+            }}
+            className="contact-btn"
+            onClick={() => {
+              navigate("/contact-us");
+            }}
           >
-            Install on Zoom
-          </a>
+            Contact Us
+          </Button>
         </div>
         <br></br>
       </main>
 
       <section>
-        <p className="service-title">Powerful Features</p>
+        <p className="service-title">Services We Offer</p>
       </section>
 
       <Container>

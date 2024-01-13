@@ -1,0 +1,141 @@
+.custom-nav {
+  min-width: 280px;
+  background-color: #0d2e4f !important;
+  color: white !important;
+  z-index: 6;
+}
+
+/* Nav links / hamburger menu */
+.navLink {
+  margin-left: 15px !important;
+  font-size: 32px !important;
+  color: white !important;
+}
+
+.navbar-nav {
+  flex-direction: row !important;
+  justify-content: center;
+  margin: 0px 20px 0px 20px;
+}
+
+/* hamburger menu */
+.hamburger {
+  text-decoration: none;
+  background-color: #335270 !important;
+}
+
+/* brand name & slogan */
+.brand-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.logo {
+  height: 60px;
+  width: 60px;
+}
+
+.brand-name {
+  text-align: left;
+  color: white;
+  font-size: 40px;
+}
+
+.slogan {
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1600px) {
+  .navLink {
+    padding: 0px 0px 0px 10px !important;
+    color: white !important;
+    font-size: 30px !important;
+  }
+}
+@media screen and (max-width: 1199px) {
+  .navbar-nav {
+    flex-direction: row !important;
+    justify-content: space-evenly;
+    margin: 0px 20px 0px 20px;
+    border: 1px solid #335270;
+    border-radius: 50px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .brand-container {
+    margin-left: 5px;
+  }
+
+  .brand-name {
+    margin: 0px;
+    font-size: 30px;
+  }
+
+  .slogan {
+    display: none;
+  }
+
+  .navLink {
+    font-size: 20px !important;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  .navbar {
+    padding-left: 0px !important;
+  }
+
+  .logo {
+    height: 40px;
+    width: 40px;
+  }
+
+  .brand-name {
+    margin: 0px;
+    font-size: 20px;
+  }
+
+  .slogan {
+    display: none;
+  }
+
+  .navbar-nav {
+    flex-direction: column !important;
+    justify-content: flex-start;
+    border: none;
+  }
+  
+  .navLink {
+    font-size: 20px !important;
+    border: 1px solid #335270;
+    border-radius: 50px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .navbar {
+    padding-left: 0px !important;
+  }
+}
+
+@media screen and (max-width: 280px) {
+  .logo {
+    display: none;
+  }
+
+  .brand-name {
+    margin: 5px;
+    font-size: 20px;
+  }
+
+  .navLink {
+    width: 85%;
+    font-size: 18px !important;
+  }
+}

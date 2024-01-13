@@ -17,7 +17,9 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
+import HomeCopy from "./pages/HomeCopy";
+import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import AccountPortal from "./pages/AccountPortal";
 // import SignupForm from "./components/Login/SignupForm";
@@ -313,10 +315,13 @@ function App() {
       <div className="App">
         {/* <Router> */}
         {/* <Switch> */}
+
+        <Navbar />
         <Routes>
           <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/home-copy" element={<HomeCopy />} />
           <Route path="/terms-privacy" element={<TermsPrivacy />} />
           <Route path="/contact-us" element={<ContactUs />} />
           {/* <Route path="/optout-image" element={<OptOutImage />} /> */}
