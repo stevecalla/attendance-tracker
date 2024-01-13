@@ -38,7 +38,18 @@
     "workbox-routing": "^6.6.0",
     "workbox-strategies": "^6.6.0",
     "workbox-streams": "^6.6.0",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "moment": "^2.29.4",
+    "phone-number-formats": "^2.2.1",
+    "dayjs": "^1.11.7",
+    "fullcalendar": "^5.11.3",
+    "@fullcalendar/core": "^5.11.3",
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/list": "^5.11.3",
+    "@fullcalendar/moment": "^5.11.3",
+    "@fullcalendar/react": "^5.11.3",
+    "@fullcalendar/timegrid": "^5.11.3"
   },
   "scripts": {
     "start": "react-scripts start",

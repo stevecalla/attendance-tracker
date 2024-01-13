@@ -94,6 +94,7 @@ export const Home = () => {
           <FeaturesCarousel />
         </Col>
       </Container>
+      
       <Footer />
     </>
   );

@@ -23,6 +23,21 @@ import {
   faCloud,
   faEye,
   faEyeSlash,
+  
+  faDriversLicense,
+  faLocationDot,
+  faEnvelopeOpenText,
+  faPhone,
+  faCross,
+  faAdd,
+  faPencil,
+  faToggleOn,
+  faToggleOff,
+  faLocation,
+  faShareNodes,
+  faSpinner,
+  faMap,
+  faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -38,6 +53,21 @@ library.add(
   faCloud,
   faEye,
   faEyeSlash,
+
+  faDriversLicense,
+  faLocationDot,
+  faEnvelopeOpenText,
+  faPhone,
+  faCross,
+  faAdd,
+  faPencil,
+  faToggleOn,
+  faToggleOff,
+  faLocation,
+  faShareNodes,
+  faSpinner,
+  faMap,
+  faEdit,
 );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
