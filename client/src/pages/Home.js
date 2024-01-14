@@ -54,7 +54,7 @@ const Home = () => {
     },
     {
       src: copy,
-      title: "Manage List",
+      title: "Copy List",
       alt: "Old fashion copy machine",
       text: "Copy the participant or fuzzy match list to the clipboard to use with third-party attendance systems.",
     },
@@ -63,41 +63,9 @@ const Home = () => {
   return (
     <>
       {/* preload image to improve largest contentful paint in lighthouse */}
-      {/* <link rel="preload" href={zoomBackground} as="image"></link> */}
+      <link rel="preload" href={zoomBackground} as="image"></link>
 
-      {/* <main className="background-image">
-        <br></br>
-        <div className="overlay-container">
-          <p className="overlay-header">Attendance Tracking</p>
-          <p className="overlay-header">Made Easier</p>
-          <p className="overlay-text">
-            Attendance tracking is time consuming. On Zoom, participants names
-            don't match the roster, participant lists shift based on the active
-            speaker, participant names don't sort alphabetically, no
-            functionality exist to mark attendance, and participant lists are
-            not extractable during the meeting. <br />
-            <br />
-            The Attendance Track aims to solve these pain points. This feature
-            rich applications includes the ability market participants present
-            or absent, use fuzzy logic to match participants againsts the
-            roster, search, filter & delete participants, copy to the clipboard
-            and save a roster.
-          </p>
-          <a
-            type="button"
-            className="install-button"
-            // fix add install link
-            href="https://koala-huge-goldfish.ngrok-free.app/api/zoomapp/install"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Install on Zoom
-          </a>
-        </div>
-        <br></br>
-      </main> */}
-
-      {/* SECTION FLIP CARD TEST */}
+      {/* SECTION HERO IMAGE & OVERLAY & FLIPCARD */}
       <main className="background-image">
         <br></br>
         <ReactCardFlip
@@ -151,12 +119,12 @@ const Home = () => {
         <br></br>
       </main>
 
-      {/* SECTION FLIP CARD TEST END */}
-
+      {/* SECTION FEATURE CARD HEADER */}
       <section>
         <p className="feature-title">Powerful Features</p>
       </section>
 
+      {/* SECTION FEATURE CARDS */}
       <Container>
         <Row>
           {features?.map(({ src, title, text }, index) => (

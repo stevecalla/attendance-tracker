@@ -4,14 +4,14 @@ import Lottie from "react-lottie-player";
 import logoCheckmark3 from "../../assets/images/lottie-static-checkmark-offblack2.png";
 import logoCheckmarkAnimated from "../../assets/images/lottie-checkmark-offblack.json";
 
-export const CheckAsset = ({widthArg, heightArg}) => {
-  const [display, setDisplay] = useState(true);
+export const CheckAsset = ({ widthArg, heightArg, animate }) => {
+  const [display, setDisplay] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    animate && setTimeout(() => {
       setDisplay(false);
     }, 3000);
-  }, []);
+  }, [animate]);
 
   const isDisplayed = {
     width: widthArg,
@@ -26,9 +26,9 @@ export const CheckAsset = ({widthArg, heightArg}) => {
   
   const isNotDisplayed = {
     display: "none",
+    backgroundColor: "white",
   };
   
-
   return (
     <>
       <img

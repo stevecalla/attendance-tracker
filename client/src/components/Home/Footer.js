@@ -1,40 +1,36 @@
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
-import "../../styles/footer.css";
+
+import { CheckAsset } from "../../components/Login/CheckAsset";
 
 import logo from "../../assets/images/logo.bkg.png";
+import "../../styles/footer.css";
 
 function Footer() {
   return (
     <footer>
-      <div className="">
-        <h3 className="footer-title">
-          Serving Greater Denver for Over 15 Years
-        </h3>
-        <main className="footer-container">
-          <img className="full-logo" src={logo} alt="Integral Solutons logo"></img>
-          <section className="phone-container">
-            <p className="">(720)-232-2510</p>
-            <p className="espanol">Se Habla Español!</p>
-          </section>
+      <section className="footer-container">
+        <article className="footer-logo">
+          <CheckAsset widthArg={"100px"} heightArg={"100px"} />
+        </article>
 
-          <section className="footer-nav-menu">
-            <Nav.Link className="menu-text" as={Link} to="/shop-links">
-              Shop Furniture
-            </Nav.Link>
-            <Nav.Link className="menu-text" as={Link} to="/contact-us">
-              Contact Us{" "}
-            </Nav.Link>
-            <Nav.Link className="menu-text" as={Link} to="/login">
-              Employee Login
-            </Nav.Link>
-          </section>
-        </main>
+        <article className="footer-title">
+          <h3 className="">Discover a Better Way to Track Attendance</h3>
+        </article>
 
-        <p className="footer-copy">
-          &copy;{new Date().getFullYear()} Integral Solutions LLC.
-        </p>
-      </div>
+        <article className="footer-nav-links">
+          <Nav.Link as={Link} to="/terms-privacy">
+            Terms & Privacy
+          </Nav.Link>
+          <Nav.Link as={Link} to="/contact-us">
+            Contact Us{" "}
+          </Nav.Link>
+        </article>
+      </section>
+
+      <p className="footer-copyright">
+        &copy;{new Date().getFullYear()} CallaCodes LLC.
+      </p>
     </footer>
   );
 }
