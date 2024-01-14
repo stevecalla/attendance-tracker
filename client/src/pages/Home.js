@@ -22,7 +22,6 @@ const Home = () => {
 
   const handleFlipClick = (e) => {
     e.preventDefault();
-    console.log("hello");
     setIsFlipped(!isFlipped);
   };
 
