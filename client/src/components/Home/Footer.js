@@ -15,15 +15,15 @@ function Footer() {
         </article>
 
         <article className="footer-title">
-          <h3 className="">Discover a Better Way to Track Attendance</h3>
+          <h3 className="">Discover Better Tools to Track Attendance</h3>
         </article>
 
         <article className="footer-nav-links">
-          <Nav.Link as={Link} to="/terms-privacy">
-            Terms & Privacy
-          </Nav.Link>
           <Nav.Link as={Link} to="/contact-us">
             Contact Us{" "}
+          </Nav.Link>
+          <Nav.Link as={Link} to="/terms-privacy">
+            Terms & Privacy
           </Nav.Link>
         </article>
       </section>

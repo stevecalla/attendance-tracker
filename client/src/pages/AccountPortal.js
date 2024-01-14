@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Headerbar from "../components/homeAttendance/Navbar";
-import Footer from "../components/homeAttendance/Footer";
+// import Headerbar from "../components/homeAttendance/Navbar";
+// import Footer from "../components/homeAttendance/Footer";
+import Footer from "../components/Home/Footer";
+
 import Profile from "../components/AccountPortal/Profile";
 import Zoom from "../components/AccountPortal/Zoom";
 import ClientList from "../components/AccountPortal/Clients";
@@ -39,7 +41,7 @@ const AccountPortal = ({
 
   return (
     <>
-      <Headerbar />
+      {/* <Headerbar /> */}
 
       <Container style={{ marginTop: "25px" }}>
         <Row className="justify-content-center">

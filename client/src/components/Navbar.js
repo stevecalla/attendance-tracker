@@ -35,34 +35,26 @@ const AppNavbar = () => {
           <Nav.Link className="navLink" as={Link} to="/">
             Home
           </Nav.Link>
-          {!Auth.loggedIn() && (
-            <>
-              <Nav.Link className="navLink" as={Link} to="/shop-links">
-                Shop Furniture
-              </Nav.Link>
-            </>
-          )}
 
-          {Auth.loggedIn() &&
+          {/* {Auth.loggedIn() &&
             Auth.isAdmin() === true &&
             Auth.isLocked() === false && (
               <>
                 <Nav.Link className="navLink" as={Link} to="/jobs-panel" reloadDocument>
                   Admin
-
                 </Nav.Link>
               </>
-            )}
+            )} */}
 
           {Auth.loggedIn() && Auth.isLocked() === false && (
             <>
               <Nav.Link
                 className="navLink"
                 as={Link}
-                to="/upcoming-jobs"
+                to="/profile-panel"
                 reloadDocument
               >
-                Employee
+                Account
               </Nav.Link>
             </>
           )}
@@ -71,6 +63,14 @@ const AppNavbar = () => {
             <>
               <Nav.Link className="navLink" as={Link} to="/contact-us">
                 Contact Us
+              </Nav.Link>
+            </>
+          )}
+
+          {!Auth.loggedIn() && (
+            <>
+              <Nav.Link className="navLink" as={Link} to="/login">
+                Login
               </Nav.Link>
             </>
           )}
