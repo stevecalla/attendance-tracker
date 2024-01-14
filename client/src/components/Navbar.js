@@ -2,10 +2,10 @@ import React from "react";
 import Auth from "../utils/auth";
 import { Link } from "react-router-dom";
 
+import { CheckAsset } from "../components/Login/CheckAsset";
+
 import { Navbar, Nav } from "react-bootstrap";
 import "../styles/navbar.css";
-
-import logoTop from "../assets/images/logo-no-slogan.png";
 
 const AppNavbar = () => {
   return (
@@ -16,7 +16,10 @@ const AppNavbar = () => {
         to="/"
         className="d-flex flex-nowrap mx-0"
       >
-        <img className="logo" src={logoTop} alt="Integral Solutions logo"></img>
+        {/* <img className="logo" src={logoTop} alt="Integral Solutions logo"></img> */}
+
+        <CheckAsset widthArg={"60px"} heightArg={"60px"} animate={true} />
+
         <div className="brand-container">
           <h2 className="brand-name">The Attendance Tracker</h2>
           {/* <h6 className="slogan">

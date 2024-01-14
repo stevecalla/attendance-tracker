@@ -1,7 +1,7 @@
 import Accordion from "react-bootstrap/Accordion";
-import Headerbar from "../homeAttendance/Navbar";
-import Footer from "../homeAttendance/Footer";
-import { Container } from "react-bootstrap";
+// import Headerbar from "../homeAttendance/Navbar";
+// import Footer from "../homeAttendance/Footer";
+// import { Container } from "react-bootstrap";
 import "../../styles/min-width.css";
 
 function TermsPrivacy() {
@@ -12,7 +12,7 @@ function TermsPrivacy() {
 
   return (
     <>
-      <Headerbar />
+      {/* <Headerbar /> */}
       <div className="min-width" style={{ height: "85vh" }}>
         <Accordion
           className="container"
@@ -468,7 +468,7 @@ function TermsPrivacy() {
         </Accordion>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

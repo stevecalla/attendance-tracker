@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import Headerbar from "../../components/homeAttendance/Navbar";
-import Footer from "../../components/homeAttendance/Footer";
+// import Headerbar from "../../components/homeAttendance/Navbar";
+// import Footer from "../../components/homeAttendance/Footer";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
@@ -218,7 +218,7 @@ function ForgotPassword() {
 
   return (
     <>
-      <Headerbar />
+      {/* <Headerbar /> */}
       <div className="min-width" style={{ height: "83vh" }}>
       <Container className="d-flex justify-content-center" style={{ marginTop: "75px" }}>
         <Col
@@ -309,7 +309,7 @@ function ForgotPassword() {
       </Container>
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

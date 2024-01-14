@@ -104,7 +104,7 @@ const Home = () => {
 
           <div onClick={handleFlipClick}>
             <div className="custom-fancy-border">
-            <p className="overlay-header">Easy to Use</p>
+            <p className="overlay-header">Tracker Demo</p>
               <img
                 className="static-image"
                 src={appGif}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import Headerbar from "../../components/homeAttendance/Navbar";
-import Footer from "../../components/homeAttendance/Footer";
+// import Headerbar from "../../components/homeAttendance/Navbar";
+// import Footer from "../../components/homeAttendance/Footer";
 
 import Auth from "../../utils/auth";
 import decode from "jwt-decode";
@@ -168,7 +168,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <Headerbar />
+      {/* <Headerbar /> */}
       <div className="min-width" style={{ height: "85vh" }}>
         <Container
           className="d-flex justify-content-center"
@@ -301,7 +301,7 @@ const ResetPassword = () => {
           </div>
         </Container>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

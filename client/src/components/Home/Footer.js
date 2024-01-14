@@ -3,15 +3,17 @@ import { Nav } from "react-bootstrap";
 
 import { CheckAsset } from "../../components/Login/CheckAsset";
 
-import logo from "../../assets/images/logo.bkg.png";
+// import logo from "../../assets/images/logo.bkg.png";
+// import "../../styles/home-page.css";
 import "../../styles/footer.css";
+
 
 function Footer() {
   return (
     <footer>
       <section className="footer-container">
         <article className="footer-logo">
-          <CheckAsset widthArg={"100px"} heightArg={"100px"} />
+          <CheckAsset widthArg={"100px"} heightArg={"100px"} animate={false} />
         </article>
 
         <article className="footer-title">

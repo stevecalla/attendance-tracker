@@ -1,11 +1,11 @@
 import React from "react";
 import Auth from "../utils/auth";
 import { useNavigate } from "react-router-dom";
-import Headerbar from "../components/homeAttendance/Navbar";
+// import Headerbar from "../components/homeAttendance/Navbar";
 import LoginForm from "../components/Login/LoginForm";
 import SignupForm from "../components/Login/SignupForm";
 import Message from "../components/Login/Message";
-import Footer from "../components/homeAttendance/Footer";
+// import Footer from "../components/homeAttendance/Footer";
 import { CheckAsset } from "../components/Login/CheckAsset";
 
 import Container from "react-bootstrap/Container";
@@ -22,7 +22,7 @@ const Login = ({
 
   return (
     <>
-    <Headerbar />
+    {/* <Headerbar /> */}
     <Container className="min-width" style={{ marginTop: "85px"}}>
       <div className="d-flex flex-column align-items-center mt-3 overflow-auto">
         <div
@@ -82,7 +82,7 @@ const Login = ({
         </div>
       </div>
     </Container>
-    <Footer />
+    {/* <Footer /> */}
     </>
   );
 };

@@ -1,5 +1,5 @@
-import Headerbar from "../homeAttendance/Navbar";
-import Footer from "../homeAttendance/Footer";
+// import Headerbar from "../homeAttendance/Navbar";
+// import Footer from "../homeAttendance/Footer";
 // import Button from "react-bootstrap/Button";
 import "../../styles/min-width.css";
 
@@ -18,7 +18,7 @@ function ContactUs() {
   };
   return (
     <>
-      <Headerbar />
+      {/* <Headerbar /> */}
       <div
         className="d-flex justify-content-center min-width"
         style={{
@@ -36,7 +36,7 @@ function ContactUs() {
           callasteven@gmail.com
         </a>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

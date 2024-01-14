@@ -8,33 +8,32 @@ export const CheckAsset = ({ widthArg, heightArg, animate }) => {
   const [display, setDisplay] = useState(false);
 
   useEffect(() => {
+    setDisplay(animate); //Sets state passed from component; false = don't animate; true = animate
     animate && setTimeout(() => {
-      setDisplay(false);
+      setDisplay(false); //Sets state to false to stop animation
     }, 3000);
   }, [animate]);
 
   const isDisplayed = {
     width: widthArg,
     height: heightArg,
-    backgroundColor: "#2B3035",
     zIndex: "5",
-  };
-  
-  const borderRadius = {
-    borderRadius: "50%",
   };
   
   const isNotDisplayed = {
     display: "none",
-    backgroundColor: "white",
+  };
+
+  const borderRadius = {
+    borderRadius: "50%",
   };
   
   return (
     <>
       <img
         src={logoCheckmark3}
-        alt="Pristine clean"
-        style={display ? isNotDisplayed : { ...borderRadius, ...isDisplayed }}
+        alt="Attendance Tracker Logo"
+        style={display ? isNotDisplayed : { ...isDisplayed, ...borderRadius }}
       ></img>
 
       <Lottie
@@ -42,7 +41,7 @@ export const CheckAsset = ({ widthArg, heightArg, animate }) => {
         play
         loop
         speed={0.5}
-        alt="Attendance Tracker"
+        alt="Attendance Tracker Animated Logo"
         style={display ? isDisplayed : isNotDisplayed}
       />
     </>
