@@ -10,7 +10,7 @@ const Message = () => {
     launchEmailPlatform();
   };
 
-  // Open preferred email provide and preppulate
+  // Open preferred email provide and prepopulate
   const launchEmailPlatform = () => {
     window.open(
       `mailto:colinmichael89@gmail.com?&subject=Shift Coverage&body=Hello Colin - I'd like to take the shift as X company on Y day of the week if available. I look forward to hearing from you.`

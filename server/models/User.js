@@ -6,6 +6,7 @@ const userSchema = new Schema(
     username: {
       type: String,
       unique: true,
+      // default: "",
     },
     email: {
       type: String,
@@ -18,6 +19,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 5,
       maxlength: 150,
+      default: "",
     },
     firstName: {
       type: String,
@@ -46,14 +48,17 @@ const userSchema = new Schema(
       type: Schema.Types.Array,
       ref: "EmailSend",
     },
+    zoomUser: {
+      type: Schema.Types.Array,
+      ref: "ZoomUser",
+    },
   },
   {
     timestamps: true,
   },
   {
-    toJSON: {
-      virtuals: true,
-    },
+    toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+    toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
   }
 );
 

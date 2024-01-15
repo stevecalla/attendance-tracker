@@ -10,7 +10,8 @@
     "isDisplayable": true,
     "isAdmin": false,
     "isLocked": false,
-    "emailSend": []
+    "emailSend": [],
+    "zoomUser": []
   },
   {
     "_id": "6398fb54494aa98f85992da3",
@@ -23,7 +24,8 @@
     "isDisplayable": true,
     "isAdmin": true,
     "isLocked": false,
-    "emailSend": []
+    "emailSend": [],
+    "zoomUser": []
   },
   {
     "_id": "6498fb54494aa98f85992da5",
@@ -36,6 +38,7 @@
     "isDisplayable": false,
     "isAdmin": true,
     "isLocked": false,
-    "emailSend": ["6398fb54494aa98f85992d25", "6398fb54494aa98f85992d25"]
+    "emailSend": ["6398fb54494aa98f85992d25", "6398fb54494aa98f85992d25"],
+    "zoomUser": ["658b5ea6b64d0454f3978319"]
   }
 ]

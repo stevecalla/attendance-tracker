@@ -9,5 +9,6 @@ router
   .get('/home', controller.home)
   .get('/authorize', controller.inClientAuthorize)
   .post('/onauthorized', controller.inClientOnAuthorized)
+  .post('/uninstall', controller.uninstall) //fix added by Calla
 
 module.exports = router

@@ -9,12 +9,18 @@ const { Hour } = require("../models");
 const hourSeeds = require("./hourSeeds.json");
 const { User } = require("../models");
 const userSeeds = require("./userSeeds.json");
+const { ZoomUser } = require("../models");
+const userZoomSeeds = require("./zoomUserSeeds.json");
 const { EmailSend } = require("../models");
 const emailSendSeeds = require("./emailSendSeeds.json");
+const { ZoomMeeting } = require("../models");
+const zoomMeetingSeeds = require("./zoomMeetingSeeds.json");
 
 db.once("open", async () => {
   try {
     await User.deleteMany({});
+    await ZoomUser.deleteMany({});
+    await ZoomMeeting.deleteMany({});
     await EmailSend.deleteMany({});
     await Schedule.deleteMany({});
     await Client.deleteMany({});
@@ -22,6 +28,8 @@ db.once("open", async () => {
     await Hour.deleteMany({});
 
     await User.create(userSeeds);
+    await ZoomUser.create(userZoomSeeds);
+    await ZoomMeeting.create(zoomMeetingSeeds);
     await EmailSend.create(emailSendSeeds);
     await Schedule.create(scheduleSeeds);
     await Client.create(clientSeeds);

@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "659c5baca1865d9db12eed1c",
+    "typ": "meeting",
+    "uid": "9U4fVlbMRsKuQgOf1kpYBg",
+    "aud": "gs1tX1AqQkCDXu7qzgFhA",
+    "iss": "marketplace.zoom.us",
+    "ts": 1704084296567,
+    "exp": 1704084416567,
+    "entitlements": [],
+    "mid": "YYH1D5AUSIqyTFRvraYVxw==",
+    "attendrole": "host",
+    "zoomUser": "658b5ea6b64d0454f3978319",
+    "raw_data": [
+      {
+        "typ": "meeting",
+        "uid": "9U4fVlbMRsKuQgOf1kpYBg",
+        "aud": "gs1tX1AqQkCDXu7qzgFhA",
+        "iss": "marketplace.zoom.us",
+        "ts": 1704084296567,
+        "exp": 1704084416567,
+        "entitlements": [],
+        "mid": "YYH1D5AUSIqyTFRvraYVxw==",
+        "attendrole": "host"
+      }
+    ]
+  }
+]

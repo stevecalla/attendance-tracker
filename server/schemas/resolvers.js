@@ -5,7 +5,9 @@ const {
   Employee,
   Hour,
   User,
+  ZoomUser,
   EmailSend,
+  ZoomMeeting,
 } = require("../models");
 const { signToken } = require("../utils/auth");
 const { mailDetails, sendMail } = require("../utils/nodeMailer");
@@ -25,7 +27,11 @@ const resolvers = {
 
     //all users, sort by lastName
     users: async (parent, args, context) => {
-      return User.find().sort({ lastName: -1 }).populate("emailSend");
+      return User.find()
+        .sort({ lastName: -1 })
+        .populate("emailSend")
+        // .populate("zoomUser")
+        .populate({ path: "zoomUser", populate: { path: "zoom_meetings" } });
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -89,6 +95,23 @@ const resolvers = {
       return User.findOne({ email: email });
       // }
       // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    //section zoomUser
+    //all users, sort by lastName
+    zoomUsers: async (parent, args, context) => {
+      return ZoomUser.find()
+        .sort({ lastName: -1 })
+        .populate("user")
+        .populate("zoom_meetings");
+    },
+
+    //section zoomMeetings
+    zoomMeetings: async (parent, args, context) => {
+      return ZoomMeeting.find()
+        .sort({ createdAt: -1 })
+        // .populate("zoomUser")
+        .populate({ path: "zoomUser", populate: { path: "user" } });
     },
 
     //section hour queries
@@ -271,7 +294,7 @@ const resolvers = {
     forgotPassword: async (parent, { email, password }) => {
       // const employee = await Employee.findOne({ email });
       const user = await User.findOne({ email });
-      console.log('resolver forgot password=', user);
+      console.log("resolver forgot password=", user);
 
       if (!user) {
         throw new AuthenticationError("Email address not found.");
@@ -285,7 +308,7 @@ const resolvers = {
 
     updatePassword: async (parent, { _id, password }, context) => {
       // if (context.user) {
-      console.log('resolver update password', _id, password);
+      console.log("resolver update password", _id, password);
 
       return User.findOneAndUpdate(
         { _id },
@@ -306,12 +329,12 @@ const resolvers = {
 
       // send the email; return the email details
       let dev = false;
-      // let dev = true;
+      // let dev = true; //fix set to dev = false in production
       let sendResponse = await sendMail(mailOptions, dev);
 
       // create the record in the database with the mail maildetails and response
       const { createEmailRecord } = require("../api/email/");
-      let createAndSendEmail = await createEmailRecord(args, sendResponse)
+      let createAndSendEmail = await createEmailRecord(args, sendResponse);
 
       return createAndSendEmail;
     },

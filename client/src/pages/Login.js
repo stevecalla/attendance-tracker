@@ -1,15 +1,16 @@
 import React from "react";
 import Auth from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+// import Headerbar from "../components/homeAttendance/Navbar";
 import LoginForm from "../components/Login/LoginForm";
 import SignupForm from "../components/Login/SignupForm";
 import Message from "../components/Login/Message";
-import { CleanAsset } from "../components/Login/CleanAsset";
+// import Footer from "../components/homeAttendance/Footer";
+import { CheckAsset } from "../components/Login/CheckAsset";
 
 import Container from "react-bootstrap/Container";
 import "../styles/button-home.css";
-
-// import littleFella from "../assets/images-avif/logo-no-slogan.avif";
+import "../styles/min-width.css";
 
 const Login = ({
   renderPanel,
@@ -20,7 +21,9 @@ const Login = ({
   let navigate = useNavigate();
 
   return (
-    <Container style={{ marginTop: "85px" }}>
+    <>
+    {/* <Headerbar /> */}
+    <Container className="min-width" style={{ marginTop: "85px"}}>
       <div className="d-flex flex-column align-items-center mt-3 overflow-auto">
         <div
           style={{
@@ -34,7 +37,7 @@ const Login = ({
         >
           <div className="mx-4 mt-4 mb-4" style={{ height: "150px" }}>
             <div className="d-flex justify-content-center align-content-center align-item-center">
-              <CleanAsset />
+              <CheckAsset widthArg={"160px"} heightArg={"150px"} />
             </div>
           </div>
           <div style={{ display: "flex", flex: "auto", width: "100%" }}>
@@ -79,6 +82,8 @@ const Login = ({
         </div>
       </div>
     </Container>
+    {/* <Footer /> */}
+    </>
   );
 };
 

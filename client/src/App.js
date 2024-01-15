@@ -17,18 +17,23 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
+// import HomeCopy from "./pages/HomeCopy";
+import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
-import SignupForm from "./components/Login/SignupForm";
-import Message from "./components/Login/Message";
+import AccountPortal from "./pages/AccountPortal";
+// import SignupForm from "./components/Login/SignupForm";
+// import Message from "./components/Login/Message";
 import { ZoomMainPortal } from "./pages/ZoomMainPortal";
 import WrongPage from "./pages/WrongPage";
 import ForgotPassword from "./components/ResetPassword/ForgotPassword";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import TermsPrivacy from "./components/Terms/TermsPrivacy";
 // import OptOutImage from "./components/ResetPassword/OptOutImage";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ContactUs from "./components/Contact/Contact";
 
 let once = 0; // to prevent increasing number of event listeners being added
 
@@ -220,7 +225,7 @@ function App() {
   // if (error) {
   //   console.log(error);
   //   return (
-  //     <div className="App">
+  //     <div className
   //       <h1>{error.message}</h1>
   //     </div>
   //   );
@@ -310,10 +315,15 @@ function App() {
       <div className="App">
         {/* <Router> */}
         {/* <Switch> */}
+
+        <Navbar />
         <Routes>
           <Route path="/api/zoomapp/proxy" element={<ZoomMainPortal />} />
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          {/* <Route path="/home-copy" element={<HomeCopy />} /> */}
+          <Route path="/terms-privacy" element={<TermsPrivacy />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           {/* <Route path="/optout-image" element={<OptOutImage />} /> */}
           <Route
             exact
@@ -357,6 +367,90 @@ function App() {
             path="/resetpassword/:token"
             element={<ResetPassword />}
           />
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/jobs-panel"
+            element={
+              <AccountPortal
+                renderPanel={"workorder"}
+                profileButtonIsActive={true}
+                employeeListButtonIsActive={false}
+                appButtonIsActive={false}
+              />
+            }
+          />
+          {/* )} */}
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/profile-panel"
+            element={
+              <AccountPortal
+                renderPanel={"profile"}
+                profileButtonIsActive={true}
+                employeeListButtonIsActive={false}
+                appButtonIsActive={false}
+              />
+            }
+          />
+          {/* )} */}
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/zoom-panel"
+            element={
+              <AccountPortal
+                renderPanel={"zoom"}
+                profileButtonIsActive={false}
+                employeeListButtonIsActive={true}
+                appButtonIsActive={false}
+              />
+            }
+          />
+          {/* )} */}
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/app-panel"
+            element={
+              <AccountPortal
+                renderPanel={"app"}
+                profileButtonIsActive={false}
+                employeeListButtonIsActive={false}
+                appButtonIsActive={true}
+              />
+            }
+          />
+          {/* )} */}
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/employees-panel"
+            element={
+              <AccountPortal
+                renderPanel={"employees"}
+                profileButtonIsActive={false}
+                employeeListButtonIsActive={true}
+                appButtonIsActive={false}
+              />
+            }
+          />
+          {/* )} */}
+          {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
+          <Route
+            exact
+            path="/client-panel"
+            element={
+              <AccountPortal
+                renderPanel={"clientlist"}
+                profileButtonIsActive={false}
+                employeeListButtonIsActive={false}
+                appButtonIsActive={true}
+              />
+            }
+          />
+          {/* )} */}
           <Route path="*" element={<WrongPage />} />
         </Routes>
       </div>

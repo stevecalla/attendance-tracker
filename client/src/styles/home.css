@@ -1,0 +1,136 @@
+/* HERO BACKGROUND IMAGE */
+.background-image {
+  background-image: url("../assets/images-avif/zoom-background-v3.avif");
+  background-position: 0% 25%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  min-width: 350px;
+}
+
+/* HERO OVERLAY */
+.overlay-container,
+.custom-fancy-border {
+  width: 500px;
+  height: 450px;
+  margin: 8px 8px 50px 35px;
+  padding-top: 8px;
+  padding-bottom: 12px;
+  color: white;
+  background-color: #0d2e4f;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  border: 1px solid black;
+  opacity: 0.9;
+}
+
+.overlay-header {
+  margin-bottom: 0;
+  font-size: 37px;
+  font-weight: bolder;
+  font-style: italic;
+  text-align: center;
+}
+
+.overlay-text {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.install-button,
+.demo-button {
+  width: 110px;
+  padding: 5px 8px;
+  color: black;
+  background-color: white;
+  font-style: italic;
+  text-decoration: none;
+  border-radius: 4px !important;
+}
+
+.demo-button {
+  width: 110px;
+  margin-left: 8px;
+  border: none;
+}
+
+/* HERO OVERLAY DEMO IMAGE */
+.custom-fancy-border {
+  color: #0d2e4f;
+  background: white;
+  border-radius: 30% 10%;
+}
+
+.demo-image {
+  height: 375px;
+}
+
+/* FEATURE SECTION */
+.feature-title {
+  padding: 10px 0 10px 0;
+  font-size: 35px;
+  color: white;
+  background-color: #0d2e4f;
+  text-align: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+/* CARDS FOR FEATURES */
+.custom-card {
+  width: 15rem;
+}
+
+.custom-card-image {
+  height: 165px;
+}
+
+.custom-card-title {
+  margin-top: -15px;
+}
+
+.custom-card-text {
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 992px) and (min-width: 576px) {
+  .overlay-container,
+  .custom-fancy-border {
+    margin-top: 120px;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .background-image {
+    background-position: 50% 90%;
+  }
+
+  .overlay-container,
+  .custom-fancy-border {
+    margin-top: 30px;
+    max-width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .overlay-header {
+    margin-bottom: 0px;
+    font-size: 20px;
+  }
+
+  .overlay-text {
+    font-size: 15px;
+  }
+
+  .demo-image {
+    height: 400px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .overlay-text {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,115 @@
+.form-length {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.addy {
+  width: 63%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-bottom: 15px;
+}
+
+.startTime {
+  width: 63%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.margin-expand {
+  margin-right: -12px;
+}
+
+@media screen and (max-width: 650px) {
+  .form-length {
+    width: 90%;
+  }
+
+  .addy {
+    width: 95%;
+  }
+
+  .zipcode-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .state-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+}
+
+@media screen and (min-width: 650px) and (max-width: 767px) {
+  .form-length {
+    width: 80%;
+  }
+
+  .addy {
+    width: 85%;
+  }
+
+  .zipcode-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .state-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 406px) {
+  .zipcode-clientUpdate {
+    margin-top: 15px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .addy {
+    width: 100%;
+  }
+
+  .startDate {
+    width: 100%;
+  }
+
+  .endDate {
+    width: 100%;
+  }
+
+  .startTime {
+    width: 100%;
+  }
+
+  .zipcode {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .zipcode-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .state-contact {
+    margin-top: 15px;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 375px) and (max-width: 389px) {
+  .zipcode {
+    margin-top: 15px;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 389px) and (max-width: 400px) {
+  .zipcode {
+    margin-top: 0px;
+  }
+}

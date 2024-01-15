@@ -13,6 +13,7 @@ const typeDefs = gql`
     isLocked: Boolean
     isDisplayable: Boolean
     emailSend: [EmailSend]
+    zoomUser: [ZoomUser]
   }
 
   type EmailSend {
@@ -30,6 +31,55 @@ const typeDefs = gql`
     messageId: String
     response: String
     user: User
+  }
+
+  # For the ZoomUser model
+  type PhoneNumber {
+    country: String!
+    code: String!
+    number: String!
+    verified: Boolean!
+    label: String
+  }
+
+  type ZoomUser {
+    _id: ID
+    zoom_id: String
+    first_name: String
+    last_name: String
+    display_name: String
+    email: String
+    role_name: String
+    timezone: String
+    last_client_version: String
+    pic_url: String
+    language: String
+    status: String
+    job_title: String
+    location: String
+    login_types: [Int]
+    phone_numbers: [PhoneNumber]
+    user_created_at: String
+    is_installed: Boolean
+    user: User
+    zoom_meetings: [ZoomMeeting]
+    zoom_meetings_count: String
+  }
+
+  type ZoomMeeting {
+    _id: ID
+    type: String
+    uid: String
+    aud: String
+    iss: String
+    ts: String
+    exp: String
+    entitlements: [String]
+    mid: String
+    attendrole: String
+    raw_data: [String]
+    load_app_count: String
+    zoomUser: ZoomUser
   }
 
   type Employee {
@@ -103,9 +153,15 @@ const typeDefs = gql`
 
   type Query {
     users: [User]!
+    me(_id: ID!): User
     userByEmail(email: String!): User
     #user(email: String!): User
-    me(_id: ID!): User
+
+    zoomUsers: [ZoomUser]!
+    zoomMeetings: [ZoomMeeting]!
+    #userZoneByEmail(email: String!): ZoomUser
+    #userZoneByEmail(zoomId: String!): ZoomUser
+
     #clients: [Client]!
     clients(isDisplayable: Boolean): [Client]!
     client(_id: ID!): Client

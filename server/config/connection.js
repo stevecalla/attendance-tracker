@@ -6,10 +6,10 @@ require("dotenv").config();
 mongoose.connect(
   process.env.MONGODB_URI || `mongodb://localhost:27017/${process.env.DB_NAME}`,
   {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+    // useNewUrlParser: true, //warning deprecated
+    // useUnifiedTopology: true, //warnin deprecated
+    // useCreateIndex: true, //not supported after mongoosev5
+    // useFindAndModify: false, //not supported after mongoosev5
   }
 );
 

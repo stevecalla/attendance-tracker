@@ -60,7 +60,7 @@ const emailSendSchema = new Schema(
   },
   {
     timestamps: true,
-    useCreateIndex: true,
+    // useCreateIndex: true,//not supported after mongoosev5
   },
   {
     toJSON: {

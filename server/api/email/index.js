@@ -15,8 +15,8 @@
 //     {
 //       useNewUrlParser: true,
 //       useUnifiedTopology: true,
-//       useCreateIndex: true,
-//       useFindAndModify: false,
+//       useCreateIndex: true,//not supported after mongoosev5
+//       useFindAndModify: false,//not supported after mongoosev5
 //     }
 //   );
 // }
@@ -155,7 +155,7 @@ const findOneAndUpdateMutation = (wasSentUpdate) => {
       {
         sort: { createdAt: -1 },
         returnOriginal: false,
-        useFindAndModify: false,
+        // useFindAndModify: false,//not supported after mongoosev5
       } // Sort by createdAt in descending order and return the updated document
     )
       .then((updatedRecord) => {
