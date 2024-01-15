@@ -6,11 +6,12 @@ import { CheckAsset } from "../../components/Login/CheckAsset";
 // import logo from "../../assets/images/logo.bkg.png";
 // import "../../styles/home-page.css";
 import "../../styles/footer.css";
+import "../../styles/min-width.css";
 
 
 function Footer() {
   return (
-    <footer>
+    <footer className="min-width">
       <section className="footer-container">
         <article className="footer-logo">
           <CheckAsset widthArg={"100px"} heightArg={"100px"} animate={false} />

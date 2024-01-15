@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-import ReactCardFlip from "react-card-flip";
-
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Footer from "../components/Home/Footer";
 import "../styles/home.css";
+import "../styles/min-width.css";
 
 import list from "../assets/images-avif/manageListofPeople.avif";
 import absent from "../assets/images-avif/absentEmptySeatInClass.avif";
@@ -14,15 +13,15 @@ import fuzzy from "../assets/images-avif/fuzzyCodingOnComputer.avif";
 import copy from "../assets/images-avif/copyMachine.avif";
 import zoomBackground from "../assets/images-avif/zoom-background-v3.avif";
 
-import appStatic from "../assets/images/homePage-app-static.png";
+// import appStatic from "../assets/images/homePage-app-static.png";
 import appGif from "../assets/images/homePage-app.gif";
 
 const Home = () => {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [display, setDisplay] = useState(true);
 
-  const handleFlipClick = (e) => {
+  const handleDemoClick = (e) => {
     e.preventDefault();
-    setIsFlipped(!isFlipped);
+    setDisplay(!display);
   };
 
   //SECTION RENDER FEATURES OBJECT
@@ -59,72 +58,83 @@ const Home = () => {
     },
   ];
 
+  const isNotDisplayed = {
+    display: "none",
+  };
+
+  const isDisplayed = {
+    display: "block",
+  };
+
   return (
     <>
       {/* preload image to improve largest contentful paint in lighthouse */}
       <link rel="preload" href={zoomBackground} as="image"></link>
 
-      {/* SECTION HERO IMAGE & OVERLAY & FLIPCARD */}
-      <main className="background-image">
+      {/* SECTION HERO IMAGE & OVERLAY & DEMO */}
+      <main className="background-image min-width">
         <br></br>
-        <ReactCardFlip
-          isFlipped={isFlipped}
-          flipSpeedBackToFront={1.5}
-          flipSpeedFrontToBack={1.5}
-          flipDirection="horizontal"
-        >
-          <div className="overlay-container" onClick={handleFlipClick}>
-            <p className="overlay-header">Attendance Tracking</p>
-            <p className="overlay-header">Made Easier</p>
-            <p className="overlay-text">
-              Attendance tracking is time consuming. On Zoom, participants names
-              don't match the roster, participant lists shift based on the
-              active speaker, participant names don't sort alphabetically, no
-              functionality exist to mark attendance, and participant lists are
-              not extractable during the meeting. <br />
-              <br />
-              The Attendance Track aims to solve these pain points. This feature
-              rich applications includes the ability market participants present
-              or absent, use fuzzy logic to match participants againsts the
-              roster, search, filter & delete participants, copy to the
-              clipboard and save a roster.
-            </p>
-            <a
-              type="button"
-              className="install-button"
-              // fix add install link
-              href="https://koala-huge-goldfish.ngrok-free.app/api/zoomapp/install"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Install on Zoom
-            </a>
-          </div>
 
-          <div onClick={handleFlipClick}>
-            <div className="custom-fancy-border">
-            <p className="overlay-header">Tracker Demo</p>
-              <img
-                className="static-image"
-                src={appGif}
-                // src={appStatic}
-                alt="Demo of Attendance Tracker"
-                fetchpriority="high"
-              />
-            </div>
-          </div>
-        </ReactCardFlip>
+        <div
+          className="overlay-container min-width"
+          style={display ? isDisplayed : isNotDisplayed}
+        >
+          <p className="overlay-header">Attendance Tracking</p>
+          <p className="overlay-header">Made Easier</p>
+          <p className="overlay-text">
+            Attendance tracking is time consuming. On Zoom, participants names
+            don't match the roster, participant lists shift based on the active
+            speaker, participant names don't sort alphabetically, no
+            functionality exist to mark attendance, and participant lists are
+            not extractable during the meeting. <br />
+            <br />
+            The Attendance Track aims to solve these pain points. This feature
+            rich applications includes the ability market participants present
+            or absent, use fuzzy logic to match participants againsts the
+            roster, search, filter & delete participants, copy to the clipboard
+            and save a roster.
+          </p>
+          <a
+            type="button"
+            className="install-button"
+            // fix add install link
+            href="https://koala-huge-goldfish.ngrok-free.app/api/zoomapp/install"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Zoom Install
+          </a>
+
+          <button className="demo-button" onClick={handleDemoClick}>
+            Demo
+          </button>
+        </div>
+
+        <div
+          className="custom-fancy-border min-width"
+          onClick={handleDemoClick}
+          style={display ? isNotDisplayed : isDisplayed}
+        >
+          <p className="overlay-header">Tracker Demo</p>
+          <img
+            className="demo-image"
+            src={appGif}
+            // src={appStatic}
+            alt="Demo of Attendance Tracker"
+            fetchpriority="high"
+          />
+        </div>
 
         <br></br>
       </main>
 
       {/* SECTION FEATURE CARD HEADER */}
-      <section>
+      <section className="min-width">
         <p className="feature-title">Powerful Features</p>
       </section>
 
       {/* SECTION FEATURE CARDS */}
-      <Container>
+      <Container className="min-width">
         <Row>
           {features?.map(({ src, title, text }, index) => (
             <Col key={index} className="d-flex justify-content-center mb-2">

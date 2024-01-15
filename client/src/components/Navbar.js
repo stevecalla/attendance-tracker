@@ -6,18 +6,17 @@ import { CheckAsset } from "../components/Login/CheckAsset";
 
 import { Navbar, Nav } from "react-bootstrap";
 import "../styles/navbar.css";
+import "../styles/min-width.css";
 
 const AppNavbar = () => {
   return (
-    <Navbar collapseOnSelect expand="xl" className="custom-nav px-3">
+    <Navbar collapseOnSelect expand="xl" className="custom-nav px-3 min-width">
       <Navbar.Brand
         as={Link}
         reloadDocument
         to="/"
         className="d-flex flex-nowrap mx-0"
       >
-        {/* <img className="logo" src={logoTop} alt="Integral Solutions logo"></img> */}
-
         <CheckAsset widthArg={"60px"} heightArg={"60px"} animate={true} />
 
         <div className="brand-container">

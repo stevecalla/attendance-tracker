@@ -5,12 +5,12 @@
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
-  min-width: 280px;
+  min-width: 350px;
 }
 
 /* HERO OVERLAY */
 .overlay-container,
-.custom-fancy-border  {
+.custom-fancy-border {
   width: 500px;
   height: 450px;
   margin: 8px 8px 50px 35px;
@@ -22,7 +22,7 @@
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   border: 1px solid black;
-  opacity: 0.90;
+  opacity: 0.9;
 }
 
 .overlay-header {
@@ -39,24 +39,32 @@
   margin-bottom: 8px;
 }
 
-.install-button {
+.install-button,
+.demo-button {
+  width: 110px;
   padding: 5px 8px;
   color: black;
   background-color: white;
   font-style: italic;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 4px !important;
 }
 
-/* HERO OVERLAY BACKFACE OF IMAGE */
+.demo-button {
+  width: 110px;
+  margin-left: 8px;
+  border: none;
+}
+
+/* HERO OVERLAY DEMO IMAGE */
 .custom-fancy-border {
   color: #0d2e4f;
   background: white;
   border-radius: 30% 10%;
 }
 
-.static-image {
-  height: 400px;
+.demo-image {
+  height: 375px;
 }
 
 /* FEATURE SECTION */
@@ -80,21 +88,21 @@
 }
 
 .custom-card-title {
-  margin-Top: -15px;
+  margin-top: -15px;
 }
 
 .custom-card-text {
-  font-size: 16px; 
+  font-size: 16px;
 }
 
-@media only screen and (max-width: 992px) and (min-width: 598px) {
+@media only screen and (max-width: 992px) and (min-width: 576px) {
   .overlay-container,
   .custom-fancy-border {
     margin-top: 120px;
   }
 }
 
-@media only screen and (max-width: 598px) and (min-width: 340px) {
+@media only screen and (max-width: 530px) {
   .background-image {
     background-position: 50% 90%;
   }
@@ -102,12 +110,6 @@
   .overlay-container,
   .custom-fancy-border {
     margin-top: 30px;
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  .overlay-container,
-  .custom-fancy-border {
     max-width: 75%;
     margin-right: auto;
     margin-left: auto;
@@ -119,7 +121,16 @@
   }
 
   .overlay-text {
+    font-size: 15px;
+  }
+
+  .demo-image {
+    height: 400px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .overlay-text {
     font-size: 14px;
-    text-align: center;
   }
 }
