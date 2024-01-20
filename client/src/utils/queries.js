@@ -1,16 +1,23 @@
 import { gql } from "@apollo/client";
 
-// export const QUERY_ME = gql`
-//   query me($id: ID!) {
-//     me(_id: $id) {
-//       _id
-//       username
-//       email
-//       firstName
-//       lastName
-//     }
-//   }
-// `;
+//SECTION USERS
+export const QUERY_ME = gql`
+  query me($id: ID!) {
+    me(_id: $id) {
+      _id
+      username
+      email
+      password
+      firstName
+      lastName
+      phone
+      zoomUser {
+        _id
+        is_installed
+      }
+    }
+  }
+`;
 
 // SECTION EMPLOYEE
 export const QUERY_EMPLOYEE_BYEMAIL = gql`
@@ -128,20 +135,6 @@ export const QUERY_SINGLE_EMPLOYEE = gql`
 `;
 
 //SECTION USERS
-
-//   query me($id: ID!) {
-//     me(_id: $id) {
-//       _id
-//       username
-//       email
-//       firstName
-//       lastName
-//     }
-//   }
-// `;
-
-// SECTION EMPLOYEE
-
 export const QUERY_USER_BYEMAIL = gql`
   query UserByEmail($email: String!) {
     userByEmail(email: $email) {
@@ -149,7 +142,7 @@ export const QUERY_USER_BYEMAIL = gql`
       firstName
       lastName
       email
-      cell
+      phone
       isAdmin
       isLocked
       isDisplayable
