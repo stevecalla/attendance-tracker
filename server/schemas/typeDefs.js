@@ -8,7 +8,7 @@ const typeDefs = gql`
     password: String
     firstName: String
     lastName: String
-    cell: String
+    phone: String
     isAdmin: Boolean
     isLocked: Boolean
     isDisplayable: Boolean

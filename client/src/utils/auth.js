@@ -76,4 +76,6 @@ class AuthService {
   }
 }
 
-export default new AuthService();
+let authService = new AuthService();
+
+export default authService;

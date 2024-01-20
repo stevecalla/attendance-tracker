@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Auth from "../../../utils/auth";
+import { getUserId } from "../../../utils/getUserId";
 
 import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
+  QUERY_ME,
   QUERY_ALL_EMPLOYEES,
   QUERY_SINGLE_EMPLOYEE,
 } from "../../../utils/queries";
@@ -53,6 +55,47 @@ function ProfileDetails() {
     useState(false);
   const [showHasDriversLicenseValidation, setShowHasDriversLicenseValidation] =
     useState(false);
+
+  //SECTION  START
+  //TODO GET CURRENT LOGIN IN USER
+  // get id for logged in employee
+  const userId = getUserId();
+  console.log(userId);
+  
+  //TODO QUERY USER DB FOR USER
+  // eslint-disable-next-line
+  const [getLoggedInUser, { loading: lazyLoadin2, data: singleEmployee2 }] =
+    useLazyQuery(QUERY_ME, {
+      variables: { id: userId },
+      // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
+      skip: !Auth.loggedIn(),
+      onCompleted: (singleEmployee) => {},
+    });
+  
+  console.log('queryMe', getLoggedInUser);
+
+  const {
+    // eslint-disable-next-line
+    // loading: userLoad,
+    data: user,
+    // eslint-disable-next-line
+    // error: userError,
+    // refetch: userRefetch,
+  } = useQuery(QUERY_ME, {
+    variables: {
+      id: userId,
+      // isDisplayable: true, //only retrieve employees with a displayable status
+    },
+    onCompleted: (data) => {console.log(data)},
+  });
+
+  console.log('currentUser', user);
+  console.log('currentUser', user?.me?.firstName);
+
+  //TODO POPULATE FORM WITH USER = //DONE (in return)
+  //TODO MUTATE USER INFO
+  //SECTION END
+
   //SECTION GET ALL EMPLOYEES
   const {
     // eslint-disable-next-line
@@ -235,7 +278,8 @@ function ProfileDetails() {
         onSubmit={handleEmployeeUpdate}
       >
         <div id="example-collapse-text">
-          <Form.Group className="form-length">
+          {/* SECTION SELECT */}
+          {/* <Form.Group className="form-length">
             <Form.Label style={{ fontWeight: "bolder" }}>Select</Form.Label>
             <Form.Control
               as="select"
@@ -257,8 +301,9 @@ function ProfileDetails() {
                 </option>
               ))}
             </Form.Control>
-          </Form.Group>
+          </Form.Group> */}
 
+          {/* SECTION FIRST NAME */}
           <Form.Group className="mb-3 form-length">
             <div className="form-label">
               <Form.Label style={{ fontWeight: "bolder" }}>
@@ -277,12 +322,15 @@ function ProfileDetails() {
               type="text"
               placeholder="Enter First Name"
               name="firstName"
-              value={selectFirstName ? prevEmployeeData?.firstName : firstName}
+              // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
+              value={user?.me?.firstName}
               onChange={handleInputChange}
               onBlur={handleBlurChange}
-              disabled={formIsDisabled}
+              // disabled={formIsDisabled}
             />
           </Form.Group>
+
+          {/* SECTION LAST NAME */}
           <Form.Group className="mb-3 form-length">
             <div className="form-label">
               <Form.Label style={{ fontWeight: "bolder" }}>
@@ -301,13 +349,15 @@ function ProfileDetails() {
               type="text"
               placeholder="Enter Last Name"
               name="lastName"
-              value={selectLastName ? prevEmployeeData?.lastName : lastName}
+              // value={selectLastName ? prevEmployeeData?.lastName : lastName}
+              value={user?.me?.lastName}
               onChange={handleInputChange}
               onBlur={handleBlurChange}
-              disabled={formIsDisabled}
+              // disabled={formIsDisabled}
             />
           </Form.Group>
 
+          {/* SECTION PHONE NUMBER */}
           <Form.Group className="mb-3 form-length">
             <div className="form-label">
               <Form.Label style={{ fontWeight: "bolder" }}>
@@ -341,15 +391,17 @@ function ProfileDetails() {
               placeholder="Enter a phone number"
               guide={true}
               // value={phone}
-              value={selectPhone ? prevEmployeeData?.phone : phone}
+              // value={selectPhone ? prevEmployeeData?.phone : phone}
+              value={user?.me?.phone}
               name="phone"
               onChange={handleInputChange}
               onBlur={handleBlurChange}
-              disabled={formIsDisabled}
+              // disabled={formIsDisabled}
               required
             />
           </Form.Group>
 
+          {/* SECTION EMAIL */}
           <Form.Group className="mb-3 form-length">
             <div className="form-label">
               <Form.Label htmlFor="email" style={{ fontWeight: "bolder" }}>
@@ -369,21 +421,23 @@ function ProfileDetails() {
               placeholder="Enter email address"
               guide={true}
               name="email"
-              value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
+              // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
+              value={user?.me?.email?.toLowerCase()}
               onChange={handleInputChange}
               onBlur={handleBlurChange}
-              disabled={formIsDisabled}
+              // disabled={formIsDisabled}
               required
             />
           </Form.Group>
 
+          {/* SECTION ZOOM IS INSTALLED TRUE OR FALSE */}
           <Form.Group className="mb-3 form-length">
             <div className="form-label">
               <Form.Label
                 htmlFor="driversLicense"
                 style={{ fontWeight: "bolder" }}
               >
-                Drivers License
+                Zoom Account (true or false)
               </Form.Label>
               <Form.Label
                 className={`validation-color ${
@@ -394,23 +448,23 @@ function ProfileDetails() {
               </Form.Label>
             </div>
             <Form.Control
-              as="select"
               className="custom-border"
               type="text"
-              placeholder="Employee Email"
+              placeholder="True or False"
               name="driversLicense"
               value={
-                selectHasDriversLicense
-                  ? prevEmployeeData?.hasDriversLicense
-                  : hasDriversLicense
+              user?.me?.zoomUser
+                  ? user?.me?.zoomUser?.is_installed?.toUpperCase()
+                  : "FALSE"
               }
               onChange={handleInputChange}
               onBlur={handleBlurChange}
-              disabled={formIsDisabled}
+              // disabled={formIsDisabled}
+              // as="select"
             >
-              <option>Select</option>
-              <option>Yes</option>
-              <option>No</option>
+              {/* <option>Select</option>
+              <option>True</option>
+              <option>False</option> */}
             </Form.Control>
           </Form.Group>
 
@@ -424,7 +478,7 @@ function ProfileDetails() {
               className="submit-button-style"
               variant="primary"
               type="submit"
-              disabled={!oneFieldHasInput}
+              // disabled={!oneFieldHasInput}
               title="Enter all fields to add a new client"
             >
               Update Employee
