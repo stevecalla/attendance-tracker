@@ -31,6 +31,7 @@ function ProfileDetails() {
   const [showValidationLastName, setShowValidationLastName] = useState(false);
   const [showValidationPhone, setShowValidationPhone] = useState(false);
   const [showValidationEmail, setShowValidationEmail] = useState(false);
+  const [dontUpdateDb, setDontUpdateDb] = useState(false);
 
   //SECTION GET CURRENT LOGIN IN USER
   // get id for logged in employee
@@ -92,11 +93,9 @@ function ProfileDetails() {
   const handleUserUpdate = async (event) => {
     event.preventDefault();
 
-    //Don't submit if values are empty
-    const isNotValid = isValidFormInput();
-
-    console.log('isNotValid', isNotValid);
-
+    //Don't update database if input is invalid
+    const isNotValid = dontUpdateDb;
+    // console.log('isNotValid', isNotValid);
     if (isNotValid) {
       return;
     }
@@ -140,44 +139,23 @@ function ProfileDetails() {
   //validation - if form input fields are blank render "is required"message
   const handleBlurChange = (e) => {
     const { name, value } = e.target;
+    console.log('name & value', name, value)
 
     const isInValidInput = {
         isValueEmpty: value.trim() === "", //true = disable submit button && render validation
-        isDisabled: function() {setIsSubmitDisabled(this.isValueEmpty)}, //true = disable submit button
+
+        disableSubmit: function() {setIsSubmitDisabled(this.isValueEmpty)}, //true = disable submit button
+        dontUpdateDb: function() {setDontUpdateDb(this.isValueEmpty)}, //true = handleUserUpdate will not update Db
+
         firstName: function() {setShowValidationFirstName(this.isValueEmpty)}, //true = show validation
         lastName: function() {setShowValidationLastName(this.isValueEmpty)}, //true = show validation
         phone: () => "validation not required", //necessary to prevent error & clarify not required
         email: function() {setShowValidationEmail(this.isValueEmpty)}, //true = show valuation
     }
 
-    isInValidInput.isDisabled(); //true = disable submit button
+    isInValidInput.dontUpdateDb(); //true = handleUserUpdate will not update Db
+    isInValidInput.disableSubmit(); //true = disable submit button
     isInValidInput[name](); //value ==== "" show validation
-  };
-
-  const isValidFormInput = () => {
-    console.log('validation', firstName, lastName, phone, email);
-
-    firstName.trim() === "" && setShowValidationFirstName(true);
-    
-    lastName.trim() === "" && setShowValidationLastName(true);
-    
-    phone.trim() === "" && setShowValidationPhone(true);
-    
-    email.trim() === "" && setShowValidationEmail(true);
-    
-    // const isValid = true;
-    const validationFlags = [showValidationFirstName, showValidationLastName, showValidationPhone, showValidationEmail];
-
-    const isNotValid = validationFlags.every(flag => !flag);
-
-    // Example usage:
-    if (isNotValid) {
-      console.log("All validations are false. Proceed with the operation.");
-    } else {
-      console.log("At least one validation is true. Do not proceed.");
-    }
-
-    return isNotValid;
   };
 
   return (
