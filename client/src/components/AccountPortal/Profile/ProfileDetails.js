@@ -1,490 +1,367 @@
-import React, { useState, useEffect } from "react";
-import Auth from "../../../utils/auth";
-import { getUserId } from "../../../utils/getUserId";
+import React, { useState } from "react";
 
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  QUERY_ME,
-  QUERY_ALL_EMPLOYEES,
-  QUERY_SINGLE_EMPLOYEE,
-} from "../../../utils/queries";
-import { UPDATE_EMPLOYEE_FORM } from "../../../utils/mutations";
+import { useQuery, useMutation } from "@apollo/client";
+import { QUERY_ME } from "../../../utils/queries";
+import { UPDATE_USER_FORM } from "../../../utils/mutations";
+
+import { getUserId } from "../../../utils/getUserId";
 
 import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
 
 import { Container, Form, Button } from "react-bootstrap";
-import "../../../styles/Contact.css";
-import "../../../styles/button-style.css";
-
-import SuccessAlert from "../../Alert";
+import "../../../styles/Contact.css"; //FIX?
+import "../../../styles/button-style.css"; //FIX?
 
 function ProfileDetails() {
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  //form = input fields
+  //SECTION FORM FIELDS = SET STATE TO PREVENT CONTROLLED FIELD ERROR
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [oneFieldHasInput, setOneFieldHasInput] = useState(true);
+  const [isInstalled, setIsInstalled] = useState("");
 
-  const [hasDriversLicense, setHasDriversLicense] = useState("");
+  //SECTION ENABLE/DISABLE FORM
+  const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
 
-  //set selected employee
+  //SECTION VALIDATION
+  const [showValidationFirstName, setShowValidationFirstName] = useState(false);
+  const [showValidationLastName, setShowValidationLastName] = useState(false);
+  const [showValidationPhone, setShowValidationPhone] = useState(false);
+  const [showValidationEmail, setShowValidationEmail] = useState(false);
 
-  const [currentEmployeeId, setCurrentEmployeeId] = useState("");
-
-  const [prevEmployeeData, setPrevEmployeeData] = useState({});
-
-  //set the state of the value in the input fields (either the input by the user or populate based on selected employee)
-  const [selectFirstName, setSelectFirstName] = useState(false);
-  const [selectLastName, setSelectLastName] = useState(false);
-  const [selectPhone, setSelectPhone] = useState(false);
-  const [selectEmail, setSelectEmail] = useState(false);
-  const [selectHasDriversLicense, setSelectHasDriversLicense] = useState(false);
-
-  //enable/disable form
-  const [formIsDisabled, setFormIsDisabled] = useState(true);
-
-  //validation
-  const [showFirstNameValidation, setShowFirstNameValidation] = useState(false);
-  const [showLastNameValidation, setShowLastNameValidation] = useState(false);
-  const [showPhoneValidation, setShowPhoneValidation] = useState(false);
-  const [showEmailEmployeeValidation, setShowEmailEmployeeStateValidation] =
-    useState(false);
-  const [showHasDriversLicenseValidation, setShowHasDriversLicenseValidation] =
-    useState(false);
-
-  //SECTION  START
-  //TODO GET CURRENT LOGIN IN USER
+  //SECTION GET CURRENT LOGIN IN USER
   // get id for logged in employee
   const userId = getUserId();
-  console.log(userId);
-  
-  //TODO QUERY USER DB FOR USER
-  // eslint-disable-next-line
-  const [getLoggedInUser, { loading: lazyLoadin2, data: singleEmployee2 }] =
-    useLazyQuery(QUERY_ME, {
-      variables: { id: userId },
-      // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
-      skip: !Auth.loggedIn(),
-      onCompleted: (singleEmployee) => {},
-    });
-  
-  console.log('queryMe', getLoggedInUser);
 
+  //SECTION QUERY USER DB FOR USER
   const {
     // eslint-disable-next-line
-    // loading: userLoad,
+    loading: userLoad,
+    // eslint-disable-next-line
     data: user,
     // eslint-disable-next-line
-    // error: userError,
-    // refetch: userRefetch,
+    error: userError,
+    refetch,
   } = useQuery(QUERY_ME, {
     variables: {
       id: userId,
-      // isDisplayable: true, //only retrieve employees with a displayable status
     },
-    onCompleted: (data) => {console.log(data)},
+    notifyOnNetworkStatusChange: true, //seems to be required for refecth to function properly
+    onCompleted: (data) => {
+      console.log("user", data);
+      const { me: currentUser } = data; //destructure user object
+      renderUser(currentUser); //set initial values & render user information
+    },
   });
 
-  console.log('currentUser', user);
-  console.log('currentUser', user?.me?.firstName);
+  //SECTION SET INITIAL CURRENT USER VALUES & POPULATE FORM WITH USER INFO
+  const renderUser = (currentUser) => {
+    console.log("currentUser", currentUser);
+    setFirstName(currentUser?.firstName);
+    setLastName(currentUser?.lastName);
+    setPhone(currentUser?.phone);
+    setEmail(currentUser?.email);
+    setIsInstalled(currentUser?.zoomUser[0]?.is_installed);
+  };
 
-  //TODO POPULATE FORM WITH USER = //DONE (in return)
-  //TODO MUTATE USER INFO
-  //SECTION END
-
-  //SECTION GET ALL EMPLOYEES
-  const {
-    // eslint-disable-next-line
-    loading: empLoad,
-    data: emp,
-    // eslint-disable-next-line
-    error: empError,
-    refetch: empRefetch,
-    // } = useQuery(QUERY_ALL_EMPLOYEES);
-  } = useQuery(QUERY_ALL_EMPLOYEES, {
-    variables: {
-      isDisplayable: true, //only retrieve employees with a displayable status
-    },
-    onCompleted: (data) => {},
-  });
-
-  //SECTION get a single employee
-  // eslint-disable-next-line
-  const [getASingleEmployee, { loading: lazyLoading, data: singleEmployee }] =
-    useLazyQuery(QUERY_SINGLE_EMPLOYEE, {
-      variables: { id: currentEmployeeId },
-      // if skip is true, this query will not be executed; in this instance, if the user is not logged in this query will be skipped when the component mounts
-      skip: !Auth.loggedIn(),
-      onCompleted: (singleEmployee) => {},
-    });
-
-  // SECTION UPDATE EMPLOYEE IN DATABASE
-  const [updateEmployee] = useMutation(UPDATE_EMPLOYEE_FORM);
-
-  //SECTION HANDLE INPUT
+  //SECTION HANDLE INPUT = CAPTURE EDITS TO USER INPUT
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log(name, value);
 
     if (name === "firstName") {
       setFirstName(value); //capture input on the form
-      setSelectFirstName(false); //allows value property to accept input
     } else if (name === "lastName") {
       setLastName(value);
-      setSelectLastName(false);
     } else if (name === "phone") {
       setPhone(value);
-      setSelectPhone(false);
     } else if (name === "email") {
       setEmail(value);
-      setSelectEmail(false);
-    } else if (name === "driversLicense") {
-      setHasDriversLicense(value);
-      setSelectHasDriversLicense(false);
     }
 
     return name;
   };
 
-  //SECTION HANDLE SELECTED EMPLOYEE
-  //set the state for the selected employee dropdown
-  async function handleSelectedEmployee(event) {
-    let employeeId =
-      event.target.options[event.target.selectedIndex].dataset.id; //get selected employee id
-    setCurrentEmployeeId(employeeId); //set state of current id
+  //SECTION UPDATE USER IN DATABASE BASED ON INPUT
+  const [updateUser] = useMutation(UPDATE_USER_FORM);
 
-    //await query single client
-    let currentEmployeeData = await getASingleEmployee(); //get selected employee data
-
-    setPrevEmployeeData(currentEmployeeData?.data?.employeeById); //set data state and rerender in form
-
-    // allow form to populate with selected employee data
-    setSelectFirstName(true);
-    setSelectLastName(true);
-    setSelectPhone(true);
-    setSelectEmail(true);
-    setSelectHasDriversLicense(true);
-
-    setFormIsDisabled(false); // enable form for input
-  }
-
-  //SECTION EMPLOYEE UPDATE
-  const handleEmployeeUpdate = async (event) => {
+  // SECTION HANDLE UPDATE USER ON CLICK
+  const handleUserUpdate = async (event) => {
     event.preventDefault();
-    let getEmployee = await getASingleEmployee();
+
+    //Don't submit if values are empty
+    const isNotValid = isValidFormInput();
+
+    console.log('isNotValid', isNotValid);
+
+    if (isNotValid) {
+      return;
+    }
 
     try {
-      await updateEmployee({
+      await updateUser({
         variables: {
-          id: currentEmployeeId,
-          firstName: firstName
-            ? firstName
-            : getEmployee.data.employeeById.firstName,
-          lastName: lastName
-            ? lastName
-            : getEmployee.data.employeeById.lastName,
-          email: email ? email : getEmployee.data.employeeById.email,
-          phone: phone ? phone : getEmployee.data.employeeById.phone,
-
-          hasDriversLicense: hasDriversLicense
-            ? hasDriversLicense
-            : getEmployee.data.employeeById.hasDriversLicense,
+          id: userId,
+          firstName,
+          lastName,
+          phone,
+          email,
         },
       });
     } catch (err) {
       console.log(err);
     }
 
-    oneFieldHasInput ? setShowSuccess(true) : setShowSuccess(false);
+    // REPLACE SUBMIT UPDATE BUTTON TEXT WITH UPDATING...
+    // DISABLE SUBMIT UPDATE BUTTON WHILE UPDATING...
+    // DISABLE FORM SO USER CAN'T MAKE CHANGES WHILE UPDATING...
+    setIsUpdatingUser(true);
+    setIsFormDisabled(true);
 
-    empRefetch();
+    // REPLACE UPDATING... BUTTON TEXT WITH SUBMIT UPDATE
+    setTimeout(() => {
+      setIsUpdatingUser(false);
+    }, 2000);
+  };
 
-    // allow form to populate with selected client data
-    setSelectFirstName(false);
-    setSelectLastName(false);
-    setSelectPhone(false);
-    setSelectEmail(false);
-    setSelectHasDriversLicense(false);
+  // SECTION ENABLE ABILITY TO EDIT USER INFORMATION
+  const handleEditButton = async (event) => {
+    event.preventDefault();
 
-    resetForm();
+    setIsFormDisabled(!isFormDisabled); //set form disabled = true
 
-    setFormIsDisabled(true); //set form disabled = true
+    !isFormDisabled && refetch(); //only execute refetch if isFormDisabled === false
   };
 
   //SECTION UTILITY FUNCTIONS
-  //validation - if a user clicks off field w/out entering text, then validation is required displays
+  //validation - if form input fields are blank render "is required"message
   const handleBlurChange = (e) => {
     const { name, value } = e.target;
 
+    console.log("blur", name, value);
+
+    name === "firstName" && value.trim() === ""
+      ? setShowValidationFirstName(true)
+      : setShowValidationFirstName(false);
+    name === "lastName" && value.trim() === ""
+      ? setShowValidationLastName(true)
+      : setShowValidationLastName(false);
+    name === "phone" && value.trim() === ""
+      ? setShowValidationPhone(true)
+      : setShowValidationPhone(false);
     name === "email" && value.trim() === ""
-      ? setShowEmailEmployeeStateValidation(true)
-      : setShowEmailEmployeeStateValidation(false);
-    name === "phone" && value.trim() === ""
-      ? setShowPhoneValidation(true)
-      : setShowPhoneValidation(false);
-    name === "phone" && value.trim() === ""
-      ? setShowPhoneValidation(true)
-      : setShowPhoneValidation(false);
-    name === "first-name" && value.trim() === ""
-      ? setShowFirstNameValidation(true)
-      : setShowFirstNameValidation(false);
-    name === "last-name" && value.trim() === ""
-      ? setShowLastNameValidation(true)
-      : setShowLastNameValidation(false);
-    name === "hasDriversLicense" && value.trim() === ""
-      ? setShowHasDriversLicenseValidation(true)
-      : setShowHasDriversLicenseValidation(false);
+      ? setShowValidationEmail(true)
+      : setShowValidationEmail(false);
   };
 
-  //reset = resets form to placeholder values
-  const resetForm = () => {
-    setFirstName("");
-    setLastName("");
-    setPhone("");
-    setEmail("");
-    setHasDriversLicense("");
+  const isValidFormInput = () => {
+    console.log('validation', firstName, lastName, phone, email);
+
+    firstName.trim() === "" && setShowValidationFirstName(true);
+    
+    lastName.trim() === "" && setShowValidationLastName(true);
+    
+    phone.trim() === "" && setShowValidationPhone(true);
+    
+    email.trim() === "" && setShowValidationEmail(true);
+    
+    // const isValid = true;
+    const validationFlags = [showValidationFirstName, showValidationLastName, showValidationPhone, showValidationEmail];
+
+    const isNotValid = validationFlags.every(flag => !flag);
+
+    // Example usage:
+    if (isNotValid) {
+      console.log("All validations are false. Proceed with the operation.");
+    } else {
+      console.log("At least one validation is true. Do not proceed.");
+    }
+
+    return isNotValid;
   };
-
-  //enable submit button = if input is added to at least one input field
-  useEffect(() => {
-    setOneFieldHasInput(
-      email.trim() !== "" ||
-        phone.trim() !== "" ||
-        firstName.trim() !== "" ||
-        lastName.trim() !== "" ||
-        hasDriversLicense !== ""
-    );
-    // eslint-disable-next-line
-  }, [email, phone, firstName, lastName, hasDriversLicense]);
-
-  let arrayForSort = [];
-  if (emp) {
-    arrayForSort = [...emp.employees];
-    arrayForSort.sort(function (a, b) {
-      if (a.lastName.toLowerCase() < b.lastName.toLowerCase()) return -1;
-      if (a.lastName.toLowerCase() > b.lastName.toLowerCase()) return 1;
-      return 0;
-    });
-  }
 
   return (
     <Container>
       <Form
-        data-editemployeeid={prevEmployeeData?._id}
+        data-editemployeeid={userId + Date.now()}
         className="py-3 overflow-auto custom-about"
-        onSubmit={handleEmployeeUpdate}
       >
-        <div id="example-collapse-text">
-          {/* SECTION SELECT */}
-          {/* <Form.Group className="form-length">
-            <Form.Label style={{ fontWeight: "bolder" }}>Select</Form.Label>
-            <Form.Control
-              as="select"
-              className="custom-border"
-              type="text"
-              placeholder="Select Employee"
-              value={"form-select" || ""}
-              name={"form-select" || ""}
-              onChange={handleSelectedEmployee}
+        {/* SECTION FIRST NAME */}
+        <Form.Group className="mb-3 form-length">
+          <div className="mb-0 form-label">
+            <Form.Label style={{ fontWeight: "bolder" }}>First Name</Form.Label>
+            <Form.Label
+              className={`validation-color ${
+                showValidationFirstName ? "show" : "hide"
+              }`}
             >
-              <option>
-                {prevEmployeeData?.firstName
-                  ? `${prevEmployeeData.firstName} ${prevEmployeeData.lastName}`
-                  : "Select"}
-              </option>
-              {arrayForSort.map((emp, index) => (
-                <option key={index} data-id={emp._id}>
-                  {`${emp.lastName}, ${emp.firstName} `}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group> */}
-
-          {/* SECTION FIRST NAME */}
-          <Form.Group className="mb-3 form-length">
-            <div className="form-label">
-              <Form.Label style={{ fontWeight: "bolder" }}>
-                First Name
-              </Form.Label>
-              <Form.Label
-                className={`validation-color ${
-                  showFirstNameValidation ? "show" : "hide"
-                }`}
-              >
-                * field is required
-              </Form.Label>
-            </div>
-            <Form.Control
-              className="custom-border"
-              type="text"
-              placeholder="Enter First Name"
-              name="firstName"
-              // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
-              value={user?.me?.firstName}
-              onChange={handleInputChange}
-              onBlur={handleBlurChange}
-              // disabled={formIsDisabled}
-            />
-          </Form.Group>
-
-          {/* SECTION LAST NAME */}
-          <Form.Group className="mb-3 form-length">
-            <div className="form-label">
-              <Form.Label style={{ fontWeight: "bolder" }}>
-                Last Name
-              </Form.Label>
-              <Form.Label
-                className={`validation-color ${
-                  showLastNameValidation ? "show" : "hide"
-                }`}
-              >
-                * field is required
-              </Form.Label>
-            </div>
-            <Form.Control
-              className="custom-border"
-              type="text"
-              placeholder="Enter Last Name"
-              name="lastName"
-              // value={selectLastName ? prevEmployeeData?.lastName : lastName}
-              value={user?.me?.lastName}
-              onChange={handleInputChange}
-              onBlur={handleBlurChange}
-              // disabled={formIsDisabled}
-            />
-          </Form.Group>
-
-          {/* SECTION PHONE NUMBER */}
-          <Form.Group className="mb-3 form-length">
-            <div className="form-label">
-              <Form.Label style={{ fontWeight: "bolder" }}>
-                Phone Number
-              </Form.Label>
-              <Form.Label
-                className={`validation-color ${
-                  showPhoneValidation ? "show" : "hide"
-                }`}
-              >
-                * field is required
-              </Form.Label>
-            </div>
-
-            <MaskedInput
-              mask={[
-                /[1-9]/,
-                /\d/,
-                /\d/,
-                "-",
-                /\d/,
-                /\d/,
-                /\d/,
-                "-",
-                /\d/,
-                /\d/,
-                /\d/,
-                /\d/,
-              ]}
-              className="form-control custom-border"
-              placeholder="Enter a phone number"
-              guide={true}
-              // value={phone}
-              // value={selectPhone ? prevEmployeeData?.phone : phone}
-              value={user?.me?.phone}
-              name="phone"
-              onChange={handleInputChange}
-              onBlur={handleBlurChange}
-              // disabled={formIsDisabled}
-              required
-            />
-          </Form.Group>
-
-          {/* SECTION EMAIL */}
-          <Form.Group className="mb-3 form-length">
-            <div className="form-label">
-              <Form.Label htmlFor="email" style={{ fontWeight: "bolder" }}>
-                Email
-              </Form.Label>
-              <Form.Label
-                className={`validation-color ${
-                  showEmailEmployeeValidation ? "show" : "hide"
-                }`}
-              >
-                * field is required
-              </Form.Label>
-            </div>
-            <MaskedInput
-              className="form-control custom-border"
-              mask={emailMask}
-              placeholder="Enter email address"
-              guide={true}
-              name="email"
-              // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
-              value={user?.me?.email?.toLowerCase()}
-              onChange={handleInputChange}
-              onBlur={handleBlurChange}
-              // disabled={formIsDisabled}
-              required
-            />
-          </Form.Group>
-
-          {/* SECTION ZOOM IS INSTALLED TRUE OR FALSE */}
-          <Form.Group className="mb-3 form-length">
-            <div className="form-label">
-              <Form.Label
-                htmlFor="driversLicense"
-                style={{ fontWeight: "bolder" }}
-              >
-                Zoom Account (true or false)
-              </Form.Label>
-              <Form.Label
-                className={`validation-color ${
-                  showHasDriversLicenseValidation ? "show" : "hide"
-                }`}
-              >
-                * field is required
-              </Form.Label>
-            </div>
-            <Form.Control
-              className="custom-border"
-              type="text"
-              placeholder="True or False"
-              name="driversLicense"
-              value={
-              user?.me?.zoomUser
-                  ? user?.me?.zoomUser?.is_installed?.toUpperCase()
-                  : "FALSE"
-              }
-              onChange={handleInputChange}
-              onBlur={handleBlurChange}
-              // disabled={formIsDisabled}
-              // as="select"
-            >
-              {/* <option>Select</option>
-              <option>True</option>
-              <option>False</option> */}
-            </Form.Control>
-          </Form.Group>
-
-          <SuccessAlert
-            message="Employee has been updated"
-            show={showSuccess}
-          ></SuccessAlert>
-
-          <div className="d-flex justify-content-center">
-            <Button
-              className="submit-button-style"
-              variant="primary"
-              type="submit"
-              // disabled={!oneFieldHasInput}
-              title="Enter all fields to add a new client"
-            >
-              Update Employee
-            </Button>
+              * field is required
+            </Form.Label>
           </div>
-        </div>
+          <Form.Control
+            className="custom-border"
+            type="text"
+            placeholder="Enter First Name"
+            name="firstName"
+            // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
+            value={firstName}
+            onChange={handleInputChange}
+            onBlur={handleBlurChange}
+            disabled={isFormDisabled}
+          />
+        </Form.Group>
+
+        {/* SECTION LAST NAME */}
+        <Form.Group className="mb-3 form-length">
+          <div className="mb-0 form-label">
+            <Form.Label style={{ fontWeight: "bolder" }}>Last Name</Form.Label>
+            <Form.Label
+              className={`validation-color ${
+                showValidationLastName ? "show" : "hide"
+              }`}
+            >
+              * field is required
+            </Form.Label>
+          </div>
+          <Form.Control
+            className="custom-border"
+            type="text"
+            placeholder="Enter Last Name"
+            name="lastName"
+            // value={selectLastName ? prevEmployeeData?.lastName : lastName}
+            value={lastName}
+            onChange={handleInputChange}
+            onBlur={handleBlurChange}
+            disabled={isFormDisabled}
+          />
+        </Form.Group>
+
+        {/* SECTION PHONE NUMBER */}
+        <Form.Group className="mb-3 form-length">
+          <div className="mb-0 form-label">
+            <Form.Label style={{ fontWeight: "bolder" }}>
+              Phone Number
+            </Form.Label>
+            <Form.Label
+              className={`validation-color ${
+                showValidationPhone ? "show" : "hide"
+              }`}
+            >
+              * field is required
+            </Form.Label>
+          </div>
+
+          <MaskedInput
+            mask={[
+              /[1-9]/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              "-",
+              /\d/,
+              /\d/,
+              /\d/,
+              /\d/,
+            ]}
+            className="form-control custom-border"
+            placeholder="Enter a phone number"
+            guide={true}
+            // value={phone}
+            // value={selectPhone ? prevEmployeeData?.phone : phone}
+            value={phone}
+            name="phone"
+            onChange={handleInputChange}
+            onBlur={handleBlurChange}
+            disabled={isFormDisabled}
+            required
+          />
+        </Form.Group>
+
+        {/* SECTION EMAIL */}
+        <Form.Group className="mb-3 form-length">
+          <div className="mb-0 form-label">
+            <Form.Label htmlFor="email" style={{ fontWeight: "bolder" }}>
+              Email
+            </Form.Label>
+            <Form.Label
+              className={`validation-color ${
+                showValidationEmail ? "show" : "hide"
+              }`}
+            >
+              * field is required
+            </Form.Label>
+          </div>
+          <MaskedInput
+            className="form-control custom-border"
+            mask={emailMask}
+            placeholder="Enter email address"
+            guide={true}
+            name="email"
+            // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
+            value={email.toLowerCase()}
+            onChange={handleInputChange}
+            onBlur={handleBlurChange}
+            disabled={isFormDisabled}
+            required
+          />
+        </Form.Group>
+
+        {/* SECTION ZOOM IS INSTALLED TRUE OR FALSE */}
+
+        {/* fix drivers license */}
+        <Form.Group className="mb-3 form-length">
+          <div className="mb-0 form-label">
+            <Form.Label
+              htmlFor="driversLicense"
+              style={{ fontWeight: "bolder" }}
+            >
+              Zoom Account
+            </Form.Label>
+            <Form.Label
+            >
+              * field is required
+            </Form.Label>
+          </div>
+          <Form.Control
+            className="custom-border"
+            type="text"
+            placeholder="True or False"
+            name="driversLicense"
+            value={isInstalled ? "True" : "False"}
+            onChange={handleInputChange}
+            disabled={true}
+          ></Form.Control>
+        </Form.Group>
+
+        {/* SECTION FORM BUTTONS */}
+        <section className="d-flex justify-content-center">
+          <Button
+            title="Enable input fields to change user information"
+            className="submit-button-style"
+            style={{ width: "145px", marginRight: "2px" }}
+            variant="primary"
+            disabled={isUpdatingUser}
+            onClick={handleEditButton}
+          >
+            {isFormDisabled ? "Edit Profile" : "Reset Form"}
+          </Button>
+
+          <Button
+            title="Update user information"
+            className="submit-button-style"
+            style={{ width: "145px" }}
+            variant="primary"
+            disabled={isFormDisabled}
+            onClick={!isUpdatingUser ? handleUserUpdate : null}
+          >
+            {isUpdatingUser ? "Updating…" : "Submit Update"}
+          </Button>
+        </section>
       </Form>
     </Container>
   );

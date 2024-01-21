@@ -270,6 +270,16 @@ const typeDefs = gql`
 
     updateClientSchedule(_id: ID, schedule: String): Client
 
+    # SECTION USER
+    updateUserForm(
+      _id: ID
+      firstName: String
+      lastName: String
+      phone: String
+      email: String
+    ): User
+
+
     # SECTION EMPLOYEE
     addEmployee(
       email: String

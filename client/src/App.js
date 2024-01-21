@@ -384,7 +384,7 @@ function App() {
           {/* {Auth.isAdmin() && !Auth.isLocked() && ( */}
           <Route
             exact
-            path="/profile-panel"
+            path="/profile"
             element={
               <AccountPortal
                 renderPanel={"profile"}
