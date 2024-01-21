@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_ME } from "../../../utils/queries";
 import { UPDATE_USER_FORM } from "../../../utils/mutations";
 
 import { getUserId } from "../../../utils/getUserId";
+import { validatePhoneorBlank } from "../../../utils/phoneValidation";
 
 import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
@@ -40,7 +41,7 @@ function ProfileDetails() {
   //SECTION QUERY USER DB FOR USER
   const {
     // eslint-disable-next-line
-    loading: userLoad,
+    loading,
     // eslint-disable-next-line
     data: user,
     // eslint-disable-next-line
@@ -137,25 +138,85 @@ function ProfileDetails() {
 
   //SECTION UTILITY FUNCTIONS
   //validation - if form input fields are blank render "is required"message
+  useEffect(() => {
+    if (!loading) {
+      let formInput = {
+        firstName,
+        lastName,
+        email,
+      };
+
+      // function validate(phoneInput) {
+      //   const regex = /^(?:[0-9]{3}-[0-9]{3}-[0-9]{4}|)$/; // Accepts '111-111-1111' or an empty string
+  
+      //   let testPhone = regex.test(phoneInput);
+      //   console.log('test phone', testPhone)
+      //   return testPhone;
+      // }
+      
+      // validate(phone);
+  
+      const isInValidInput = {
+        isInvalid: false,
+        firstName: function() {setShowValidationFirstName(this.isInvalid)}, //true = show validation
+        lastName: function() {setShowValidationLastName(this.isInvalid)}, //true = show validation
+        email: function() {setShowValidationEmail(this.isInvalid)}, //true = show validation
+        phone: (x) => "validation not required", //necessary to prevent error & clarify not required
+      }
+  
+      //render validation "is required"
+      for (const key in formInput) {
+        if (formInput[key].trim() === "") {
+          isInValidInput.isInvalid = true;
+          isInValidInput[key]();
+        } else {
+          isInValidInput.isInvalid = false;
+          isInValidInput[key]();
+        }
+        console.log(emailMask);
+      };
+  
+      // disable submit button and don't update Db
+      for (const key in formInput) {
+        if (formInput[key].trim() === "" || !validatePhoneorBlank(phone)) { //if empty
+          setIsSubmitDisabled(true);
+          setDontUpdateDb(true);
+          setShowValidationPhone(true);
+          return;
+        }
+  
+        validatePhoneorBlank(phone) && setShowValidationPhone(false);
+        setIsSubmitDisabled(false);
+      }
+    }
+  
+  }, [loading, firstName, lastName, email, phone])
+  
+
   const handleBlurChange = (e) => {
     const { name, value } = e.target;
-    console.log('name & value', name, value)
+    console.log("name & value", name, value);
 
-    const isInValidInput = {
-        isValueEmpty: value.trim() === "", //true = disable submit button && render validation
+    // const isInValidInput = {
+    //   formInput: {firstName, lastName, email}, //updates based on state from the handleInputChange function
 
-        disableSubmit: function() {setIsSubmitDisabled(this.isValueEmpty)}, //true = disable submit button
-        dontUpdateDb: function() {setDontUpdateDb(this.isValueEmpty)}, //true = handleUserUpdate will not update Db
+    //   isValueEmpty: value.trim() === "", //true = disable submit button && render validation
 
-        firstName: function() {setShowValidationFirstName(this.isValueEmpty)}, //true = show validation
-        lastName: function() {setShowValidationLastName(this.isValueEmpty)}, //true = show validation
-        phone: () => "validation not required", //necessary to prevent error & clarify not required
-        email: function() {setShowValidationEmail(this.isValueEmpty)}, //true = show valuation
-    }
+    //   disableSubmit: function() {setIsSubmitDisabled(this.isValueEmpty)}, //true = disable submit button
+    //   dontUpdateDb: function() {setDontUpdateDb(this.isValueEmpty)}, //true = handleUserUpdate will not update Db
 
-    isInValidInput.dontUpdateDb(); //true = handleUserUpdate will not update Db
-    isInValidInput.disableSubmit(); //true = disable submit button
-    isInValidInput[name](); //value ==== "" show validation
+    //   firstName: () => "",
+    //   // firstName: function() {setShowValidationFirstName(this.isValueEmpty)}, //true = show validation
+    //   lastName: function() {setShowValidationLastName(this.isValueEmpty)}, //true = show validation
+    //   phone: () => "validation not required", //necessary to prevent error & clarify not required
+    //   email: function() {setShowValidationEmail(this.isValueEmpty)}, //true = show valuation
+    // }
+
+    // console.log(isInValidInput.formInput);
+
+    // isInValidInput.dontUpdateDb(); //true = handleUserUpdate will not update Db
+    // isInValidInput.disableSubmit(); //true = disable submit button
+    // isInValidInput[name](); //value ==== "" show validation
   };
 
   return (
@@ -184,7 +245,7 @@ function ProfileDetails() {
             // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
             value={firstName}
             onChange={handleInputChange}
-            onBlur={handleBlurChange}
+            // onBlur={handleBlurChange}
             disabled={isFormDisabled}
           />
         </Form.Group>
@@ -209,7 +270,7 @@ function ProfileDetails() {
             // value={selectLastName ? prevEmployeeData?.lastName : lastName}
             value={lastName}
             onChange={handleInputChange}
-            onBlur={handleBlurChange}
+            // onBlur={handleBlurChange}
             disabled={isFormDisabled}
           />
         </Form.Group>
@@ -225,7 +286,7 @@ function ProfileDetails() {
                 showValidationPhone ? "show" : "hide"
               }`}
             >
-              * field is required
+              * format xxx-xxx-xxxx or blank
             </Form.Label>
           </div>
 
@@ -252,7 +313,7 @@ function ProfileDetails() {
             value={phone}
             name="phone"
             onChange={handleInputChange}
-            onBlur={handleBlurChange}
+            // onBlur={handleBlurChange}
             disabled={isFormDisabled}
             required
           />
@@ -281,7 +342,7 @@ function ProfileDetails() {
             // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
             value={email.toLowerCase()}
             onChange={handleInputChange}
-            onBlur={handleBlurChange}
+            // onBlur={handleBlurChange}
             disabled={isFormDisabled}
             required
           />
@@ -297,10 +358,6 @@ function ProfileDetails() {
               style={{ fontWeight: "bolder" }}
             >
               Zoom Account
-            </Form.Label>
-            <Form.Label
-            >
-              * field is required
             </Form.Label>
           </div>
           <Form.Control
