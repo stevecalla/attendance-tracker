@@ -1,4 +1,4 @@
-function validatePhoneorBlank(phoneInput) {
+function validatePhoneOrBlank(phoneInput) {
   // Validates '111-111-1111' or an empty string
   const regex = /^(?:[0-9]{3}-[0-9]{3}-[0-9]{4}|)$/;
 
@@ -26,7 +26,7 @@ function validatePhoneVariousFormats(phoneInput) {
 }
 
 module.exports = {
-  validatePhoneorBlank,
+  validatePhoneOrBlank,
   validatePhone,
   validatePhoneVariousFormats
 };
