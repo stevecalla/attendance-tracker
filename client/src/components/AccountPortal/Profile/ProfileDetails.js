@@ -23,6 +23,7 @@ function ProfileDetails() {
 
   //SECTION ENABLE/DISABLE FORM
   const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
 
   //SECTION VALIDATION
@@ -140,20 +141,17 @@ function ProfileDetails() {
   const handleBlurChange = (e) => {
     const { name, value } = e.target;
 
-    console.log("blur", name, value);
+    const isInValidInput = {
+        isValueEmpty: value.trim() === "", //true = disable submit button && render validation
+        isDisabled: function() {setIsSubmitDisabled(this.isValueEmpty)}, //true = disable submit button
+        firstName: function() {setShowValidationFirstName(this.isValueEmpty)}, //true = show validation
+        lastName: function() {setShowValidationLastName(this.isValueEmpty)}, //true = show validation
+        phone: () => "validation not required", //necessary to prevent error & clarify not required
+        email: function() {setShowValidationEmail(this.isValueEmpty)}, //true = show valuation
+    }
 
-    name === "firstName" && value.trim() === ""
-      ? setShowValidationFirstName(true)
-      : setShowValidationFirstName(false);
-    name === "lastName" && value.trim() === ""
-      ? setShowValidationLastName(true)
-      : setShowValidationLastName(false);
-    name === "phone" && value.trim() === ""
-      ? setShowValidationPhone(true)
-      : setShowValidationPhone(false);
-    name === "email" && value.trim() === ""
-      ? setShowValidationEmail(true)
-      : setShowValidationEmail(false);
+    isInValidInput.isDisabled(); //true = disable submit button
+    isInValidInput[name](); //value ==== "" show validation
   };
 
   const isValidFormInput = () => {
@@ -356,7 +354,7 @@ function ProfileDetails() {
             className="submit-button-style"
             style={{ width: "145px" }}
             variant="primary"
-            disabled={isFormDisabled}
+            disabled={isSubmitDisabled}
             onClick={!isUpdatingUser ? handleUserUpdate : null}
           >
             {isUpdatingUser ? "Updating…" : "Submit Update"}
