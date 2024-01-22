@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     _id: ID
     username: String
@@ -94,6 +96,8 @@ const typeDefs = gql`
     raw_data: [String]
     load_app_count: String
     zoomUser: ZoomUser
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Employee {
@@ -173,6 +177,9 @@ const typeDefs = gql`
     #user(email: String!): User
 
     zoomUsers: [ZoomUser]!
+    zoomUserById(_id: ID!): ZoomUser!
+    zoomUserByUserId(user: ID!): ZoomUser
+
     zoomMeetings: [ZoomMeeting]!
     #userZoneByEmail(email: String!): ZoomUser
     #userZoneByEmail(zoomId: String!): ZoomUser
