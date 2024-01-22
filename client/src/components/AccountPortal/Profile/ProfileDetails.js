@@ -15,6 +15,8 @@ import { Container, Form, Button } from "react-bootstrap";
 import "../../../styles/Contact.css";
 import "../../../styles/button-style.css";
 
+import Modal from "../../Modal/";
+
 function ProfileDetails() {
   //SECTION FORM FIELDS = SET STATE TO PREVENT CONTROLLED FIELD ERROR
   const [firstName, setFirstName] = useState("");
@@ -85,14 +87,12 @@ function ProfileDetails() {
   };
 
   //SECTION UPDATE USER IN DATABASE BASED ON INPUT
-  const [updateUser, { error }] = useMutation(UPDATE_USER_FORM, {
-    onError: (error) => {
-      console.log(error);
-      // setError(error?.graphQLErrors[0]?.message);
-    },
-  });
+  const [updateUser] = useMutation(UPDATE_USER_FORM);
 
   // SECTION HANDLE UPDATE USER ON CLICK
+  const [modalContent, setModalContent] = useState({});
+  const [renderModal, setRenderModal] = useState(false);
+
   const handleUserUpdate = async (event) => {
     event.preventDefault();
 
@@ -113,20 +113,36 @@ function ProfileDetails() {
         },
       });
 
-      const { success, message, user } = data.data.updateUserForm
+      const { success, message, shortMessage, user } = data.data.updateUserForm;
 
       console.log(success, message, user);
 
-      
+      // RENDER ERROR MODAL
+      if (!success) {
+        setModalContent({
+          message,
+          shortMessage,
+          success,
+          user,
+        });
+        setRenderModal(true);
+      }
     } catch (err) {
+      setModalContent({
+        message: err,
+        shortMessage: err,
+        success: false,
+        user: null,
+      });
+      setRenderModal(true);
       console.log(err);
     }
 
     // REPLACE SUBMIT UPDATE BUTTON TEXT WITH UPDATING...
-    // DISABLE SUBMIT UPDATE BUTTON WHILE UPDATING...
-    // DISABLE FORM SO USER CAN'T MAKE CHANGES WHILE UPDATING...
     setIsUpdatingUser(true);
+    // DISABLE FORM SO USER CAN'T MAKE CHANGES WHILE UPDATING...
     setIsFormDisabled(true);
+    // DISABLE SUBMIT UPDATE BUTTON WHILE UPDATING...
     setIsSubmitDisabled(true);
 
     // REPLACE UPDATING... BUTTON TEXT WITH SUBMIT UPDATE
@@ -201,6 +217,10 @@ function ProfileDetails() {
       }
     }
   }, [loading, firstName, lastName, email, phone, isFormDisabled]);
+
+  function resetModal() {
+    setRenderModal(!renderModal);
+  }
 
   return (
     <Container>
@@ -387,6 +407,9 @@ function ProfileDetails() {
           </Button>
         </section>
       </Form>
+
+      {/* RENDER MODAL IF PROFILE UPDATE FAILS */}
+      {renderModal && <Modal modalContent={modalContent} resetModal={resetModal}/>}
     </Container>
   );
 }
