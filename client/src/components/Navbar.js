@@ -53,7 +53,7 @@ const AppNavbar = () => {
               <Nav.Link
                 className="navLink"
                 as={Link}
-                to="/profile-panel"
+                to="/profile"
                 reloadDocument
               >
                 Account

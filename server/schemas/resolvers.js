@@ -20,18 +20,23 @@ const resolvers = {
   Query: {
     me: async (parent, { _id }, context) => {
       // if (context.user) {
-      return User.findById({ _id });
+      return User.findById({ _id }).populate({
+        path: "zoomUser",
+        populate: { path: "zoom_meetings" },
+      });
       // }
       // throw new AuthenticationError("You need to be logged in!");
     },
 
     //all users, sort by lastName
     users: async (parent, args, context) => {
-      return User.find()
-        .sort({ lastName: -1 })
-        .populate("emailSend")
-        // .populate("zoomUser")
-        .populate({ path: "zoomUser", populate: { path: "zoom_meetings" } });
+      return (
+        User.find()
+          .sort({ lastName: -1 })
+          .populate("emailSend")
+          // .populate("zoomUser")
+          .populate({ path: "zoomUser", populate: { path: "zoom_meetings" } })
+      );
     },
 
     clients: async (parent, { isDisplayable }, context) => {
@@ -108,10 +113,12 @@ const resolvers = {
 
     //section zoomMeetings
     zoomMeetings: async (parent, args, context) => {
-      return ZoomMeeting.find()
-        .sort({ createdAt: -1 })
-        // .populate("zoomUser")
-        .populate({ path: "zoomUser", populate: { path: "user" } });
+      return (
+        ZoomMeeting.find()
+          .sort({ createdAt: -1 })
+          // .populate("zoomUser")
+          .populate({ path: "zoomUser", populate: { path: "user" } })
+      );
     },
 
     //section hour queries
@@ -553,6 +560,28 @@ const resolvers = {
         { _id },
         {
           $addToSet: { hour },
+        },
+        { new: true }
+      );
+      // }
+      // throw new AuthenticationError("You need to be logged in!");
+    },
+
+    // SECTION USER
+    updateUserForm: async (
+      parent,
+      { _id, firstName, lastName, phone, email, },
+      context
+    ) => {
+      // if (context.user) {
+      console.log(_id, firstName, lastName, phone, email,);
+      return User.findOneAndUpdate(
+        { _id },
+        {
+          firstName,
+          lastName,
+          phone,
+          email,
         },
         { new: true }
       );

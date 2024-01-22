@@ -8,7 +8,7 @@ import {
 } from "../../../utils/mutations";
 
 import { format_date_MMDDYYYY } from "../../../utils/dateFormat";
-import format_phone from "../../../utils/helpers";
+import format_phone from "../../../utils/phoneFormat";
 import googleMap from "../../../utils/googleMap";
 
 import { Row, Col, Container, Modal, Button } from "react-bootstrap";

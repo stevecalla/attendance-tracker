@@ -8,7 +8,7 @@ import {
   TOGGLE_ADMIN,
   TOGGLE_LOCKED,
 } from "../../../utils/mutations";
-import format_phone from "../../../utils/helpers";
+import format_phone from "../../../utils/phoneFormat";
 
 import { Row, Col, Container, Form, Modal, Button } from "react-bootstrap";
 import Collapse from "react-bootstrap/Collapse";

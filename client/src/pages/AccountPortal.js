@@ -60,7 +60,7 @@ const AccountPortal = ({
                 style={profileButtonIsActive ? isActive : notActive}
                 active={profileButtonIsActive}
                 onClick={() => {
-                  navigate("/profile-panel");
+                  navigate("/profile");
                 }}
               >
                 Profile

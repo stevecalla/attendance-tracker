@@ -52,6 +52,31 @@ export const UPDATE_PASSWORD = gql`
   }
 `;
 
+// SECTION USER
+export const UPDATE_USER_FORM = gql`
+  mutation updateUserForm(
+    $id: ID
+    $firstName: String
+    $lastName: String
+    $phone: String
+    $email: String
+  ) {
+    updateUserForm(
+      _id: $id
+      firstName: $firstName
+      lastName: $lastName
+      phone: $phone
+      email: $email
+    ) {
+      _id
+      firstName
+      lastName
+      phone
+      email
+    }
+  }
+`;
+
 // SECTION EMPLOYEE
 export const SIGNUP_EMPLOYEE = gql`
   mutation signupEmployee($email: String!, $password: String!) {
