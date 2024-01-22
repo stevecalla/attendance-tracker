@@ -573,20 +573,36 @@ const resolvers = {
       { _id, firstName, lastName, phone, email, },
       context
     ) => {
-      // if (context.user) {
-      console.log(_id, firstName, lastName, phone, email,);
-      return User.findOneAndUpdate(
-        { _id },
-        {
-          firstName,
-          lastName,
-          phone,
-          email,
-        },
-        { new: true }
-      );
-      // }
-      // throw new AuthenticationError("You need to be logged in!");
+      try {
+        console.log(_id, firstName, lastName, phone, email);
+    
+        const updatedUser = await User.findOneAndUpdate(
+          { _id },
+          {
+            firstName,
+            lastName,
+            phone,
+            email,
+          },
+          { new: true }
+        );
+    
+        // Check if the user with the given _id exists
+        if (!updatedUser) {
+          console.log("User not found");
+          throw new Error("User not found");
+        }
+    
+        return updatedUser;
+      } catch (error) {
+        // Handle the error and return an error object
+        const errorObject = {
+          success: false,
+          message: error.message || "An error occurred while updating the user.",
+        };
+        console.log(errorObject);
+        return errorObject;
+      }
     },
 
     // SECTION EMPLOYEE

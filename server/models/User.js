@@ -10,15 +10,15 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      required: [true, "email is required"],
+      unique: [true, "email arleady exits"],
       match: [/.+@.+\..+/, "Must use a valid email address"],
     },
     password: {
       type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 150,
+      required: [true, "password is required"],
+      minlength:[5, "password minimum length is 5 characters"],
+      maxlength: [150, "password maximum length is 150 characters"],
       default: "",
     },
     firstName: {
@@ -31,6 +31,7 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
+      match: [/^(?:[0-9]{3}-[0-9]{3}-[0-9]{4}|)$/, "Must use a valid phone number"],
     },
     isDisplayable: {
       type: Boolean,
