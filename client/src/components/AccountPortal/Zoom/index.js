@@ -6,7 +6,7 @@ import EmployeeAdd from "./EmployeeAdd";
 import EmployeeUpdate from "./EmployeeUpdate";
 import Reports from "./Reports";
 
-function EmployeesList() {
+function ZoomAccount() {
   return (
     <Tabs
       defaultActiveKey="employeeList"
@@ -32,4 +32,4 @@ function EmployeesList() {
   );
 }
 
-export default EmployeesList;
+export default ZoomAccount;

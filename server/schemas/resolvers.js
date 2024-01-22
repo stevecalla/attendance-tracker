@@ -18,7 +18,8 @@ let expiration = "2h"; // 2 hours
 
 const resolvers = {
   Query: {
-    me: async (parent, { _id }, context) => {
+    userById: async (parent, { _id }, context) => {
+      console.log(_id);
       // if (context.user) {
       return User.findById({ _id }).populate({
         path: "zoomUser",
@@ -570,12 +571,12 @@ const resolvers = {
     // SECTION USER
     updateUserForm: async (
       parent,
-      { _id, firstName, lastName, phone, email, },
+      { _id, firstName, lastName, phone, email },
       context
     ) => {
       try {
         console.log(_id, firstName, lastName, phone, email);
-    
+
         const user = await User.findOneAndUpdate(
           { _id },
           {
@@ -588,32 +589,30 @@ const resolvers = {
         );
 
         console.log(user);
-    
+
         // Check if the user with the given _id exists
         if (!user) {
           console.log("User not found");
           throw new Error("User not found");
         }
 
-      return {
-        code: 200,
-        success: true,
-        shortMessage: "Success",
-        message: `Successfully updated user ${user._id}`,
-        user
-      };
-    } catch (error) {
-      console.log(error);
-      return {
-        code: error.code,
-        success: false,
-        shortMessage: error.codeName,
-        message: error.message,
-        user: null
-      };
-    };
-
-
+        return {
+          code: 200,
+          success: true,
+          shortMessage: "Success",
+          message: `Successfully updated user ${user._id}`,
+          user,
+        };
+      } catch (error) {
+        console.log(error);
+        return {
+          code: error.code,
+          success: false,
+          shortMessage: error.codeName,
+          message: error.message,
+          user: null,
+        };
+      }
     },
 
     // SECTION EMPLOYEE

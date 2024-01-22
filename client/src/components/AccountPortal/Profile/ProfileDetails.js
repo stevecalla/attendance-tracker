@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { QUERY_ME } from "../../../utils/queries";
+import { QUERY_USER } from "../../../utils/queries";
 import { UPDATE_USER_FORM } from "../../../utils/mutations";
 
 import { getUserId } from "../../../utils/getUserId";
@@ -49,13 +49,13 @@ function ProfileDetails() {
     // eslint-disable-next-line
     error: userError,
     refetch,
-  } = useQuery(QUERY_ME, {
+  } = useQuery(QUERY_USER, {
     variables: {
       id: userId,
     },
     notifyOnNetworkStatusChange: true, //seems to be required for refetch to function properly
     onCompleted: (data) => {
-      const { me: currentUser } = data; //destructure user object
+      const { userById: currentUser } = data; //destructure user object
       renderCurrentUser(currentUser); //set initial values & render user information
     },
   });
@@ -186,7 +186,7 @@ function ProfileDetails() {
 
       //RENDER VALIDATION "IS REQUIRED" OR VALID PHONE FORMAT
       for (const key in formInput) {
-        if (formInput[key].trim() === "") {
+        if (formInput[key]?.trim() === "") {
           isInValidInput.isInvalid = true;
           isInValidInput[key]();
         } else {
@@ -197,7 +197,7 @@ function ProfileDetails() {
 
       //DISABLE SUBMIT BUTTON && DON'T UPDATE DB
       for (const key in formInput) {
-        if (formInput[key].trim() === "") {
+        if (formInput[key]?.trim() === "") {
           //if empty
           setIsSubmitDisabled(true);
           setDontUpdateDb(true);
@@ -345,7 +345,7 @@ function ProfileDetails() {
             placeholder="Enter email address"
             guide={true}
             name="email"
-            value={email.toLowerCase()}
+            value={email?.toLowerCase()}
             onChange={handleInputChange}
             // Due to the use of the MaskInput component, the e.target.value does not clear if the entire email is selected the deleted
             onKeyDown={(e) => {

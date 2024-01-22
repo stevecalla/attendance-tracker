@@ -1,15 +1,15 @@
 import { gql } from "@apollo/client";
 
 //SECTION USERS
-export const QUERY_ME = gql`
-  query me($id: ID!) {
-    me(_id: $id) {
+export const QUERY_USER = gql`
+  query userById($id: ID!) {
+    userById(_id: $id) {
       _id
       username
-      email
       firstName
       lastName
       phone
+      email
       zoomUser {
         _id
         is_installed
