@@ -576,7 +576,7 @@ const resolvers = {
       try {
         console.log(_id, firstName, lastName, phone, email);
     
-        const updatedUser = await User.findOneAndUpdate(
+        const user = await User.findOneAndUpdate(
           { _id },
           {
             firstName,
@@ -586,23 +586,34 @@ const resolvers = {
           },
           { new: true }
         );
+
+        console.log(user);
     
         // Check if the user with the given _id exists
-        if (!updatedUser) {
+        if (!user) {
           console.log("User not found");
           throw new Error("User not found");
         }
-    
-        return updatedUser;
-      } catch (error) {
-        // Handle the error and return an error object
-        const errorObject = {
-          success: false,
-          message: error.message || "An error occurred while updating the user.",
-        };
-        console.log(errorObject);
-        return errorObject;
-      }
+
+      return {
+        code: 200,
+        success: true,
+        shortMessage: "Success",
+        message: `Successfully updated user ${user._id}`,
+        user
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        code: error.code,
+        success: false,
+        shortMessage: error.codeName,
+        message: error.message,
+        user: null
+      };
+    };
+
+
     },
 
     // SECTION EMPLOYEE

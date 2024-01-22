@@ -85,7 +85,12 @@ function ProfileDetails() {
   };
 
   //SECTION UPDATE USER IN DATABASE BASED ON INPUT
-  const [updateUser] = useMutation(UPDATE_USER_FORM);
+  const [updateUser, { error }] = useMutation(UPDATE_USER_FORM, {
+    onError: (error) => {
+      console.log(error);
+      // setError(error?.graphQLErrors[0]?.message);
+    },
+  });
 
   // SECTION HANDLE UPDATE USER ON CLICK
   const handleUserUpdate = async (event) => {
@@ -98,7 +103,7 @@ function ProfileDetails() {
     }
 
     try {
-      await updateUser({
+      const data = await updateUser({
         variables: {
           id: userId,
           firstName,
@@ -107,6 +112,12 @@ function ProfileDetails() {
           email,
         },
       });
+
+      const { success, message, user } = data.data.updateUserForm
+
+      console.log(success, message, user);
+
+      
     } catch (err) {
       console.log(err);
     }

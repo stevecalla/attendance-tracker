@@ -68,11 +68,17 @@ export const UPDATE_USER_FORM = gql`
       phone: $phone
       email: $email
     ) {
-      _id
-      firstName
-      lastName
-      phone
-      email
+      code
+      success
+      shortMessage
+      message
+      user {
+        _id
+        firstName
+        lastName
+        phone
+        email
+      }
     }
   }
 `;
