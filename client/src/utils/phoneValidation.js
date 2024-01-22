@@ -3,7 +3,6 @@ function validatePhoneOrBlank(phoneInput) {
   const regex = /^(?:[0-9]{3}-[0-9]{3}-[0-9]{4}|)$/;
 
   let testPhone = regex.test(phoneInput);
-  console.log("test phone", testPhone);
   return testPhone;
 }
 
@@ -12,7 +11,6 @@ function validatePhone(phoneInput) {
   const regex = /^([0-9]{3})-([0-9]{3})-([0-9]{4})$/;
 
   let testPhone = regex.test(phoneInput);
-  console.log("test phone", testPhone);
   return testPhone;
 }
 
@@ -21,7 +19,6 @@ function validatePhoneVariousFormats(phoneInput) {
   const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
   let testPhone = regex.test(phoneInput);
-  console.log("test phone", testPhone);
   return testPhone;
 }
 

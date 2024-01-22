@@ -17,10 +17,10 @@ import "../../../styles/button-style.css"; //FIX?
 
 function ProfileDetails() {
   //SECTION FORM FIELDS = SET STATE TO PREVENT CONTROLLED FIELD ERROR
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [isInstalled, setIsInstalled] = useState("");
 
   //SECTION ENABLE/DISABLE FORM
@@ -53,15 +53,13 @@ function ProfileDetails() {
     },
     notifyOnNetworkStatusChange: true, //seems to be required for refecth to function properly
     onCompleted: (data) => {
-      console.log("user", data);
       const { me: currentUser } = data; //destructure user object
-      renderUser(currentUser); //set initial values & render user information
+      renderCurrentUser(currentUser); //set initial values & render user information
     },
   });
 
   //SECTION SET INITIAL CURRENT USER VALUES & POPULATE FORM WITH USER INFO
-  const renderUser = (currentUser) => {
-    console.log("currentUser", currentUser);
+  const renderCurrentUser = (currentUser) => {
     setFirstName(currentUser?.firstName);
     setLastName(currentUser?.lastName);
     setPhone(currentUser?.phone);
@@ -72,7 +70,6 @@ function ProfileDetails() {
   //SECTION HANDLE INPUT = CAPTURE EDITS TO USER INPUT
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
 
     if (name === "firstName") {
       setFirstName(value); //capture input on the form
@@ -96,7 +93,6 @@ function ProfileDetails() {
 
     //Don't update database if input is invalid
     const isNotValid = dontUpdateDb;
-    // console.log('isNotValid', isNotValid);
     if (isNotValid) {
       return;
     }
@@ -146,15 +142,21 @@ function ProfileDetails() {
         lastName,
         email,
       };
-  
+
       const isInValidInput = {
         isInvalid: false,
-        firstName: function() {setShowValidationFirstName(this.isInvalid)}, //true = show validation
-        lastName: function() {setShowValidationLastName(this.isInvalid)}, //true = show validation
-        email: function() {setShowValidationEmail(this.isInvalid)}, //true = show validation
+        firstName: function () {
+          setShowValidationFirstName(this.isInvalid);
+        }, //true = show validation
+        lastName: function () {
+          setShowValidationLastName(this.isInvalid);
+        }, //true = show validation
+        email: function () {
+          setShowValidationEmail(this.isInvalid);
+        }, //true = show validation
         phone: (x) => "validation not required", //necessary to prevent error & clarify not required
-      }
-  
+      };
+
       //RENDER VALIDATION "IS REQUIRED" OR VALID PHONE FORMAT
       for (const key in formInput) {
         if (formInput[key].trim() === "") {
@@ -164,12 +166,12 @@ function ProfileDetails() {
           isInValidInput.isInvalid = false;
           isInValidInput[key]();
         }
-        console.log(emailMask);
-      };
-  
+      }
+
       //DISABLE SUBMIT BUTTON && DON'T UPDATE DB
       for (const key in formInput) {
-        if (formInput[key].trim() === "") { //if empty
+        if (formInput[key].trim() === "") {
+          //if empty
           setIsSubmitDisabled(true);
           setDontUpdateDb(true);
           return;
@@ -179,18 +181,15 @@ function ProfileDetails() {
           setIsSubmitDisabled(true);
           setDontUpdateDb(true);
           return;
-        } 
-  
-        console.log('isformdisabled', isFormDisabled);
-        
+        }
+
         validatePhoneOrBlank(phone) && setShowValidationPhone(false);
         validateEmail(email) && setShowValidationPhone(false);
         isFormDisabled === false && setIsSubmitDisabled(false);
         setDontUpdateDb(false);
       }
     }
-  
-  }, [loading, firstName, lastName, email, phone, isFormDisabled])
+  }, [loading, firstName, lastName, email, phone, isFormDisabled]);
 
   return (
     <Container>
@@ -257,7 +256,7 @@ function ProfileDetails() {
                 showValidationPhone ? "show" : "hide"
               }`}
             >
-              * valid phone is required
+              * e.g 111-111-1111
             </Form.Label>
           </div>
 
@@ -279,11 +278,18 @@ function ProfileDetails() {
             className="form-control custom-border"
             placeholder="Enter a phone number"
             guide={true}
-            // value={phone}
-            // value={selectPhone ? prevEmployeeData?.phone : phone}
             value={phone}
             name="phone"
             onChange={handleInputChange}
+            // Due to the use of the MaskInput component, the e.target.value does not clear if the entire email is selected the deleted
+            onKeyDown={(e) => {
+              if (e.key === "Backspace" || e.key === "Delete") {
+                const clearedValue = "";
+                handleInputChange({
+                  target: { name: e.target.name, value: clearedValue },
+                });
+              }
+            }}
             disabled={isFormDisabled}
             required
           />
@@ -303,6 +309,7 @@ function ProfileDetails() {
               * valid email is required
             </Form.Label>
           </div>
+
           <MaskedInput
             className="form-control custom-border"
             mask={emailMask}
@@ -310,8 +317,17 @@ function ProfileDetails() {
             guide={true}
             name="email"
             // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
-            value={email.toLowerCase()}
+            value={email}
             onChange={handleInputChange}
+            // Due to the use of the MaskInput component, the e.target.value does not clear if the entire email is selected the deleted
+            onKeyDown={(e) => {
+              if (e.key === "Backspace" || e.key === "Delete") {
+                const clearedValue = "";
+                handleInputChange({
+                  target: { name: e.target.name, value: clearedValue },
+                });
+              }
+            }}
             disabled={isFormDisabled}
             required
           />
