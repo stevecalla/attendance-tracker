@@ -16,6 +16,20 @@ const typeDefs = gql`
     zoomUser: [ZoomUser]
   }
 
+  # fix
+  type UpdateUserFormResponse {
+    "Similar to HTTP status code, represents the status of the mutation"
+    code: Int!
+    "Indicates whether the mutation was successful"
+    success: Boolean!
+    "Short human-readable error message"
+    shortMessage: String!
+    "Human-readable message for the UI"
+    message: String!
+    "Newly updated user after a successful mutation"
+    user: User
+  }
+
   type EmailSend {
     _id: ID
     fromEmail: String
@@ -271,14 +285,23 @@ const typeDefs = gql`
     updateClientSchedule(_id: ID, schedule: String): Client
 
     # SECTION USER
+
+    # updateUserForm(
+      #   _id: ID
+      #   firstName: String
+      #   lastName: String
+      #   phone: String
+      #   email: String
+      # ): User
+      
+    #fix
     updateUserForm(
       _id: ID
       firstName: String
       lastName: String
       phone: String
       email: String
-    ): User
-
+    ): UpdateUserFormResponse
 
     # SECTION EMPLOYEE
     addEmployee(

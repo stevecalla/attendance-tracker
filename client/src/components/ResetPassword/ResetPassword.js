@@ -11,7 +11,7 @@ import { useMutation } from "@apollo/client";
 
 import { QUERY_USER_BYEMAIL } from "../../utils/queries";
 import { UPDATE_PASSWORD } from "../../utils/mutations";
-import CountdownTimer from "../Timer/countDown";
+// import CountdownTimer from "../Timer/countDown";
 import StaticModal from "../Modal/StaticModal";
 
 import { Form, Button, InputGroup, Container } from "react-bootstrap";

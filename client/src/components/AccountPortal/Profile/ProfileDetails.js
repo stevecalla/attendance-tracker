@@ -12,8 +12,10 @@ import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
 
 import { Container, Form, Button } from "react-bootstrap";
-import "../../../styles/Contact.css"; //FIX?
-import "../../../styles/button-style.css"; //FIX?
+import "../../../styles/Contact.css";
+import "../../../styles/button-style.css";
+
+import Modal from "../../Modal/";
 
 function ProfileDetails() {
   //SECTION FORM FIELDS = SET STATE TO PREVENT CONTROLLED FIELD ERROR
@@ -51,7 +53,7 @@ function ProfileDetails() {
     variables: {
       id: userId,
     },
-    notifyOnNetworkStatusChange: true, //seems to be required for refecth to function properly
+    notifyOnNetworkStatusChange: true, //seems to be required for refetch to function properly
     onCompleted: (data) => {
       const { me: currentUser } = data; //destructure user object
       renderCurrentUser(currentUser); //set initial values & render user information
@@ -88,6 +90,9 @@ function ProfileDetails() {
   const [updateUser] = useMutation(UPDATE_USER_FORM);
 
   // SECTION HANDLE UPDATE USER ON CLICK
+  const [modalContent, setModalContent] = useState({});
+  const [renderModal, setRenderModal] = useState(false);
+
   const handleUserUpdate = async (event) => {
     event.preventDefault();
 
@@ -98,7 +103,7 @@ function ProfileDetails() {
     }
 
     try {
-      await updateUser({
+      const data = await updateUser({
         variables: {
           id: userId,
           firstName,
@@ -107,15 +112,37 @@ function ProfileDetails() {
           email,
         },
       });
+
+      const { success, message, shortMessage, user } = data.data.updateUserForm;
+
+      console.log(success, message, user);
+
+      // RENDER ERROR MODAL
+      if (!success) {
+        setModalContent({
+          message,
+          shortMessage,
+          success,
+          user,
+        });
+        setRenderModal(true);
+      }
     } catch (err) {
+      setModalContent({
+        message: err,
+        shortMessage: err,
+        success: false,
+        user: null,
+      });
+      setRenderModal(true);
       console.log(err);
     }
 
     // REPLACE SUBMIT UPDATE BUTTON TEXT WITH UPDATING...
-    // DISABLE SUBMIT UPDATE BUTTON WHILE UPDATING...
-    // DISABLE FORM SO USER CAN'T MAKE CHANGES WHILE UPDATING...
     setIsUpdatingUser(true);
+    // DISABLE FORM SO USER CAN'T MAKE CHANGES WHILE UPDATING...
     setIsFormDisabled(true);
+    // DISABLE SUBMIT UPDATE BUTTON WHILE UPDATING...
     setIsSubmitDisabled(true);
 
     // REPLACE UPDATING... BUTTON TEXT WITH SUBMIT UPDATE
@@ -191,6 +218,10 @@ function ProfileDetails() {
     }
   }, [loading, firstName, lastName, email, phone, isFormDisabled]);
 
+  function resetModal() {
+    setRenderModal(!renderModal);
+  }
+
   return (
     <Container>
       <Form
@@ -214,7 +245,6 @@ function ProfileDetails() {
             type="text"
             placeholder="Enter First Name"
             name="firstName"
-            // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
             value={firstName}
             onChange={handleInputChange}
             disabled={isFormDisabled}
@@ -238,7 +268,6 @@ function ProfileDetails() {
             type="text"
             placeholder="Enter Last Name"
             name="lastName"
-            // value={selectLastName ? prevEmployeeData?.lastName : lastName}
             value={lastName}
             onChange={handleInputChange}
             disabled={isFormDisabled}
@@ -316,8 +345,7 @@ function ProfileDetails() {
             placeholder="Enter email address"
             guide={true}
             name="email"
-            // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
-            value={email}
+            value={email.toLowerCase()}
             onChange={handleInputChange}
             // Due to the use of the MaskInput component, the e.target.value does not clear if the entire email is selected the deleted
             onKeyDown={(e) => {
@@ -379,6 +407,9 @@ function ProfileDetails() {
           </Button>
         </section>
       </Form>
+
+      {/* RENDER MODAL IF PROFILE UPDATE FAILS */}
+      {renderModal && <Modal modalContent={modalContent} resetModal={resetModal}/>}
     </Container>
   );
 }
