@@ -12,8 +12,8 @@ import MaskedInput from "react-text-mask";
 import emailMask from "text-mask-addons/dist/emailMask";
 
 import { Container, Form, Button } from "react-bootstrap";
-import "../../../styles/Contact.css"; //FIX?
-import "../../../styles/button-style.css"; //FIX?
+import "../../../styles/Contact.css";
+import "../../../styles/button-style.css";
 
 function ProfileDetails() {
   //SECTION FORM FIELDS = SET STATE TO PREVENT CONTROLLED FIELD ERROR
@@ -51,7 +51,7 @@ function ProfileDetails() {
     variables: {
       id: userId,
     },
-    notifyOnNetworkStatusChange: true, //seems to be required for refecth to function properly
+    notifyOnNetworkStatusChange: true, //seems to be required for refetch to function properly
     onCompleted: (data) => {
       const { me: currentUser } = data; //destructure user object
       renderCurrentUser(currentUser); //set initial values & render user information
@@ -214,7 +214,6 @@ function ProfileDetails() {
             type="text"
             placeholder="Enter First Name"
             name="firstName"
-            // value={selectFirstName ? prevEmployeeData?.firstName : firstName}
             value={firstName}
             onChange={handleInputChange}
             disabled={isFormDisabled}
@@ -238,7 +237,6 @@ function ProfileDetails() {
             type="text"
             placeholder="Enter Last Name"
             name="lastName"
-            // value={selectLastName ? prevEmployeeData?.lastName : lastName}
             value={lastName}
             onChange={handleInputChange}
             disabled={isFormDisabled}
@@ -316,8 +314,7 @@ function ProfileDetails() {
             placeholder="Enter email address"
             guide={true}
             name="email"
-            // value={selectEmail ? prevEmployeeData?.email : email.toLowerCase()}
-            value={email}
+            value={email.toLowerCase()}
             onChange={handleInputChange}
             // Due to the use of the MaskInput component, the e.target.value does not clear if the entire email is selected the deleted
             onKeyDown={(e) => {
