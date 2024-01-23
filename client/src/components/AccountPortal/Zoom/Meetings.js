@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-
 import { useQuery, useMutation } from "@apollo/client";
+
 import { QUERY_ALL_EMPLOYEES } from "../../../utils/queries";
+import { formatUnixToDayMonthDateYear } from "../../../utils/dateInfo";
+
 import {
   // DELETE_EMPLOYEE,
   SOFT_DELETE_EMPLOYEE,
@@ -17,7 +19,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../styles/Contact.css";
 import "../../../styles/button-style.css";
 
-function Meetings() {
+function Meetings({ data }) {
+  // TODO // REFACTOR = START
+
+  // TODO // GET MEETING DATA
+  console.log("props", data);
+
+  // console.log("props", data.zoomUserByUserId.zoom_meetings);
+  const { zoomUserByUserId } = data || {zoomUserByUserId: {zoom_meetings: [{createdAt: 0, mid: "" }]}};
+  
+  const { zoom_meetings: meetings } = zoomUserByUserId;
+
+  console.log("meetings", meetings);
+  console.log(meetings[0].createdAt, meetings[0].mid);
+  
+  // TODO // FORMAT DATE
+  let formattedDate = formatUnixToDayMonthDateYear(meetings[0].createdAt);
+  console.log(formattedDate);
+
+  // TODO // RENDER DATA
+
+  // TODO // REFACTOR DELETE
+  // TODO // REMOVE OLD CODE
+
+  // TODO REFACTOR //END
+
   const [openDetails, setOpenDetails] = useState(false);
   const [show, setShow] = useState(false);
   const [deleteThis, setDeleteThis] = useState("");
@@ -167,7 +193,8 @@ function Meetings() {
     <>
       <Container>
         <Row style={{ display: "flex", justifyContent: "center" }}>
-          {arrayForSort?.map((emp, index) => (
+          {/* {arrayForSort?.map((emp, index) => ( */}
+          {meetings?.map((meeting, index) => (
             <div id="accordion" key={index} style={{ width: "98%" }}>
               <div className="card p-2 mb-1">
                 <div
@@ -188,7 +215,8 @@ function Meetings() {
                       data-target={`#collapse-client-${index}`}
                     >
                       <p className="mb-0 text-left">
-                        {emp?.lastName}, {emp?.firstName}
+                        {/* {emp?.lastName}, {emp?.firstName} */}
+                        {formatUnixToDayMonthDateYear(meeting.createdAt)}
                       </p>
                     </button>
                   </h5>
@@ -205,7 +233,7 @@ function Meetings() {
                     />
                   </div>
                 </div>
-                <Collapse>
+                {/* <Collapse>
                   <div id={`#collapse-client-${index}`}>
                     <Container fluid="true" className="center-screen">
                       <Row>
@@ -266,7 +294,7 @@ function Meetings() {
                       </Row>
                     </Container>
                   </div>
-                </Collapse>
+                </Collapse> */}
               </div>
             </div>
           ))}

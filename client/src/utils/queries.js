@@ -18,6 +18,23 @@ export const QUERY_USER = gql`
   }
 `;
 
+//SECTION ZOOM MEETINGS
+export const QUERY_ZOOM_MEETINGS = gql`
+  query ZoomUserByUserId($user: ID!) {
+    zoomUserByUserId(user: $user) {
+      _id
+      user {
+        _id
+      }
+      zoom_meetings {
+        _id
+        mid
+        createdAt
+      }
+    }
+  }
+`;
+
 // SECTION EMPLOYEE
 export const QUERY_EMPLOYEE_BYEMAIL = gql`
   query EmployeeByEmail($email: String!) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { useQuery, useMutation } from "@apollo/client";
+
 import { QUERY_USER } from "../../../utils/queries";
 import { UPDATE_USER_FORM } from "../../../utils/mutations";
 

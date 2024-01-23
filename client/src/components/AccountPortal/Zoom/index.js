@@ -1,13 +1,39 @@
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
+import { useQuery, useMutation } from "@apollo/client";
+import { QUERY_ZOOM_MEETINGS } from "../../../utils/queries";
+
+import { getUserId } from "../../../utils/getUserId";
 
 import Meetings from "./Meetings";
 import EmployeeAdd from "./EmployeeAdd";
 import EmployeeUpdate from "./EmployeeUpdate";
 import Reports from "./Reports";
 
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+
 function ZoomAccount() {
-  
+  //SECTION GET CURRENT LOGIN IN USER
+  const userId = getUserId();
+
+   //SECTION GET ALL ZOOM MEETINGS FOR CURRRENT USER
+   const {
+    // eslint-disable-next-line
+    loading,
+    // eslint-disable-next-line
+    data,
+    // eslint-disable-next-line
+    error,
+    // eslint-disable-next-line
+    refetch,
+  } = useQuery(QUERY_ZOOM_MEETINGS, {
+    variables: {
+      user: userId, 
+    },
+    onCompleted: (data) => {
+      // console.log(data);
+    },
+  });
+
   return (
     <Tabs
       defaultActiveKey="employeeList"
@@ -18,7 +44,7 @@ function ZoomAccount() {
       mountOnEnter
     >
       <Tab eventKey="meetings" title="Meetings">
-        <Meetings />
+        <Meetings data={data}/>
       </Tab>
       <Tab eventKey="reports" title="Reports">
         <Reports/>
