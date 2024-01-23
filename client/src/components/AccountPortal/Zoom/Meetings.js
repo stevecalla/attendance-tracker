@@ -22,22 +22,10 @@ import "../../../styles/button-style.css";
 function Meetings({ data }) {
   // TODO // REFACTOR = START
 
-  // TODO // GET MEETING DATA
-  console.log("props", data);
+  console.log(data);
+  const { zoom_meetings: meetings } = data.zoomUserByUserId;
 
-  // console.log("props", data.zoomUserByUserId.zoom_meetings);
-  const { zoomUserByUserId } = data || {zoomUserByUserId: {zoom_meetings: [{createdAt: 0, mid: "" }]}};
-  
-  const { zoom_meetings: meetings } = zoomUserByUserId;
-
-  console.log("meetings", meetings);
-  console.log(meetings[0].createdAt, meetings[0].mid);
-  
-  // TODO // FORMAT DATE
-  let formattedDate = formatUnixToDayMonthDateYear(meetings[0].createdAt);
-  console.log(formattedDate);
-
-  // TODO // RENDER DATA
+  console.log('meetings', meetings);
 
   // TODO // REFACTOR DELETE
   // TODO // REMOVE OLD CODE

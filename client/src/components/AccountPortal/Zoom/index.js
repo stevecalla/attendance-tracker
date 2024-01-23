@@ -34,9 +34,11 @@ function ZoomAccount() {
     },
   });
 
+  const meetingData = data || {zoomUserByUserId: {zoom_meetings: [{createdAt: 0, mid: "" }]}};
+
   return (
     <Tabs
-      defaultActiveKey="employeeList"
+      defaultActiveKey="meetings"
       id="fill-tab-example"
       className="mb-3"
       fill //sizes tabs to fit available space
@@ -44,7 +46,7 @@ function ZoomAccount() {
       mountOnEnter
     >
       <Tab eventKey="meetings" title="Meetings">
-        <Meetings data={data}/>
+        <Meetings data={meetingData}/>
       </Tab>
       <Tab eventKey="reports" title="Reports">
         <Reports/>
