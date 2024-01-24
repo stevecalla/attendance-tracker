@@ -1,9 +1,10 @@
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { QUERY_ZOOM_MEETINGS } from "../../../utils/queries";
 
 import { getUserId } from "../../../utils/getUserId";
 
 import Meetings from "./Meetings";
+
 import EmployeeAdd from "./EmployeeAdd";
 import EmployeeUpdate from "./EmployeeUpdate";
 import Reports from "./Reports";
@@ -15,8 +16,8 @@ function ZoomAccount() {
   //SECTION GET CURRENT LOGIN IN USER
   const userId = getUserId();
 
-   //SECTION GET ALL ZOOM MEETINGS FOR CURRRENT USER
-   const {
+  //SECTION GET ALL ZOOM MEETINGS FOR CURRRENT USER
+  const {
     // eslint-disable-next-line
     loading,
     // eslint-disable-next-line
@@ -27,14 +28,16 @@ function ZoomAccount() {
     refetch,
   } = useQuery(QUERY_ZOOM_MEETINGS, {
     variables: {
-      user: userId, 
+      user: userId,
     },
     onCompleted: (data) => {
-      // console.log(data);
+      console.log(data);
     },
   });
 
-  const meetingData = data || {zoomUserByUserId: {zoom_meetings: [{createdAt: 0, mid: "" }]}};
+  const meetingData = data || {
+    zoomUserByUserId: { zoom_meetings: [{ createdAt: null, mid: null }] },
+  };
 
   return (
     <Tabs
@@ -46,10 +49,10 @@ function ZoomAccount() {
       mountOnEnter
     >
       <Tab eventKey="meetings" title="Meetings">
-        <Meetings data={meetingData}/>
+        <Meetings data={meetingData} />
       </Tab>
       <Tab eventKey="reports" title="Reports">
-        <Reports/>
+        <Reports />
       </Tab>
       <Tab eventKey="employeeAdd" title="Add Employee">
         <EmployeeAdd />
@@ -60,5 +63,6 @@ function ZoomAccount() {
     </Tabs>
   );
 }
+// }
 
 export default ZoomAccount;

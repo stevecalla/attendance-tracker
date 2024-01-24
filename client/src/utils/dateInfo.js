@@ -33,7 +33,6 @@ const getTime = (date) => {
 const formatUnixToDayMonthDateYear = (dateInput) => {
   //input unix date = 1705949020206
   //output = Monday, January 22, 2024
-
   const date = new Date(dateInput);
 
   const options = {
@@ -44,7 +43,6 @@ const formatUnixToDayMonthDateYear = (dateInput) => {
   };
 
   const formattedDate = date.toLocaleDateString("en-US", options);
-  console.log(formattedDate);
 
   return formattedDate;
 }
