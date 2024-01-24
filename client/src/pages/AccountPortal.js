@@ -51,7 +51,7 @@ const AccountPortal = ({
         </Row>
       </Container>
 
-      <Container className="mb-1">
+      <Container className="mb-1" >
         <Row>
           <Col>
             <div className="d-flex flex-row mb-1 p-0 border border-secondary rounded-lg">

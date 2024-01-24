@@ -11,6 +11,7 @@ import Reports from "./Reports";
 
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import { Container } from "react-bootstrap";
 
 function ZoomAccount() {
   //SECTION GET CURRENT LOGIN IN USER
@@ -21,7 +22,7 @@ function ZoomAccount() {
     // eslint-disable-next-line
     loading,
     // eslint-disable-next-line
-    data,
+    data: meetingData,
     // eslint-disable-next-line
     error,
     // eslint-disable-next-line
@@ -35,34 +36,44 @@ function ZoomAccount() {
     },
   });
 
-  const meetingData = data || {
-    zoomUserByUserId: { zoom_meetings: [{ createdAt: null, mid: null }] },
-  };
+  console.log("loading status", loading);
 
-  return (
-    <Tabs
-      defaultActiveKey="meetings"
-      id="fill-tab-example"
-      className="mb-3"
-      fill //sizes tabs to fit available space
-      unmountOnExit //removes content when entering a different tab
-      mountOnEnter
-    >
-      <Tab eventKey="meetings" title="Meetings">
-        <Meetings data={meetingData} />
-      </Tab>
-      <Tab eventKey="reports" title="Reports">
-        <Reports />
-      </Tab>
-      <Tab eventKey="employeeAdd" title="Add Employee">
-        <EmployeeAdd />
-      </Tab>
-      <Tab eventKey="employeeUpdate" title="Update Employee">
-        <EmployeeUpdate />
-      </Tab>
-    </Tabs>
-  );
+  if (loading) {
+    return <Container style={{ height: "80vh" }}></Container>;
+  } else {
+    return (
+      // <Container style={{ height: "80vh", overflow: "scroll" }}>
+      <Tabs
+        defaultActiveKey="meetings"
+        id="fill-tab-example"
+        className="mb-3"
+        fill //sizes tabs to fit available space
+        unmountOnExit //removes content when entering a different tab
+        mountOnEnter
+      >
+        <Tab eventKey="account" title="Account">
+          <Container style={{ height: "80vh", overflow: "scroll" }}>
+            <Reports data={meetingData} />
+          </Container>
+        </Tab>
+        <Tab eventKey="meetings" title="Meetings" data={meetingData}>
+          <Container style={{ height: "80vh", overflow: "scroll" }}>
+            <Meetings data={meetingData} />
+          </Container>
+        </Tab>
+        {/* <Tab eventKey="employeeAdd" title="Add Employee" data={meetingData}>
+          <EmployeeAdd />
+        </Tab> */}
+        {/* <Tab
+          eventKey="employeeUpdate"
+          title="Update Employee"
+          data={meetingData}
+        >
+          <EmployeeUpdate />
+        </Tab> */}
+      </Tabs>
+    );
+  }
 }
-// }
 
 export default ZoomAccount;

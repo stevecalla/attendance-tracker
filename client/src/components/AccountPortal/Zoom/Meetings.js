@@ -2,16 +2,16 @@ import React, { useState } from "react";
 
 import { formatUnixToDayMonthDateYear } from "../../../utils/dateInfo";
 
-import { Row, Col, Container, Card } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import Collapse from "react-bootstrap/Collapse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../styles/Contact.css";
 import "../../../styles/button-style.css";
 
 function Meetings({ data }) {
-  const { zoom_meetings: meetings } = data.zoomUserByUserId;
-
   const [openDetails, setOpenDetails] = useState(false);
+
+  const { zoom_meetings: meetings } = data?.zoomUserByUserId || [];
 
   // SECTION HANDLE COLLAPSE
   const getElement = (event) => {
@@ -28,77 +28,54 @@ function Meetings({ data }) {
     }
   };
 
-  if (meetings.length === 0) {
-    console.log("test");
-    return (
-      <Container style={{ height: "60vh" }}>
-        <Row>
-          <Card className="rounded p-2 text-left" style={{ width: "98%" }}>
-            No meetings at this time
-          </Card>
-        </Row>
-      </Container>
-    );
-  } else {
-    return (
-      <Container style={{ height: "60vh" }}>
-        <Row style={{ display: "flex", justifyContent: "center" }}>
-          {meetings?.map((meeting, index) => (
-            <div id="accordion" key={index} style={{ width: "98%" }}>
-              <div className="card p-2 mb-1">
-                <div
-                  className="rounded directions-collapse"
-                  id="headingOne"
-                  style={{
-                    color: "black",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <h5 className="d-flex flex-column mb-0 text-left">
-                    <button
-                      onClick={(event) => getElement(event)}
-                      aria-controls={`#collapse-client-${index}`}
-                      aria-expanded={openDetails}
-                      className={
-                        meeting?.createdAt ? `btn btn-link pl-1` : `btn pl-1`
-                      }
-                      data-target={`#collapse-client-${index}`}
-                    >
-                      <p className="mb-0 text-left">
-                        {meeting?.createdAt
-                          ? `${index + 1}) ${formatUnixToDayMonthDateYear(
-                              meeting?.createdAt
-                            )}`
-                          : "No meetings at this time"}
-                      </p>
-                    </button>
-                  </h5>
-                </div>
-                <Collapse>
-                  <div id={`#collapse-client-${index}`}>
-                    <Container>
-                      <Row>
-                        <Col className="d-flex justify-start">
-                          <p className="m-0">
-                            <FontAwesomeIcon
-                              className="px-2"
-                              icon="fa-solid fa-envelope-open-text"
-                            />
-                            Id: {meeting?.mid}
-                          </p>
-                        </Col>
-                      </Row>
-                    </Container>
-                  </div>
-                </Collapse>
+  return (
+    <Row style={{ display: "flex", justifyContent: "center" }}>
+      {meetings?.length === 0 ? (
+        <Card className="p-2">
+          No meetings at this time
+        </Card>
+      ) : (
+        meetings?.map((meeting, index) => (
+          <Card key={index} className="p-2 mb-1">
+            <h5 className="d-flex flex-column mb-0">
+              <button
+                onClick={(event) => getElement(event)}
+                aria-controls={`#collapse-client-${index}`}
+                aria-expanded={openDetails}
+                className={
+                  meeting?.createdAt ? `btn btn-link pl-0` : `btn pl-0`
+                }
+                data-target={`#collapse-client-${index}`}
+              >
+                <p className="mb-0" style={{ textAlign: "left" }}>
+                  {meeting?.createdAt
+                    ? `${index + 1}) ${formatUnixToDayMonthDateYear(
+                        meeting?.createdAt
+                      )}`
+                    : "No meetings at this time"}
+                </p>
+              </button>
+            </h5>
+            <Collapse>
+              <div id={`#collapse-client-${index}`}>
+                <Row>
+                  <Col className="d-flex justify-start">
+                    <p className="m-0">
+                      <FontAwesomeIcon
+                        className="px-3"
+                        icon="fa-solid fa-envelope-open-text"
+                      />
+                      Id: {meeting?.mid}
+                    </p>
+                  </Col>
+                </Row>
               </div>
-            </div>
-          ))}
-        </Row>
-      </Container>
-    );
-  }
+            </Collapse>
+          </Card>
+        ))
+      )}
+    </Row>
+  );
 }
 
 export default Meetings;
