@@ -30,7 +30,7 @@ function Meetings({ data }) {
 
   return (
     <Row style={{ display: "flex", justifyContent: "center" }}>
-      {meetings?.length === 0 ? (
+      {!meetings?.length ? (
         <Card className="p-2">
           No meetings at this time
         </Card>
