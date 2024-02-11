@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     _id: ID
     username: String
@@ -16,7 +18,7 @@ const typeDefs = gql`
     zoomUser: [ZoomUser]
   }
 
-  # fix
+  # USED BY UPDATEUSERFORM TO PASS ERROR PLUS USER
   type UpdateUserFormResponse {
     "Similar to HTTP status code, represents the status of the mutation"
     code: Int!
@@ -94,6 +96,8 @@ const typeDefs = gql`
     raw_data: [String]
     load_app_count: String
     zoomUser: ZoomUser
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Employee {
@@ -166,12 +170,16 @@ const typeDefs = gql`
   }
 
   type Query {
+    userById(_id: ID!): User
+
     users: [User]!
-    me(_id: ID!): User
     userByEmail(email: String!): User
     #user(email: String!): User
 
     zoomUsers: [ZoomUser]!
+    zoomUserById(_id: ID!): ZoomUser!
+    zoomUserByUserId(user: ID!): ZoomUser
+
     zoomMeetings: [ZoomMeeting]!
     #userZoneByEmail(email: String!): ZoomUser
     #userZoneByEmail(zoomId: String!): ZoomUser
@@ -285,16 +293,6 @@ const typeDefs = gql`
     updateClientSchedule(_id: ID, schedule: String): Client
 
     # SECTION USER
-
-    # updateUserForm(
-      #   _id: ID
-      #   firstName: String
-      #   lastName: String
-      #   phone: String
-      #   email: String
-      # ): User
-      
-    #fix
     updateUserForm(
       _id: ID
       firstName: String

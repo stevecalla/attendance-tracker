@@ -1,4 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
+
+const { GraphQLScalarType, Kind } = require("graphql");
+
 const {
   Schedule,
   Client,
@@ -18,7 +21,7 @@ let expiration = "2h"; // 2 hours
 
 const resolvers = {
   Query: {
-    me: async (parent, { _id }, context) => {
+    userById: async (parent, { _id }, context) => {
       // if (context.user) {
       return User.findById({ _id }).populate({
         path: "zoomUser",
@@ -107,6 +110,21 @@ const resolvers = {
     zoomUsers: async (parent, args, context) => {
       return ZoomUser.find()
         .sort({ lastName: -1 })
+        .populate("user")
+        .populate("zoom_meetings");
+    },
+
+    //zoom user by zoom id
+    zoomUserById: async (parent, { _id }, context) => {
+      return ZoomUser.findOne({ _id })
+        .populate("user")
+        .populate("zoom_meetings");
+    },
+
+    //zoom user by user id
+    zoomUserByUserId: async (parent, { user }, context) => {
+      console.log("resolver Zoom user by user id = ", user);
+      return ZoomUser.findOne({ user: user })
         .populate("user")
         .populate("zoom_meetings");
     },
@@ -570,12 +588,12 @@ const resolvers = {
     // SECTION USER
     updateUserForm: async (
       parent,
-      { _id, firstName, lastName, phone, email, },
+      { _id, firstName, lastName, phone, email },
       context
     ) => {
       try {
         console.log(_id, firstName, lastName, phone, email);
-    
+
         const user = await User.findOneAndUpdate(
           { _id },
           {
@@ -588,32 +606,30 @@ const resolvers = {
         );
 
         console.log(user);
-    
+
         // Check if the user with the given _id exists
         if (!user) {
           console.log("User not found");
           throw new Error("User not found");
         }
 
-      return {
-        code: 200,
-        success: true,
-        shortMessage: "Success",
-        message: `Successfully updated user ${user._id}`,
-        user
-      };
-    } catch (error) {
-      console.log(error);
-      return {
-        code: error.code,
-        success: false,
-        shortMessage: error.codeName,
-        message: error.message,
-        user: null
-      };
-    };
-
-
+        return {
+          code: 200,
+          success: true,
+          shortMessage: "Success",
+          message: `Successfully updated user ${user._id}`,
+          user,
+        };
+      } catch (error) {
+        console.log(error);
+        return {
+          code: error.code,
+          success: false,
+          shortMessage: error.codeName,
+          message: error.message,
+          user: null,
+        };
+      }
     },
 
     // SECTION EMPLOYEE
@@ -908,6 +924,33 @@ const resolvers = {
       // throw new AuthenticationError("You need to be logged in!");
     },
   },
+
+  // https://stackoverflow.com/questions/49693928/date-and-json-in-type-definition-for-graphql
+  // https://www.apollographql.com/docs/apollo-server/schema/custom-scalars/
+  Date: new GraphQLScalarType({
+    name: "Date",
+    description: "Date custom scalar type",
+    serialize(value) {
+      if (value instanceof Date) {
+        return value.getTime(); // Convert outgoing Date to integer for JSON
+      }
+      throw Error("GraphQL Date Scalar serializer expected a `Date` object");
+    },
+    parseValue(value) {
+      if (typeof value === "number") {
+        return new Date(value); // Convert incoming integer to Date
+      }
+      throw new Error("GraphQL Date Scalar parser expected a `number`");
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        // Convert hard-coded AST string to integer and then to Date
+        return new Date(parseInt(ast.value, 10));
+      }
+      // Invalid hard-coded value (not an integer)
+      return null;
+    },
+  }),
 };
 
 module.exports = resolvers;
